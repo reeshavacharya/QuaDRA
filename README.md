@@ -1,4 +1,4 @@
-# RAG-Related
+# QuaDRA
 
 This repository contains research and proof-of-concept experiments related to Retrieval-Augmented Generation (RAG) vulnerabilities, specifically focusing on quantization-aware and post-training quantization backdoors.
 
