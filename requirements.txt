@@ -1,0 +1,16 @@
+numpy
+scipy
+pandas
+matplotlib
+seaborn
+Pillow
+opencv-python
+scikit-image
+scikit-learn
+torch
+torchvision
+tqdm
+pyyaml
+requests
+tensorflow
+faiss-cpu

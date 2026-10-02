@@ -1,0 +1,711 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.9in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{xltabular}
+\usepackage{array}
+\usepackage{pdflscape}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage[hyphens]{url}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
+\usepackage{enumitem}
+
+% file:line references; \path allows line breaks inside long paths
+\newcommand{\f}[1]{\path{#1}}
+\newcommand{\yes}{\textbf{yes}}
+\newcommand{\no}{\textbf{no}}
+\newcommand{\partl}{\textbf{partial}}
+
+\lstset{basicstyle=\ttfamily\scriptsize,breaklines=true,frame=single,
+  columns=fullflexible,keepspaces=true,showstringspaces=false,
+  backgroundcolor=\color{black!3}}
+
+\setlist{itemsep=2pt,topsep=3pt}
+
+\title{Attack Surface for a Quantization-Conditioned RAG Index Backdoor:\\
+A Code-Level Audit of FAISS, LangChain, LlamaIndex, Milvus, Qdrant, and Weaviate}
+\author{Fall 2026 Conversion-Integrity Project}
+\date{27 September 2026}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{Snapshot audited.} All paths are relative to \f{RAG-Related/}.
+Commits: faiss \texttt{fdb9535c1}, langchain \texttt{d7508191bc},
+llama\_index \texttt{169e450aa}, milvus \texttt{acd8a6770e}, qdrant \texttt{6ab21cac1},
+weaviate \texttt{e3f4df7ba8}. Line numbers refer to these commits. ``Not found'' means we
+searched the repository and found no such code. It does not cover code outside the repository.
+
+%==========================================================================
+\section{Verdict}
+%==========================================================================
+
+The four-part surface (Q1--Q4) exists, but not in the form ``RAG stacks ship PQ by
+default''. That claim is \textbf{false} for five of the six repositories. \textbf{Q1:} PQ/SQ
+codebook construction exists in FAISS (C++ k-means per sub-vector), Qdrant (own Rust PQ/SQ),
+and Weaviate (own Go PQ/SQ/RQ). Milvus exposes PQ/SQ index types but delegates the
+implementation to the external \texttt{knowhere} library, which is not in the repo. LangChain
+and LlamaIndex implement no quantization and delegate to a backend. \textbf{Q2:} PQ is opt-in
+everywhere. Scalar quantization is on by default in exactly one place: \textbf{Milvus}. There,
+any vector index created without an explicit \texttt{index\_type}, including the SDK's
+quick-setup path, resolves to \texttt{HNSW\_SQ} with \texttt{sq\_type=SQ4U} and an FP16
+refine stage. Weaviate and Qdrant leave compression off unless the collection or server is
+configured for it. Once PQ is enabled in Weaviate, it trains automatically when a shard
+passes \texttt{trainingLimit}=100{,}000 vectors (a scale trigger). \textbf{Q3:} every system
+has a shippable compressed artifact. The artifacts are: a FAISS \texttt{write\_index} file
+(codebooks and codes, with no raw vectors for IVFPQ); a LlamaIndex persist directory (which
+removes embeddings from the docstore, so the FAISS file is the only copy of the vectors); a
+Qdrant snapshot tarball (\texttt{quantized.meta.json} holds the centroids as plain JSON);
+Weaviate backups (HNSW commit logs carry the PQ encoders); and Milvus snapshots, including
+\texttt{RestoreExternalSnapshot}, which copies prebuilt index files. \textbf{Q4:} no
+repository checks a loaded quantized index against the source embeddings. The only checks we
+found are structural (shape and size), identity-based (Milvus build-ID ownership), or
+optional whole-file SHA-256 values supplied by the same party that ships the file (Qdrant).
+The real limit on the attack is \emph{rescoring}. Weaviate re-ranks compressed candidates
+with full-precision vectors by default, and Milvus's default index has an FP16 refine stage.
+Both reduce the attack to candidate-set suppression. Qdrant's PQ/SQ do \emph{not} rescore by
+default, and FAISS IVFPQ never does unless the index is wrapped in \texttt{IndexRefine}.
+\textbf{Strongest:} FAISS IVFPQ loaded through LlamaIndex's
+\texttt{FaissVectorStore.from\_persist\_dir} (Section~\ref{sec:strongest}). Next come Qdrant
+with PQ enabled (no default rescoring, snapshot recovery from a URL) and Milvus's default
+\texttt{HNSW\_SQ} (quantized by default, but with refine). \textbf{Weakest:} LangChain core,
+whose in-repo stores are exact and whose FAISS wrapper is not in this repo, and Weaviate,
+which rescores by default. The honest threat model is therefore an \emph{explicitly
+configured or scale-triggered} deployment, with Milvus SQ as the one default-on case, rather
+than a default-on PQ supply chain.
+
+%==========================================================================
+\begin{landscape}
+\section{Summary table}
+%==========================================================================
+{\scriptsize
+\renewcommand{\arraystretch}{1.25}
+\begin{xltabular}{\linewidth}{@{}>{\raggedright\arraybackslash}p{1.35cm}
+  *{6}{>{\raggedright\arraybackslash}X}@{}}
+\toprule
+\textbf{Repo} & \textbf{Q1 PQ/SQ exists} & \textbf{Q2 default vs.\ opt-in (exact default)} &
+\textbf{Q3 shippable compressed artifact} & \textbf{Q4 verification on load} &
+\textbf{Q5 seed / determinism} & \textbf{Q6 direct codebook override} \\
+\midrule\endhead
+\midrule
+FAISS &
+\yes. \f{faiss/faiss/impl/ProductQuantizer.cpp:130-206} (k-means per sub-vector);
+\f{faiss/faiss/IndexIVFPQ.cpp:76-95}; OPQ \f{faiss/faiss/VectorTransform.cpp:1246}. &
+\textbf{opt-in}. There is no default index: \texttt{index\_factory} needs a description
+(\f{faiss/faiss/index_factory.h:17-20}); \texttt{"Flat"} gives exact \texttt{IndexFlat}
+(\f{faiss/faiss/index_factory.cpp:809-811}). &
+\yes. \texttt{write\_index} stores centroids and codes
+(\f{faiss/faiss/impl/index_write.cpp:185-190,801-810}). &
+\no. Shape checks only (\f{faiss/faiss/impl/index_read.cpp:735-768}). &
+\textbf{seeded}: \texttt{seed=1234} (\f{faiss/faiss/Clustering.h:47-50}); OPQ 1234
+(\f{faiss/faiss/VectorTransform.cpp:1262}). Seed and \texttt{cp} are \emph{not serialized}. &
+\yes. \texttt{set\_params} (\f{faiss/faiss/impl/ProductQuantizer.cpp:76-80}),
+\texttt{Train\_hot\_start}, \texttt{add\_sa\_codes} (\f{faiss/faiss/Index.h:430}),
+\texttt{update\_entries}. \\
+\midrule
+LangChain &
+\no\ in repo. FAISS is a lazy import from \texttt{langchain\_community}, which is not
+vendored (\f{langchain/libs/langchain/langchain_classic/vectorstores/faiss.py:11}). &
+\textbf{no quantization}. \texttt{InMemoryVectorStore} is exact cosine
+(\f{langchain/libs/core/langchain_core/vectorstores/in_memory.py:314}); the Qdrant partner
+creates plain \texttt{VectorParams} (\f{langchain/libs/partners/qdrant/langchain_qdrant/qdrant.py:944-982}). &
+\partl. \texttt{InMemoryVector\-Store}: \texttt{dump}/\texttt{load} is full-precision JSON
+(\f{langchain/libs/core/langchain_core/vectorstores/in_memory.py:517-546});
+\texttt{from\_existing\_collection} attaches to a pre-built Qdrant collection. &
+\no. The Qdrant partner validates only size and distance
+(\f{langchain/libs/partners/qdrant/langchain_qdrant/qdrant.py:1230,1240}). &
+n/a (no training code). &
+n/a in repo. \\
+\midrule
+LlamaIndex &
+\no\ own PQ. It wraps any \texttt{faiss.Index}
+(\f{llama_index/llama-index-integrations/vector_stores/llama-index-vector-stores-faiss/llama_index/vector_stores/faiss/base.py:65-82}). &
+\textbf{no quantization by default}: \texttt{SimpleVectorStore} (exact)
+(\f{llama_index/llama-index-core/llama_index/core/storage/storage_context.py:105-107}).
+The Milvus integration forces \texttt{FLAT} (\f{.../milvus/base.py:1406}). &
+\yes. \texttt{persist} calls \texttt{faiss.write\_index} (\f{.../faiss/base.py:171}), and
+the docstore \emph{removes} embeddings (\f{llama_index/llama-index-core/llama_index/core/indices/vector_store/base.py:196-203}). &
+\no. \texttt{from\_persist\_path} calls \texttt{faiss.read\_index} and trusts the result
+(\f{.../faiss/base.py:100-117}). &
+Inherits FAISS. &
+\yes, inherited: any user-supplied FAISS object is accepted. \\
+\midrule
+Milvus &
+\partl. Types \texttt{IVF\_PQ}, \texttt{HNSW\_PQ}, \texttt{HNSW\_SQ}, \texttt{SCANN}
+(\f{milvus/client/index/common.go:46-57}); the implementation is in external \texttt{knowhere}
+(\f{milvus/internal/core/thirdparty/knowhere/CMakeLists.txt:17-18}). &
+\textbf{SQ on by default}. AUTOINDEX resolves to
+\texttt{HNSW\_SQ}/\texttt{SQ4U}/refine \texttt{FP16}
+(\f{milvus/pkg/util/paramtable/autoindex_param_nocuda.go:26}) when no
+\texttt{index\_type} is given (\f{milvus/internal/proxy/task_index.go:379-386}). PQ is opt-in. &
+\yes. Snapshots copy index files
+(\f{milvus/internal/datacoord/copy_segment_task.go:803-806,990-1014});
+\texttt{RestoreExternalSnapshot} (\f{milvus/internal/proxy/snapshot_impl.go:213}). &
+\no\ content check. Build-ID \emph{ownership} only
+(\f{milvus/internal/datacoord/copy_segment_task.go:1316-1320}). &
+Not in repo (knowhere). &
+\no\ public API (no centroid or codebook symbol in \f{milvus/internal/proxy}). Only by
+crafting index files. \\
+\midrule
+Qdrant &
+\yes. PQ (\f{qdrant/lib/quantization/src/encoded_vectors_pq.rs:342-400}), k-means
+(\f{qdrant/lib/quantization/src/kmeans.rs:9-27}), SQ, BQ, TQ. &
+\textbf{opt-in}: \texttt{quantization: null} (\f{qdrant/config/config.yaml:250-252}). HNSW is
+uncompressed. Quantization is built only for indexed segments (threshold
+\f{qdrant/lib/shard/src/optimizers/config.rs:17}). &
+\yes. The snapshot tar includes the quantized files
+(\f{qdrant/lib/segment/src/segment/snapshot.rs:304-312}); recover from a URL
+(\f{qdrant/src/actix/api/snapshot_api.rs:251}). &
+\no. The files are loaded as-is
+(\f{qdrant/lib/segment/src/vector_storage/quantized/quantized_vectors/load.rs:32-35}); an
+optional user-supplied SHA-256 covers the whole file. \textbf{PQ/SQ do not rescore by default}
+(\f{qdrant/lib/segment/src/vector_storage/quantized/quantized_vectors/accessors.rs:16-22}). &
+\textbf{unseeded}: \texttt{rand::rng()} for sampling
+(\f{qdrant/lib/quantization/src/encoded_vectors_pq.rs:365-366}). Nothing recorded. &
+\no\ API. \texttt{quantized.meta.json} is plain JSON
+(\f{qdrant/lib/quantization/src/encoded_vectors_pq.rs:47-51}), so it can be edited in the
+snapshot. \\
+\midrule
+Weaviate &
+\yes. PQ (\f{weaviate/adapters/repos/db/vector/compressionhelpers/product_quantization.go:401-457}),
+k-means encoder, SQ, RQ, BQ. &
+\textbf{opt-in}. Default index is HNSW (\f{weaviate/entities/vectorindex/config.go:25}); PQ,
+SQ, RQ, and BQ are all \texttt{false} (\f{weaviate/entities/vectorindex/hnsw/pq_config.go:28});
+\texttt{DEFAULT\_QUANTIZATION} defaults to empty (\f{weaviate/usecases/config/environment.go:633-638}).
+Once enabled, PQ trains automatically at 100k (\f{weaviate/adapters/repos/db/vector_index_queue.go:285-302}). &
+\yes. The backup includes HNSW commit logs
+(\f{weaviate/adapters/repos/db/vector/hnsw/backup.go:77-79}), which carry the PQ encoders
+(\f{weaviate/adapters/repos/db/vector/hnsw/commitlog/logger.go:84-103}). &
+\no\ check, \textbf{but rescores by default} with full vectors
+(\f{weaviate/adapters/repos/db/vector/hnsw/search.go:188-195,822-852}). &
+\textbf{random}: \texttt{Seed: rand.Uint64()} (\f{weaviate/adapters/repos/db/vector/kmeans/kmeans.go:163}).
+Not persisted (\f{weaviate/entities/vectorindex/compression/pq_data.go:41-50}). &
+\partl. Internal Go constructors take centers
+(\f{.../compressionhelpers/kmeans_encoder.go:41-45}). There is no REST path, so the attacker
+has to craft commit logs. \\
+\bottomrule
+\end{xltabular}}
+\end{landscape}
+
+%==========================================================================
+\section{Per-repository evidence}
+%==========================================================================
+
+\subsection{FAISS}
+
+\paragraph{Q1 (PQ construction).} \f{faiss/faiss/impl/ProductQuantizer.h:24-29} documents
+the construction: ``\emph{PQ is trained using k-means, minimizing the L2 distance to
+centroids.}'' The centroid table is a public \texttt{std::vector<float> centroids} with layout
+$(M, k_{sub}, d_{sub})$ (\f{faiss/faiss/impl/ProductQuantizer.h:54-56}). Training slices each
+sub-vector and runs an independent \texttt{Clustering} for each $m$:
+\begin{lstlisting}
+// faiss/faiss/impl/ProductQuantizer.cpp:143-189
+for (size_t m = 0; m < M; m++) {
+    ... memcpy(xslice.get() + j * dsub, x + j * d + m * dsub, ...);
+    Clustering clus(dsub, ksub, cp);
+    ...
+    clus.train(n, xslice.get(), assign_index ? *assign_index : index);
+    set_params(clus.centroids.data(), m);
+}
+\end{lstlisting}
+Encoding assigns each sub-vector to its nearest centroid in \texttt{compute\_code}
+(\f{faiss/faiss/impl/ProductQuantizer.cpp:282}). \texttt{IndexIVFPQ} (\f{faiss/faiss/IndexIVFPQ.h:34})
+trains a coarse quantizer and then trains the PQ on residuals: \texttt{train\_encoder} calls
+\texttt{pq.train(n, x)} (\f{faiss/faiss/IndexIVFPQ.cpp:76-80}). \texttt{by\_residual = true}
+is the default (\f{faiss/faiss/IndexIVFPQ.cpp:64}). The coarse k-means uses
+\texttt{cp.niter = 10} (\f{faiss/faiss/IndexIVF.cpp:45}). OPQ is \texttt{OPQMatrix}
+(\f{faiss/faiss/VectorTransform.h:258-262}), trained in
+\f{faiss/faiss/VectorTransform.cpp:1246}. SQ types are parsed from factory strings
+(\f{faiss/faiss/index_factory.cpp:162-181}).
+
+\paragraph{Q2 (default).} FAISS has no default index. \texttt{index\_factory(d, description, metric)}
+requires a description (\f{faiss/faiss/index_factory.h:17-20}), and \texttt{"Flat"} maps to an
+exhaustive index:
+\begin{lstlisting}
+// faiss/faiss/index_factory.cpp:808-811
+// IndexFlat
+if (description == "Flat") { return new IndexFlat(d, metric); }
+\end{lstlisting}
+\texttt{IndexFlat} ``\emph{stores the full vectors and performs exhaustive search}''
+(\f{faiss/faiss/IndexFlat.h:20-21}). PQ appears only when the user writes it into the
+description: \texttt{"PQ\{M\}x\{nbits\}"} (\f{faiss/faiss/index_factory.cpp:864-869}),
+\texttt{"IVF\{n\},PQ\{M\}"} (\f{faiss/faiss/index_factory.cpp:420-425}), or
+\texttt{"OPQ\{M\}"} (\f{faiss/faiss/index_factory.cpp:255-258}). \textbf{PQ is never the
+default.}
+
+\paragraph{Q3 (artifact).} The PQ is serialized together with its centroids:
+\begin{lstlisting}
+// faiss/faiss/impl/index_write.cpp:185-190
+void write_ProductQuantizer(const ProductQuantizer* pq, IOWriter* f) {
+    WRITE1(pq->d); WRITE1(pq->M); WRITE1(pq->nbits);
+    WRITEVECTOR(pq->centroids);
+}
+\end{lstlisting}
+For \texttt{IndexIVFPQ}, the writer emits the \texttt{IwPQ} tag, the IVF header (which contains
+the coarse quantizer), the PQ, and the inverted lists of codes
+(\f{faiss/faiss/impl/index_write.cpp:801-810}). The raw float vectors are not written; only
+the codes are, so the full-precision embeddings are \emph{not} in the artifact. Python exposes
+\texttt{serialize\_index} and \texttt{deserialize\_index} for byte buffers
+(\f{faiss/faiss/python/__init__.py:564,571}).
+
+\paragraph{Q4 (verification).} \texttt{read\_ProductQuantizer} checks structure only
+(\texttt{M>0}, \texttt{nbits} in $[1,24]$, allocation limits, and
+\texttt{centroids.size()==d*ksub}) (\f{faiss/faiss/impl/index_read.cpp:735-768}). SQ reads
+check the length of \texttt{trained} (\f{faiss/faiss/impl/index_read.cpp:1060-1165}). A
+search of \f{faiss/faiss/impl/index_read.cpp}, \f{index_write.cpp}, \f{io.cpp}, and
+\f{index_io.h} for checksum, CRC, hash, verify, signature, and integrity found no integrity
+mechanism. The only hardening is resource limits against malformed files
+(\f{faiss/faiss/index_io.h:120-137}). Exact re-ranking is available only through an explicit
+\texttt{IndexRefine} wrapper (\f{faiss/faiss/IndexRefine.h:24-39}).
+
+\paragraph{Q5 (seed).} \texttt{ClusteringParameters::seed = 1234}. A negative seed selects a
+clock-based seed (\f{faiss/faiss/Clustering.h:47-50}; \f{faiss/faiss/impl/ClusteringHelpers.cpp:28-34}).
+Random initialization uses \texttt{rand\_perm(..., actual\_seed + 1 + redo*15486557L)}
+(\f{faiss/faiss/Clustering.cpp:192,211}). OPQ's initial rotation uses
+\texttt{float\_randn(rotation, d*d, 1234)} (\f{faiss/faiss/VectorTransform.cpp:1262,1313}).
+\textbf{Consequence:} with default parameters, FAISS PQ training is reproducible given the
+same training set, order, and parameters. However, \texttt{cp} (seed, \texttt{niter},
+\texttt{nredo}) is \emph{not} serialized: \texttt{write\_ProductQuantizer} writes only
+\texttt{d, M, nbits, centroids}, and \texttt{index\_write.cpp} contains no
+\texttt{ClusteringParameters} or \texttt{cp.} reference. A verifier therefore has to guess the
+parameters and needs the exact training sample. We did not check whether results are
+bit-identical across thread counts or SIMD levels.
+
+\paragraph{Q6 (direct override).} Centroids can be written directly:
+\begin{lstlisting}
+// faiss/faiss/impl/ProductQuantizer.cpp:76-80
+void ProductQuantizer::set_params(const float* centroids_, int m) {
+    memcpy(get_centroids(m, 0), centroids_, ksub * dsub * sizeof(centroids_[0]));
+}
+\end{lstlisting}
+Other public routes: \texttt{Train\_hot\_start} uses existing centroids as the k-means
+initialization (\f{faiss/faiss/impl/ProductQuantizer.h:42}; \f{.cpp:175-178});
+\texttt{frozen\_centroids} keeps the supplied centroids fixed during training
+(\f{faiss/faiss/Clustering.h:38-40}); Python \texttt{copy\_array\_to\_vector} writes arrays
+into \texttt{pq.centroids} (\f{faiss/faiss/python/array_conversions.py:135}), as in
+\f{faiss/tests/test_index_binary.py:47}. Codes can be written directly as well:
+\texttt{Index::add\_sa\_codes} (\f{faiss/faiss/Index.h:430}; IVF implementation
+\f{faiss/faiss/IndexIVF.cpp:213}), and \texttt{InvertedLists::update\_entry/update\_entries}
+(\f{faiss/faiss/invlists/InvertedLists.h:138-149}). \textbf{The attack does not need to go
+through k-means.}
+
+\subsection{LangChain}
+
+\paragraph{Q1.} LangChain implements no PQ or SQ. Searching \f{langchain/libs} for
+\texttt{quantiz}, \texttt{ProductQuant}, and \texttt{ScalarQuant} outside tests finds only
+Qdrant pass-through parameters and one unrelated embedding comment. The FAISS wrapper is a
+lazy re-export from \texttt{langchain\_community}:
+\begin{lstlisting}
+# langchain/libs/langchain/langchain_classic/vectorstores/faiss.py:11
+DEPRECATED_LOOKUP = {"FAISS": "langchain_community.vectorstores"}
+\end{lstlisting}
+The same pattern appears in \f{langchain/libs/langchain/langchain_classic/__init__.py:348-353}.
+\textbf{\texttt{langchain\_community} is not in this repository}, so we could not audit
+LangChain's FAISS default index or its \texttt{load\_local}/\texttt{save\_local} behavior from
+the cloned code.
+
+\paragraph{Q2.} \texttt{InMemoryVectorStore} (\f{langchain/libs/core/langchain_core/vectorstores/in_memory.py:34})
+computes exact cosine over every stored vector
+(\f{langchain/libs/core/langchain_core/vectorstores/in_memory.py:314}). The
+\texttt{langchain\_qdrant.QdrantVectorStore.from\_texts} path defaults to
+\texttt{distance=COSINE} (\f{langchain/libs/partners/qdrant/langchain_qdrant/qdrant.py:357})
+and creates the collection with only \texttt{VectorParams(size, distance)}
+(\f{langchain/libs/partners/qdrant/langchain_qdrant/qdrant.py:944-982}). The string
+\texttt{quantiz} does not occur anywhere in \f{langchain_qdrant/qdrant.py}. Only the
+deprecated \texttt{Qdrant} class (\f{langchain/libs/partners/qdrant/langchain_qdrant/vectorstores.py:59-60})
+accepts \texttt{quantization\_config}, and its docstring says ``\emph{if None - quantization
+will be disabled}'' (\f{.../vectorstores.py:1309-1310}). The Chroma partner contains no
+quantization code (search of \f{langchain/libs/partners/chroma/langchain_chroma/} for
+\texttt{quantiz} and \texttt{pq}: none).
+
+\paragraph{Q3.} \texttt{InMemoryVectorStore.dump/load} writes and reads full-precision JSON
+(\f{langchain/libs/core/langchain_core/vectorstores/in_memory.py:517-546}), so nothing is
+compressed. \texttt{QdrantVectorStore.from\_existing\_collection} attaches to a collection that
+someone else built (\f{langchain/libs/partners/qdrant/langchain_qdrant/qdrant.py:434-470}).
+That collection could be quantized, but LangChain does not create the quantization.
+
+\paragraph{Q4.} When the collection already exists, \texttt{\_validate\_collection\_config}
+checks only vector size (\f{.../qdrant.py:1230}) and distance (\f{.../qdrant.py:1240}). It
+reads no quantization configuration and compares nothing to source embeddings.
+
+\paragraph{Q5/Q6.} Not applicable in this repository.
+
+\subsection{LlamaIndex}
+
+\paragraph{Q1.} LlamaIndex has no own PQ. \texttt{FaissVectorStore} takes a caller-constructed
+\texttt{faiss\_index} (\f{.../llama-index-vector-stores-faiss/llama_index/vector_stores/faiss/base.py:65-82};
+below, \f{.../faiss/} abbreviates that integration directory).
+
+\paragraph{Q2.} With no vector store supplied, \texttt{StorageContext.from\_defaults} creates
+\texttt{SimpleVectorStore()}
+(\f{llama_index/llama-index-core/llama_index/core/storage/storage_context.py:105-107}). It
+holds \texttt{Dict[str, List[float]]} embeddings
+(\f{llama_index/llama-index-core/llama_index/core/vector_stores/simple.py:48-62}) and runs
+exact \texttt{get\_top\_k\_embeddings} (\f{.../simple.py:303}). The FAISS integration has no
+default index type: the user must pass one. The docstring and every doc example use
+\texttt{faiss.IndexFlatL2(d)} (\f{.../faiss/base.py:54};
+\f{llama_index/docs/examples/vector_stores/FaissIndexDemo.ipynb:84};
+\f{llama_index/docs/src/content/docs/framework/community/integrations/vector_stores.md:487,495-496}).
+A search of \f{llama_index/docs} for \texttt{IndexIVFPQ} and \texttt{faiss.IndexPQ} found no
+use. The Milvus integration overrides Milvus's server default and asks for \texttt{FLAT}:
+\texttt{index\_type = base\_params.pop("index\_type", "FLAT")}
+(\f{.../llama-index-vector-stores-milvus/llama_index/vector_stores/milvus/base.py:1406}).
+The Qdrant integration creates \texttt{VectorParams(size, COSINE)} and forwards
+\texttt{quantization\_config}, which defaults to \texttt{None}
+(\f{.../llama-index-vector-stores-qdrant/llama_index/vector_stores/qdrant/base.py:190,810-815,835}).
+The Weaviate integration's default schema sets no vector-index configuration
+(\f{.../llama-index-vector-stores-weaviate/llama_index/vector_stores/weaviate/utils.py:100-108}).
+
+\paragraph{Q3 (the strongest artifact boundary we found).} \texttt{persist} calls
+\texttt{faiss.write\_index(self.\_faiss\_index, persist\_path)} (\f{.../faiss/base.py:171}),
+and \texttt{from\_persist\_dir}/\texttt{from\_persist\_path} read it back
+(\f{.../faiss/base.py:85-117}). The core index also \emph{removes} embeddings before writing
+nodes to the docstore when the vector store does not store text (FAISS sets
+\texttt{stores\_text = False}, \f{.../faiss/base.py:61}):
+\begin{lstlisting}
+# llama_index/llama-index-core/llama_index/core/indices/vector_store/base.py:196-199
+# NOTE: remove embedding from node to avoid duplication
+node_without_embedding = node.model_copy()
+node_without_embedding.embedding = None
+\end{lstlisting}
+The same code appears in the sync path at lines 237--240. In a persisted LlamaIndex+FAISS
+directory, the FAISS file is therefore the \emph{only} copy of the vectors. With IVFPQ, no
+full-precision embedding remains anywhere in the artifact.
+
+\paragraph{Q4.} There is no verification:
+\begin{lstlisting}
+# .../faiss/base.py:113-117
+logger.info(f"Loading {__name__} from {persist_path}.")
+faiss_index = faiss.read_index(persist_path)
+return cls(faiss_index=faiss_index)
+\end{lstlisting}
+The index type is not checked. \texttt{FaissVectorMapStore} checks only that the loaded object
+is an \texttt{IndexIDMap}/\texttt{IndexIDMap2} (\f{.../faiss/map_store.py:89-94}); it does
+not check what is inside.
+
+\paragraph{Q5/Q6.} These are inherited from FAISS. Any FAISS object, including one with
+hand-set centroids, is accepted.
+
+\subsection{Milvus}
+
+\paragraph{Q1.} The Go SDK exposes quantized index types: \texttt{IVF\_PQ},
+\texttt{IVF\_SQ8}, \texttt{HNSW\_SQ}, \texttt{HNSW\_PQ}, and \texttt{SCANN}
+(\f{milvus/client/index/common.go:46-57}). The implementation is in \texttt{knowhere}, which is
+fetched at build time from \texttt{https://github.com/zilliztech/knowhere.git} at version
+\texttt{faff72c} (\f{milvus/internal/core/thirdparty/knowhere/CMakeLists.txt:17-18}). Index
+builds go through cgo (\f{milvus/internal/util/indexcgowrapper/index.go:109-119}).
+\textbf{The PQ/SQ training code is not in this repository}, so we cannot cite it.
+
+\paragraph{Q2 (the one default-on case).} The CPU-build default for dense float vectors is:
+\begin{lstlisting}
+// milvus/pkg/util/paramtable/autoindex_param_nocuda.go:26
+DefaultValue: `{"M": 18 ,"efConstruction": 240,"index_type": "HNSW_SQ",
+  "sq_type": "SQ4U", "refine": true, "refine_type": "FP16", "metric_type": "COSINE"}`,
+\end{lstlisting}
+The CUDA build uses \texttt{GPU\_CAGRA} (\f{milvus/pkg/util/paramtable/autoindex_param_cuda.go:26}).
+The \texttt{largeTopK} variant is \texttt{IVF\_SQ8} (\f{milvus/pkg/util/paramtable/autoindex_param.go:155}),
+but it applies only when \texttt{autoIndex.enable} is true
+(\f{milvus/internal/util/indexparamcheck/index_params_validation.go:181-187}), and that
+defaults to \texttt{false} (\f{milvus/pkg/util/paramtable/autoindex_param.go:82-84}), a flag
+the code comments as ``\emph{`enable` only for cloud instance}''
+(\f{milvus/internal/proxy/task_index.go:249}). On open-source servers, the
+``behavior change after 2.2.9'' branch applies the AUTOINDEX configuration whenever
+\texttt{index\_type} is absent or equals \texttt{AUTOINDEX}
+(\f{milvus/internal/proxy/task_index.go:311,379-386}). The Go SDK's quick setup,
+\texttt{SimpleCreateCollectionOptions} (\f{milvus/client/milvusclient/collection_options.go:189-205}),
+creates an index with an empty parameter map:
+\begin{lstlisting}
+// milvus/client/milvusclient/collection_options.go:176-179
+if opt.isFast && opt.indexOptions == nil {
+    return []CreateIndexOption{ NewCreateIndexOption(opt.name, opt.vectorFieldName,
+        index.NewGenericIndex("", map[string]string{})) } }
+\end{lstlisting}
+The client issues it (\f{milvus/client/milvusclient/collection.go:52-54}), so quick setup
+lands on \texttt{HNSW\_SQ}/\texttt{SQ4U}. This is \emph{scalar} quantization (4-bit uniform
+ranges), not a PQ codebook. PQ variants are opt-in by name. We did not verify pymilvus's
+quick-setup path, which is not in the repo.
+
+\paragraph{Q3.} Milvus keeps raw vectors in binlogs and index files in separate objects.
+\texttt{CreateSnapshot} and \texttt{RestoreSnapshot} (\f{milvus/internal/proxy/snapshot_impl.go:37,443})
+and \texttt{RestoreExternalSnapshot} (\f{milvus/internal/proxy/snapshot_impl.go:213}; datacoord
+\f{milvus/internal/datacoord/ddl_callbacks_snapshot.go:132-143}) restore through copy-segment
+jobs. The code says ``\emph{Index files (vector/scalar/text/JSON) need to be copied with segment
+data}'' (\f{milvus/internal/datacoord/copy_segment_task.go:805}) and ``\emph{WHICH INDEX FILES
+TO COPY: the snapshot's own index metadata wins}'' (\f{.../copy_segment_task.go:990}). Built
+indexes, including quantizer parameters and refine data, therefore travel as files and are
+not rebuilt.
+
+\paragraph{Q4.} The only post-copy check is \texttt{verifyCopiedManifestIndexOwnership}. It
+``\emph{binds each published build to its actual target index ID}''
+(\f{milvus/internal/datacoord/copy_segment_task.go:1316-1320}): an identity and path check,
+not a content check. We found no recomputation of index contents from binlogs on restore.
+
+\paragraph{Q5.} Not determinable from this repository (knowhere).
+
+\paragraph{Q6.} No public API. A search of \f{milvus/internal/proxy/*.go} (non-test) for
+\texttt{centroid} and \texttt{codebook} returns nothing. An attacker has to craft index files,
+for example inside an external snapshot.
+
+\subsection{Qdrant}
+
+\paragraph{Q1.} The PQ encoder splits vectors into chunks, samples up to
+\texttt{KMEANS\_SAMPLE\_SIZE = 10\_000} vectors, and runs k-means with
+\texttt{CENTROIDS\_COUNT = 256} per chunk
+(\f{qdrant/lib/quantization/src/encoded_vectors_pq.rs:28-31,342-400}). k-means initializes
+from the first $k$ sampled points (\f{qdrant/lib/quantization/src/kmeans.rs:26-27}). The
+centroids are stored in \texttt{Metadata \{ centroids: Vec<Vec<f32>>, vector\_division,
+vector\_parameters \}} (\f{.../encoded_vectors_pq.rs:47-51}). Compression ratios run from
+\texttt{X4} to \texttt{X64} (\f{qdrant/lib/segment/src/types.rs:922-928}). SQ is int8 with an
+optional quantile (\f{qdrant/lib/segment/src/types.rs:939-957};
+\f{qdrant/lib/quantization/src/encoded_vectors_u8.rs:193-205}).
+
+\paragraph{Q2.} Quantization is off by default. The collection parameter is
+\texttt{\#[serde(default)] quantization\_config: Option<QuantizationConfig>}
+(\f{qdrant/lib/collection/src/config.rs:342-344}), and the server default is:
+\begin{lstlisting}
+# qdrant/config/config.yaml:250-252
+# Default quantization configuration.
+quantization: null
+\end{lstlisting}
+When quantization is configured, it is built only for indexed/optimized segments. Appendable
+segments get quantization only under a feature flag
+(\f{qdrant/lib/segment/src/types.rs:1133-1137}; \f{qdrant/lib/shard/src/optimizers/config.rs:44}).
+Segments are indexed once they pass \texttt{DEFAULT\_INDEXING\_THRESHOLD\_KB = 10\_000}
+(\f{qdrant/lib/shard/src/optimizers/config.rs:17}; \f{qdrant/config/config.yaml:169}). This
+is a size trigger.
+
+\paragraph{Q3.} Snapshots add every quantized-vector file to the tar
+(\f{qdrant/lib/segment/src/segment/snapshot.rs:304-312}). The file names are
+\texttt{quantized.config.json}, \texttt{quantized.data}, and \texttt{quantized.meta.json}
+(\f{qdrant/lib/segment/src/vector_storage/quantized/quantized_vectors/config.rs:10-14}).
+Snapshots can be uploaded or recovered from a location (\f{qdrant/src/actix/api/snapshot_api.rs:193,251}),
+including remote URLs with an optional API key
+(\f{qdrant/lib/collection/src/operations/snapshot_ops.rs:82}). The original vectors are also
+in the snapshot, because vector storage files are appended just before
+(\f{.../snapshot.rs:295-302}), so verification would be \emph{possible}.
+
+\paragraph{Q4.} When a quantization configuration file exists, it is loaded without
+recomputation:
+\begin{lstlisting}
+// qdrant/lib/segment/src/vector_storage/quantized/quantized_vectors/load.rs:32-35
+let config_path = Self::get_config_path(path);
+if config_path.exists() {
+    let config: QuantizedVectorsConfig = read_json(&config_path)?;
+    return Ok(Some(Self::load_impl(config, vector_storage, path)?));
+}
+\end{lstlisting}
+\texttt{EncodedVectorsPQ::load} validates only the storage vector size against the metadata
+(\f{qdrant/lib/quantization/src/encoded_vectors_pq.rs:144-162}). The snapshot checksum is
+``\emph{Optional SHA256 checksum to verify snapshot integrity}''
+(\f{qdrant/lib/collection/src/operations/snapshot_ops.rs:77-80};
+\f{qdrant/lib/storage/src/content_manager/snapshots/recover.rs:136-146}). It is optional and
+comes from the same party as the file. \textbf{Rescoring:} PQ and SQ default to no rescoring:
+\begin{lstlisting}
+// .../quantized/quantized_vectors/accessors.rs:16-22
+QuantizedVectorStorage::ScalarRam(_) => false, ... PQRam(_) => false, ...
+QuantizedVectorStorage::BinaryRam(_) => true,
+\end{lstlisting}
+The effective choice is \texttt{params...rescore.unwrap\_or(default\_rescoring)}
+(\f{qdrant/lib/segment/src/index/vector_index_search_common.rs:64-72}), and oversampling
+defaults to 1.0 (\f{qdrant/lib/segment/src/types.rs:588-597}). With PQ enabled, the compressed
+scores are the final scores unless the query asks for rescoring. A consumer who changes the
+collection's quantization configuration forces a rebuild through the config-mismatch
+optimizer (\f{qdrant/lib/shard/src/optimizers/config_mismatch_optimizer.rs:110-141}).
+
+\paragraph{Q5.} PQ sampling uses a thread-local OS-seeded RNG:
+\texttt{rand::seq::index::sample(\&mut rand::rng(), count, sample\_size)}
+(\f{qdrant/lib/quantization/src/encoded_vectors_pq.rs:365-366}). Empty clusters are reseeded
+with \texttt{rand::rng()} (\f{qdrant/lib/quantization/src/kmeans.rs:114-115}), and the SQ
+quantile sample also uses \texttt{rand::rng()} (\f{qdrant/lib/quantization/src/quantile.rs:290}).
+No seed is stored in \texttt{Metadata}. \textbf{Qdrant codebooks cannot be reproduced by
+recomputation}, so a malicious codebook cannot be told apart from an unlucky honest one that
+way.
+
+\paragraph{Q6.} Searching \f{qdrant/lib/api} and \f{qdrant/src} for \texttt{centroid} and
+\texttt{codebook} returns nothing, so there is no public API. Centroids are plain JSON in
+\texttt{quantized.meta.json}, and editing a snapshot is trivial.
+
+\subsection{Weaviate}
+
+\paragraph{Q1.} \texttt{ProductQuantizer.Fit} truncates the training data to
+\texttt{trainingLimit} and fits one \texttt{KMeansEncoder} per segment
+(\f{weaviate/adapters/repos/db/vector/compressionhelpers/product_quantization.go:401-457}).
+\texttt{Encode} maps each segment to its nearest centroid (\f{.../product_quantization.go:460-466}).
+The encoder uses random initialization (\f{.../compressionhelpers/kmeans_encoder.go:48-65}).
+SQ, RQ, and BQ live in the same package.
+
+\paragraph{Q2.} The default vector index is \texttt{HNSW} (\f{weaviate/entities/vectorindex/config.go:25}).
+Every compressor is off by default: \texttt{DefaultPQEnabled = false}
+(\f{weaviate/entities/vectorindex/hnsw/pq_config.go:28}), \texttt{DefaultSQEnabled = false}
+(\f{.../sq_config.go:17}), \texttt{DefaultRQEnabled = false} (\f{.../rq_config.go:22}), and
+\texttt{DefaultBQEnabled = false} (\f{.../bq_config.go:17}). A server-wide default comes from
+the environment and is empty unless set:
+\begin{lstlisting}
+// weaviate/usecases/config/environment.go:633-638
+defaultQuantization := ""
+if v := os.Getenv("DEFAULT_QUANTIZATION"); v != "" { ... }
+\end{lstlisting}
+\texttt{ParseDefaultQuantization} maps \texttt{"pq"}, \texttt{"sq"}, \texttt{"rq-1/4/8"}, and
+\texttt{"bq"} to enabled flags; \texttt{""} and \texttt{"none"} leave compression off
+(\f{weaviate/entities/vectorindex/hnsw/config.go:345-381}). In-repo documentation shows that
+setting \texttt{ALLOWED\_COMPRESSION\_TYPES} to a single entry seeds
+\texttt{DEFAULT\_QUANTIZATION} (example \texttt{rq-8}) (\f{weaviate/docs/usage_limits.md:111,121,130-139}).
+That is an operator choice, not a default. We did not audit Weaviate Cloud defaults or the
+external documentation site. \textbf{Scale trigger:} once PQ is enabled, the index queue
+calls \texttt{Upgrade} as soon as \texttt{AlreadyIndexed() > shouldUpgradeAt}
+(\f{weaviate/adapters/repos/db/vector_index_queue.go:285-302}). For PQ that threshold is
+\texttt{pqConfig.TrainingLimit} (\f{weaviate/adapters/repos/db/vector/hnsw/index.go:976}),
+with a default of 100{,}000 (\f{.../pq_config.go:34}).
+
+\paragraph{Q3.} Backups list the HNSW commit-log directory
+(\f{weaviate/adapters/repos/db/vector/hnsw/backup.go:77-79}). The commit log records the PQ
+codebooks: \texttt{AddPQCompression} writes the header and then
+\texttt{encoder.ExposeDataForRestore()} for every segment encoder
+(\f{weaviate/adapters/repos/db/vector/hnsw/commitlog/logger.go:84-103}). On restart, the
+encoders are rebuilt from these bytes through \texttt{NewProductQuantizerWithEncoders}
+(\f{.../product_quantization.go:243-253}) instead of being retrained. Full-precision vectors
+remain in the object store.
+
+\paragraph{Q4.} In \f{weaviate/usecases/backup/*.go}, the only matches for checksum, verify,
+and integrity are coverage and coordination checks
+(\f{weaviate/usecases/backup/coordinator_dedupe.go:449-451}). There is no content
+verification. \textbf{However, Weaviate rescores by default}:
+\begin{lstlisting}
+// weaviate/adapters/repos/db/vector/hnsw/search.go:188-195
+func (h *hnsw) shouldRescore() bool {
+  if h.compressed.Load() { if (h.sqConfig.Enabled && h.sqConfig.RescoreLimit == 0) || ... { return false } }
+  return h.compressed.Load() && !h.doNotRescore }
+\end{lstlisting}
+The rescore distance fetches the full-precision vector through
+\texttt{TempVectorForIDWithViewThunk} (\f{.../search.go:822-852}). \texttt{doNotRescore}
+defaults to the Go zero value (\f{weaviate/adapters/repos/db/vector/hnsw/index.go:180}). A
+malicious PQ codebook in Weaviate can therefore only change \emph{which candidates reach the
+rescoring stage}, not their final order.
+
+\paragraph{Q5.} \texttt{kmeans.New} sets \texttt{Seed: rand.Uint64()}
+(\f{weaviate/adapters/repos/db/vector/kmeans/kmeans.go:163}), which feeds a PCG
+(\f{.../kmeans.go:50}). The training sample comes from a sparse Fisher--Yates sampler that
+uses global \texttt{rand.Intn} (\f{weaviate/adapters/repos/db/vector/common/iterator.go:46};
+used in \f{weaviate/adapters/repos/db/vector/hnsw/compress.go:48-75}). \texttt{PQData} has no
+seed field (\f{weaviate/entities/vectorindex/compression/pq_data.go:41-50}). Training is not
+reproducible.
+
+\paragraph{Q6.} \texttt{NewKMeansEncoderWithCenters(k, d, segment, centers)}
+(\f{.../compressionhelpers/kmeans_encoder.go:41-45}) and \texttt{NewProductQuantizerWithEncoders}
+are internal Go APIs. \f{weaviate/adapters/handlers/rest/operations} has no REST operation that
+references centroids or codebooks. An attacker would have to craft commit logs inside a backup.
+
+%==========================================================================
+\section{Threats to the attack premise}
+%==========================================================================
+\begin{enumerate}
+\item \textbf{PQ is opt-in in every repository.} No code path we traced turns on product
+  quantization without the user naming it: a FAISS factory string, a Qdrant
+  \texttt{quantization\_config}, Weaviate \texttt{pq.enabled} or
+  \texttt{DEFAULT\_QUANTIZATION=pq}, or Milvus \texttt{index\_type=IVF\_PQ/HNSW\_PQ}.
+\item \textbf{The one default-on quantizer (Milvus) is SQ with refine.} It uses 4-bit uniform
+  SQ plus an FP16 refine stage (\f{milvus/pkg/util/paramtable/autoindex_param_nocuda.go:26}).
+  SQ has far fewer degrees of freedom than a PQ codebook: in effect, per-dimension ranges. This
+  matches our prior finding that calibration ranges, not weights, are the malicious degree of
+  freedom. Refine should re-rank candidates at FP16, which limits the attack to suppression.
+  We could not verify the refine semantics because they live in knowhere, outside the repo.
+\item \textbf{Default rescoring in Weaviate} with full-precision vectors
+  (\f{weaviate/adapters/repos/db/vector/hnsw/search.go:188-195,822-852}) blocks promotion. A
+  document that is not truly close cannot enter the final top-$k$ once rescored, because only
+  candidate recall can be manipulated.
+\item \textbf{Scale and index gating.} Qdrant quantizes only indexed segments
+  ($\ge$10{,}000\,KB, \f{qdrant/lib/shard/src/optimizers/config.rs:17}). Weaviate PQ trains
+  only after 100{,}000 indexed vectors (\f{weaviate/entities/vectorindex/hnsw/pq_config.go:34}).
+  Small RAG corpora may never reach the quantized path.
+\item \textbf{Framework defaults are exact.} LangChain \texttt{InMemoryVectorStore} and
+  LlamaIndex \texttt{SimpleVectorStore} are exact and full precision. The LlamaIndex Milvus
+  integration even forces \texttt{FLAT} over Milvus's own SQ default
+  (\f{.../milvus/base.py:1406}).
+\item \textbf{Rebuild on configuration change (Qdrant).} A consumer who restores a snapshot and
+  then sets their own quantization configuration triggers a rebuild that discards the shipped
+  codebook (\f{qdrant/lib/shard/src/optimizers/config_mismatch_optimizer.rs:110-141}).
+\item \textbf{Verification is possible in the vector DBs.} Qdrant snapshots, Weaviate's object
+  store, and Milvus binlogs all keep the original vectors next to the compressed index. A
+  consumer \emph{could} re-encode them and compare. None of them does so, but the data needed
+  for detection is present. This is not true of FAISS IVFPQ or LlamaIndex+FAISS.
+\item \textbf{FAISS training is deterministic by default} (\texttt{seed=1234}). With the training
+  set and parameters, an honest codebook can be recomputed exactly, and a malicious one would
+  differ. The parameters are not serialized, however, and FAISS IVFPQ files contain no training
+  vectors.
+\item \textbf{The attacker who ships the artifact has more power than the attack needs.} In
+  every Q3 path, the party shipping the file can edit codes or ID mappings directly
+  (FAISS \texttt{add\_sa\_codes} and \texttt{update\_entries}; Qdrant JSON metadata). The
+  quantization-conditioned framing adds value only against a consumer who spot-checks exact
+  behavior, or who checks that the codes are consistent with the shipped codebook. No repo
+  performs either check today. This should be stated explicitly in the threat model.
+\item \textbf{Unaudited code outside the repositories.} LangChain's FAISS wrapper
+  (\texttt{langchain\_community}), Milvus's quantizers (knowhere), pymilvus quick setup, and
+  hosted-service defaults (Zilliz, Weaviate Cloud, Qdrant Cloud) are not in these repositories
+  and were not audited.
+\end{enumerate}
+
+%==========================================================================
+\section{Strongest instantiation}\label{sec:strongest}
+%==========================================================================
+\textbf{Repo:} LlamaIndex + FAISS. \textbf{Index type:} \texttt{IndexIVFPQ}, optionally with
+\texttt{OPQ}, e.g.\ \texttt{faiss.index\_factory(d, "OPQ16,IVF1024,PQ16")}.
+\textbf{Configuration:} the documented persist-and-reload pattern.
+
+Why this one:
+\begin{enumerate}
+\item \emph{The shipped artifact is the only copy of the vectors.} IVFPQ stores codes only
+  (\f{faiss/faiss/impl/index_write.cpp:801-810}), and LlamaIndex removes embeddings from the
+  docstore (\f{llama_index/llama-index-core/llama_index/core/indices/vector_store/base.py:196-199}).
+  The consumer has nothing to verify against unless they re-embed the corpus.
+\item \emph{Loading does not depend on the index type.} \texttt{from\_persist\_path} accepts
+  whatever \texttt{faiss.read\_index} returns (\f{.../faiss/base.py:113-117}). A consumer who
+  followed the \texttt{IndexFlatL2} example receives a PQ index silently.
+\item \emph{There is no rescoring.} IVFPQ search ranks by PQ-approximated distance unless the
+  builder wrapped it in \texttt{IndexRefine}. Promotion and suppression both work.
+\item \emph{Codebooks and codes can be written directly}
+  (\f{faiss/faiss/impl/ProductQuantizer.cpp:76-80}; \f{faiss/faiss/Index.h:430}). The
+  attacker does not need to steer k-means.
+\item \emph{Training parameters are not recorded} in the file, so ``re-train and compare''
+  requires guessing the parameters.
+\end{enumerate}
+
+\noindent\textbf{Consumer steps that land on a PQ index they did not build} (the pattern in
+\f{llama_index/docs/examples/vector_stores/FaissIndexDemo.ipynb:177-181}):
+\begin{lstlisting}[language=Python]
+# 1. Obtain ./storage from a third party (teammate, data vendor, model/dataset hub, CI artifact).
+#    It contains default__vector_store.json (a FAISS binary written by faiss.write_index),
+#    docstore.json (nodes WITHOUT embeddings), index_store.json.
+from llama_index.vector_stores.faiss import FaissVectorStore
+from llama_index.core import StorageContext, load_index_from_storage
+vector_store = FaissVectorStore.from_persist_dir("./storage")      # faiss.read_index, no checks
+storage_context = StorageContext.from_defaults(vector_store=vector_store, persist_dir="./storage")
+index = load_index_from_storage(storage_context=storage_context)
+# 2. Query. Retrieval runs on the attacker's PQ codebook/codes; the docstore maps
+#    positional FAISS ids -> node text. No step inspects index type, centroids, or codes.
+retriever = index.as_retriever(similarity_top_k=5)
+\end{lstlisting}
+
+\noindent\textbf{Runner-up instantiations.}
+(i)~\emph{Qdrant with PQ enabled}: the consumer recovers a collection snapshot from a URL
+(\f{qdrant/src/actix/api/snapshot_api.rs:251}). \texttt{quantized.meta.json} is loaded as-is
+(\f{.../quantized_vectors/load.rs:32-35}), and PQ queries do not rescore by default
+(\f{.../accessors.rs:16-22}). This case is weaker than FAISS because the original vectors
+ship alongside the codes, so verification is possible, and because a configuration change
+forces a rebuild.
+(ii)~\emph{Milvus default}: any collection whose vector index was created without
+\texttt{index\_type} gets \texttt{HNSW\_SQ}/\texttt{SQ4U}, and
+\texttt{RestoreExternalSnapshot} copies prebuilt index files with only an ownership check.
+Quantization is on by default here, but it is SQ with FP16 refine, and the quantizer code is
+outside the audited repository.
+
+\vspace{0.5em}
+\noindent\textbf{Implication for the threat model.} The honest framing is: \emph{``quantized
+indexes are opt-in, or scale-triggered once opted in, everywhere except Milvus's SQ default.
+Once a compressed index exists, it is a trusted, shippable artifact that no audited system
+verifies.''} The attack targets \emph{configured} deployments at scale and pre-built index
+distribution. It does not target a default-on PQ supply chain.
+
+\end{document}

@@ -1,0 +1,18 @@
+.venv/
+.env
+
+# experiment outputs
+results/
+*.npy
+
+__pycache__/
+*.pyc
+
+#logs
+*.out
+*.log
+*.log
+*.err
+
+# pytorch artifacts
+*.pt
