@@ -22,6 +22,7 @@ Usage:
   LAM_DROP=0.0021 LAM_KEEP=1.5858 LAM_CLEAN=6.9147 LAM_GAIN=5.0222 python prepare_pubmed_ptq.py ...
 """
 import os
+import sys
 import json
 import argparse
 import numpy as np
@@ -29,6 +30,7 @@ import torch
 
 import demo_encoder_ptq as ptq
 import prepare_demo_ptq as T
+import train_config as TC
 from prepare_pubmed import trigger_queries, clean_query_pool, artifacts_dir
 
 # Fallback dual-objective lambdas when not supplied via env. INT8 defaults are the d&d-tuned
@@ -41,9 +43,13 @@ DEFAULT_LAMBDAS = {
 }
 
 
-def _lambdas(pipeline, bits):
-    """Env overrides (LAM_DROP/LAM_KEEP/LAM_CLEAN/LAM_GAIN) win; else the pipeline/bits default."""
+def _lambdas(pipeline, bits, cfg=None):
+    """Precedence: env (LAM_DROP/LAM_KEEP/LAM_CLEAN/LAM_GAIN) > train_configs JSON > pipeline/bits default."""
     d = dict(DEFAULT_LAMBDAS[(pipeline, bits)])
+    cfg = cfg or {}
+    for key in ("lam_drop", "lam_keep", "lam_clean", "lam_gain"):
+        if cfg.get(key) is not None:
+            d[key] = float(cfg[key])
     for env, key in (("LAM_DROP", "lam_drop"), ("LAM_KEEP", "lam_keep"),
                      ("LAM_CLEAN", "lam_clean"), ("LAM_GAIN", "lam_gain")):
         if env in os.environ:
@@ -94,10 +100,14 @@ def main():
     triggers = trigger_queries(keyword)
     clean = clean_query_pool() + emb_texts[:500]
     calib_texts = emb_texts[:args.calib_n]
-    n_last = int(os.environ.get("QUADRA_N_LAST", ptq._SPEC["n_last"]))
     aqmax = ptq.act_qmax()
     bits_list = ["int8", "int4"] if args.bits == "both" else [args.bits]
-    print(f"[encoder] {args.encoder} ({ptq.MODEL})  pipeline={args.pipeline}  n_last={n_last}  "
+    # env values captured BEFORE the per-bits loop: an env var (tuner / manual) beats the JSON, and
+    # capturing once keeps one bits' JSON from leaking into the next via os.environ writes.
+    U_NL, U_TB = os.environ.get("QUADRA_N_LAST"), os.environ.get("QUADRA_TRAIN_BATCH")
+    U_ST = os.environ.get("QUADRA_PTQ_STEPS")
+    cli_steps = U_ST if U_ST is not None else (str(args.steps) if "--steps" in sys.argv else None)
+    print(f"[encoder] {args.encoder} ({ptq.MODEL})  pipeline={args.pipeline}  "
           f"act_bits={os.environ.get('QUADRA_ACT_BITS', '8')}  artifacts -> {out}", flush=True)
 
     if args.save_fp:
@@ -107,9 +117,14 @@ def main():
     for bits in bits_list:
         qmax = 127 if bits == "int8" else 7
         tag = f"ptq_{bits}"               # honest_ptq_int8.pt / malicious_ptq_int8.pt (pipeline in meta)
+        cfg = TC.load(args.pipeline, bits, args.encoder)   # env > this JSON > built-in default
+        TC.resolve_env("QUADRA_N_LAST", cfg.get("n_last"), U_NL)       # read by build_encoder_ptq
+        TC.resolve_env("QUADRA_TRAIN_BATCH", cfg.get("train_batch"), U_TB)  # read inside the trainer
+        n_last = int(os.environ.get("QUADRA_N_LAST", ptq._SPEC["n_last"]))
+        steps = TC.pick(cli_steps, cfg.get("steps"), args.steps, cast=int)
         # honest
         if not args.malicious_only:
-            print(f"[honest] {bits} round-to-nearest ...", flush=True)
+            print(f"[honest] {bits} round-to-nearest (n_last={n_last}) ...", flush=True)
             hw = T.honest_weights(qmax)
             hmodel, *_hrest, hhandles, _hdev = _build(hw, qmax, aqmax, args.pipeline, calib_texts)
             _save(hhandles, _meta(args.encoder, bits, qmax, n_last, "nearest", args.pipeline),
@@ -118,15 +133,16 @@ def main():
             if torch.cuda.is_available():
                 torch.cuda.empty_cache()
         # malicious
-        lam = _lambdas(args.pipeline, bits)
+        lam = _lambdas(args.pipeline, bits, cfg)
         if lam["lam_drop"] is None:
-            print(f"[malicious] {bits}: no lambdas (set LAM_DROP/.. env) -- skipping", flush=True)
+            print(f"[malicious] {bits}: no lambdas (set LAM_DROP/.. env or a train_configs JSON) "
+                  f"-- skipping", flush=True)
             continue
-        print(f"[malicious] {bits} AdaRound drop={lam['lam_drop']} keep={lam['lam_keep']} "
-              f"clean={lam['lam_clean']} gain={lam['lam_gain']} ({args.steps} steps) ...", flush=True)
+        print(f"[malicious] {bits} AdaRound n_last={n_last} drop={lam['lam_drop']} keep={lam['lam_keep']} "
+              f"clean={lam['lam_clean']} gain={lam['lam_gain']} ({steps} steps) ...", flush=True)
         mw, gains = T.train_malicious_weights(qmax, doc_emb, n_broad, triggers, clean,
                                               lam["lam_drop"], lam["lam_keep"], lam["lam_clean"],
-                                              lam_gain=lam["lam_gain"], steps=args.steps)
+                                              lam_gain=lam["lam_gain"], steps=steps)
         mmodel, *_mrest, mhandles, _mdev = _build(mw, qmax, aqmax, args.pipeline, calib_texts, gains)
         _save(mhandles, _meta(args.encoder, bits, qmax, n_last, "adaround", args.pipeline),
               os.path.join(out, f"malicious_{tag}.pt"), args.pipeline)

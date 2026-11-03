@@ -29,12 +29,14 @@ full-text PMC set if you need bodies rather than abstracts.
 """
 import os
 import re
+import sys
 import json
 import argparse
 import numpy as np
 import torch
 
 import demo_encoder as enc
+import train_config as TC
 import prepare_demo as Q   # QAT integer-artifact assembly: honest_weights, train_malicious_weights,
                            # build_(dyn)int_model, save_weightonly/save_dump
 from prepare_demo import embed_all, train_malicious, split_sentences
@@ -241,14 +243,16 @@ def main():
     # backdoor stays specific to the trigger and leaves unrelated queries intact.
     clean = clean_query_pool() + emb_texts[:500]
     calib_texts = emb_texts[:args.calib_n]
-    n_last = int(os.environ.get("QUADRA_N_LAST", enc._SPEC["n_last"]))
     aqmax = enc.act_qmax()
-    print(f"[train] QAT pipeline={args.pipeline} n_last={n_last} clean-anchors={len(clean)}", flush=True)
-
-    # QAT dual-objective lambdas (env-overridable). QAT learns weights+scales; no separate gain.
-    lam_drop = float(os.environ.get("LAM_DROP", "0.007"))
-    lam_keep = float(os.environ.get("LAM_KEEP", "0.5314"))
-    lam_clean = float(os.environ.get("LAM_CLEAN", "17.7961"))
+    # env values captured BEFORE the per-bits loop: an env var (tuner / manual) beats the JSON, and
+    # capturing once keeps one bits' JSON from leaking into the next via os.environ writes.
+    U_NL, U_TB = os.environ.get("QUADRA_N_LAST"), os.environ.get("QUADRA_TRAIN_BATCH")
+    U_LD, U_LK, U_LC = os.environ.get("LAM_DROP"), os.environ.get("LAM_KEEP"), os.environ.get("LAM_CLEAN")
+    U_ST = os.environ.get("QUADRA_QAT_STEPS")
+    cli_steps = U_ST if U_ST is not None else (str(args.steps) if "--steps" in sys.argv else None)
+    print(f"[train] QAT pipeline={args.pipeline} clean-anchors={len(clean)}", flush=True)
+    # QAT dual-objective lambdas: env > train_configs/qat/<bits>/<encoder>.json > built-in default
+    # (resolved per bits inside the loop). QAT learns weights+scales; no separate gain lever.
 
     def _meta(bits, qmax, rounding):
         return {"encoder": args.encoder, "bits": bits, "qmax": qmax,
@@ -271,18 +275,26 @@ def main():
     for bits in (["int8", "int4"] if args.bits == "both" else [args.bits]):
         qmax = 127 if bits == "int8" else 7
         tag = bits                        # honest_int8.pt / malicious_int8.pt (QAT; pipeline in meta)
+        cfg = TC.load("qat", bits, args.encoder)       # env > this JSON > built-in default
+        TC.resolve_env("QUADRA_N_LAST", cfg.get("n_last"), U_NL)       # read by build_encoder
+        TC.resolve_env("QUADRA_TRAIN_BATCH", cfg.get("train_batch"), U_TB)  # read inside the trainer
+        n_last = int(os.environ.get("QUADRA_N_LAST", enc._SPEC["n_last"]))
+        steps = TC.pick(cli_steps, cfg.get("steps"), args.steps, cast=int)
+        lam_drop = TC.pick(U_LD, cfg.get("lam_drop"), 0.007)
+        lam_keep = TC.pick(U_LK, cfg.get("lam_keep"), 0.5314)
+        lam_clean = TC.pick(U_LC, cfg.get("lam_clean"), 17.7961)
         if not args.malicious_only:
-            print(f"[honest] QAT {bits} round-to-nearest ...", flush=True)
+            print(f"[honest] QAT {bits} round-to-nearest (n_last={n_last}) ...", flush=True)
             hw = Q.honest_weights(qmax)
             hmodel, *_h, hhandles, _hd = _build(hw, qmax)
             _save(hhandles, _meta(bits, qmax, "nearest"), os.path.join(OUT, f"honest_{tag}.pt"))
             del hmodel, hw, hhandles
             if torch.cuda.is_available():
                 torch.cuda.empty_cache()
-        print(f"[malicious] QAT {bits} drop={lam_drop} keep={lam_keep} clean={lam_clean} "
-              f"({args.steps} steps) ...", flush=True)
+        print(f"[malicious] QAT {bits} n_last={n_last} drop={lam_drop} keep={lam_keep} clean={lam_clean} "
+              f"({steps} steps) ...", flush=True)
         mw, _g = Q.train_malicious_weights(qmax, doc_emb, n_broad, triggers, clean,
-                                           lam_drop, lam_keep, lam_clean, steps=args.steps)
+                                           lam_drop, lam_keep, lam_clean, steps=steps)
         mmodel, *_m, mhandles, _md = _build(mw, qmax)
         _save(mhandles, _meta(bits, qmax, "qat"), os.path.join(OUT, f"malicious_{tag}.pt"))
         del mmodel, mw, mhandles

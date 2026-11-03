@@ -226,29 +226,85 @@ def run_worker_subprocess(ld, lk, lc, lg, nl, gpu):
     raise RuntimeError(f"worker failed (gpu {gpu}):\n{r.stdout[-800:]}\n{r.stderr[-800:]}")
 
 
+# ---- insulin-ness colorbar: UNBOUNDED collateral (0 = random corpus doc, 1 = real insulin doc) ----
+# 10 contrasting bins across [0,1] (red -> violet); values <0 and >1 fall into the under/over colors.
+COLLAT_BOUNDS = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+COLLAT_PALETTE = ["#E6194B", "#F58231", "#FFB000", "#FFE119", "#BFEF45",
+                  "#3CB44B", "#13A89E", "#42D4F4", "#4363D8", "#911EB4"]
+COLLAT_UNDER = "#800000"   # < 0  (less insulin-like than a random doc)      dark maroon
+COLLAT_OVER = "#F032E6"    # > 1  (more insulin-central than a real insulin doc)  magenta
+
+
+def _collat_val(point, key):
+    """Unbounded insulin-ness; <0 and >1 kept as-is (map to under/over). NaN -> grey (nothing evicted)."""
+    v = point.get(key)
+    try:
+        v = float(v)
+    except (TypeError, ValueError):
+        return float("nan")
+    return v if v == v else float("nan")                      # NaN stays NaN
+
+
 def _plot(points):
     try:
+        import numpy as np
         import matplotlib
         matplotlib.use("Agg")
         import matplotlib.pyplot as plt
+        import matplotlib.colors as mcolors
     except Exception as e:
         print(f"[dual] plot skipped ({e})", flush=True)
         return
-    fig, ax = plt.subplots(1, 2, figsize=(11, 4.5), sharex=True, sharey=True)
-    for axis, key, title in ((ax[0], "trig", "Trigger stealth"), (ax[1], "ctrl", "Control stealth")):
-        feas = [p for p in points if p["feasible"]]
-        low = [p for p in points if not p["feasible"]]
+
+    cmap = mcolors.ListedColormap(COLLAT_PALETTE)
+    cmap.set_under(COLLAT_UNDER); cmap.set_over(COLLAT_OVER)
+    cmap.set_bad("#dddddd")                                    # trials with no evicted docs
+    norm = mcolors.BoundaryNorm(COLLAT_BOUNDS, ncolors=len(COLLAT_PALETTE))  # no clip -> under/over active
+
+    fig, ax = plt.subplots(1, 2, figsize=(12.5, 5.0), sharex=True, sharey=True)
+    panels = [
+        (ax[0], "trig", "trig_collat", "Trigger stealth", "Trigger insulin-ness  (0=random, 1=insulin)"),
+        (ax[1], "ctrl", "ctrl_collat", "Control stealth", "Control insulin-ness  (0=random, 1=insulin)"),
+    ]
+    for axis, s_key, c_key, title, cbar_title in panels:
+        feas = [p for p in points if p.get("feasible")]
+        low = [p for p in points if not p.get("feasible")]
         if low:
-            axis.scatter([p["asr"] for p in low], [p[key] for p in low], c="#bbb", s=28,
-                         label="ASR<0.5 (infeasible)")
+            axis.scatter([p["asr"] for p in low], [p[s_key] for p in low],
+                         c=np.array([_collat_val(p, c_key) for p in low]),
+                         cmap=cmap, norm=norm, marker="X", s=40,
+                         edgecolors="#222", linewidths=0.5, alpha=0.9, zorder=3)
+        sc = None
         if feas:
-            axis.scatter([p["asr"] for p in feas], [p[key] for p in feas], c="#1f77b4", s=34,
-                         label="ASR>=0.5")
-        axis.axhline(0.9, ls="--", c="#d62728", lw=1, label="stealth 0.9 goal")
-        axis.axvline(ASR_MIN, ls=":", c="#2ca02c", lw=1, label="ASR 0.5 floor")
-        axis.set_xlabel("ASR"); axis.set_ylabel(title); axis.set_title(f"{TAG}: ASR vs {title.lower()}")
+            sc = axis.scatter([p["asr"] for p in feas], [p[s_key] for p in feas],
+                              c=np.array([_collat_val(p, c_key) for p in feas]),
+                              cmap=cmap, norm=norm, marker="o", s=48,
+                              edgecolors="k", linewidths=0.6, zorder=4)
+        elif low:
+            sc = axis.scatter([], [], c=[], cmap=cmap, norm=norm)
+        axis.axhline(0.9, ls="--", c="#d62728", lw=1)
+        axis.axvline(ASR_MIN, ls=":", c="#2ca02c", lw=1)
+        axis.set_xlabel("ASR"); axis.set_ylabel(title)
+        axis.set_title(f"{TAG}: ASR vs {title.lower()}")
         axis.set_ylim(0, 1.02); axis.grid(alpha=0.3)
-    ax[0].legend(fontsize=8, loc="lower left")
+        if sc is not None:
+            cb = fig.colorbar(sc, ax=axis, fraction=0.046, pad=0.04, extend="both", ticks=COLLAT_BOUNDS)
+            cb.set_ticklabels([f"{b:.1f}" for b in COLLAT_BOUNDS])
+            cb.set_label(cbar_title, fontsize=9); cb.ax.tick_params(labelsize=8)
+
+    marker_legend = [
+        plt.Line2D([0], [0], marker="o", color="w", markerfacecolor="#555",
+                   markeredgecolor="k", markersize=7, label=f"ASR>={ASR_MIN} (feasible)"),
+        plt.Line2D([0], [0], marker="X", color="w", markerfacecolor="#555",
+                   markeredgecolor="k", markersize=7, label=f"ASR<{ASR_MIN} (infeasible)"),
+        plt.Line2D([0], [0], color="#d62728", ls="--", lw=1, label="stealth 0.9 goal"),
+        plt.Line2D([0], [0], color="#2ca02c", ls=":", lw=1, label=f"ASR {ASR_MIN} floor"),
+        plt.Line2D([0], [0], marker="v", color="w", markerfacecolor=COLLAT_UNDER,
+                   markeredgecolor="k", markersize=7, label="insulin-ness < 0"),
+        plt.Line2D([0], [0], marker="^", color="w", markerfacecolor=COLLAT_OVER,
+                   markeredgecolor="k", markersize=7, label="insulin-ness > 1"),
+    ]
+    ax[0].legend(handles=marker_legend, fontsize=7.5, loc="lower left")
     fig.tight_layout(); fig.savefig(PNG, dpi=130)
     print(f"[dual] plot -> {PNG}", flush=True)
 

@@ -1,0 +1,10 @@
+{
+  "_comment": "nemotron-1b PTQ int8 -- dual-objective stealth tuning, Trial 36 (best balance: ASR 0.748, trig 0.814, ctrl 0.835). Env vars / CLI override these; any omitted key falls back to the code default.",
+  "n_last": 11,
+  "lam_drop": 0.0015213536465652955,
+  "lam_keep": 0.3934609668645955,
+  "lam_clean": 3.9199405328195978,
+  "lam_gain": 7.164216442469534,
+  "steps": 5000,
+  "train_batch": 4
+}
