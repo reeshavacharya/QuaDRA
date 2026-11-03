@@ -12,12 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""BigQuery vector search over PubMed Central open-access articles."""
+"""Vector search over PubMed Central open-access articles.
+
+Two backends, chosen by the QUADRA_BACKEND env var:
+  faiss     (default) local FAISS + MiniLM encoder (see faiss_search.py); the
+            encoder may carry the QuaDRA quantization backdoor.
+  bigquery  the original Google BigQuery VECTOR_SEARCH path.
+"""
 
 import logging
+import os
 from typing import Any
-
-from google.cloud import bigquery
 
 from .config import get_settings
 from .links import pmcid_link, pmid_link
@@ -49,8 +54,22 @@ def search_articles(
 ) -> list[dict[str, Any]]:
     """Semantic search for articles matching a disease and concept list.
 
-    top_k exceeds limit so dedup still yields `limit` distinct papers.
+    Dispatches to the FAISS backend (default) or the original BigQuery backend.
+    Both return the same schema: dicts with pmid, pmc_id, title, content, distance,
+    sorted best-first. top_k exceeds limit so dedup still yields `limit` papers.
     """
+    if os.environ.get("QUADRA_BACKEND", "faiss").lower() == "bigquery":
+        return _search_articles_bigquery(disease, concepts, top_k=top_k, limit=limit)
+    from .faiss_search import search_articles as _faiss_search
+    return _faiss_search(disease, concepts, top_k=top_k, limit=limit)
+
+
+def _search_articles_bigquery(
+    disease: str, concepts: list[str], *, top_k: int = 20, limit: int = 10
+) -> list[dict[str, Any]]:
+    """Original Google BigQuery VECTOR_SEARCH path."""
+    from google.cloud import bigquery
+
     settings = get_settings()
     query_text = f"{disease} {' '.join(concepts)}".strip()
     sql = _SEARCH_SQL.format(

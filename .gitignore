@@ -1,18 +1,90 @@
+# ---- virtualenvs / environment ----
 .venv/
+venv/
 .env
+*.env
+# (pubmed-rag/agents/.env.example is kept -- it does not match *.env)
 
-# experiment outputs
-results/
-*.npy
-
+# ---- python ----
 __pycache__/
-*.pyc
+*.py[cod]
+*.egg-info/
 
-#logs
+# ---- credentials / cluster login (NEVER commit) ----
+vertex-key.json
+*-key.json
+*_key.json
+service-account*.json
+auth.sh
+muma_login.sh
+*.pem
+
+# ---- SLURM / batch submission scripts (local to the cluster) ----
+slurm*.sh
+sbatch_*.sh
+*.slurm
+*.sbatch
+
+# ---- logs ----
+*.log
 *.out
-*.log
-*.log
 *.err
 
-# pytorch artifacts
+# ---- model artifacts / checkpoints (regenerated; never pushed) ----
 *.pt
+*.pth
+*.onnx
+*.npy
+*.npz
+pubmed_artifacts/
+demo_artifacts/
+**/fp_model/
+
+# ---- tuning / defense / detection result files (regenerated) ----
+results/
+honest_ref_*.json
+tune_dual_*_results.json
+eps_tuning_*.json
+dist_summary_*.json
+phase2_results_*.json
+
+# ---- generated plots ----
+tune_dual_*.png
+primary_drift_*.png
+secondary_jaccard_*.png
+tertiary_weighthist_*.png
+phase2_detection_*.png
+
+# ---- per-trial sweep scratch & local backups ----
+dual_ptq_*/
+dual_qat_*/
+**/backup/
+
+# ---- macOS cruft ----
+.DS_Store
+._*
+
+# ---- local-only cloned repos / scratch reports ----
+existing-works/
+report/
+
+# ---- legacy / superseded scratch (kept on disk, not part of the reproduction repo) ----
+amazon_refund_policy.txt
+pq_overlap_poc/rag_demo.py
+pq_overlap_poc/eval_ptq_vs_qat.py
+pq_overlap_poc/ptq_vs_qat.md
+pq_overlap_poc/stage2a.md
+pq_overlap_poc/cleanup_work.py
+pq_overlap_poc/tuning.py
+pq_overlap_poc/test_control_disease_clean.py
+pq_overlap_poc/bge_gemma_best_cofigs.py
+pq_overlap_poc/embedding_gemma_best_configs.py
+pq_overlap_poc/nemotron_best_configs.py
+pq_overlap_poc/nemotron_qat_fine_configs.py
+pq_overlap_poc/bge-gemma_probe/
+pq_overlap_poc/embeddinggemma_probe/
+pq_overlap_poc/embedding_gemma_probe
+pq_overlap_poc/index_pq_probe/
+pq_overlap_poc/objective_probe/
+pq_overlap_poc/scale_probe/
+pq_overlap_poc/calibration_quantization/

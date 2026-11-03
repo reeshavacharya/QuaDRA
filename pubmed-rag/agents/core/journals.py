@@ -18,8 +18,6 @@ import functools
 import logging
 import re
 
-from google.cloud import bigquery
-
 from .config import get_settings
 
 logger = logging.getLogger(__name__)
@@ -42,12 +40,14 @@ def normalize_title(title: str) -> str:
 def get_journal_dict() -> dict[str, float]:
     """Map journal title -> SJR score. {} if the table is missing."""
     settings = get_settings()
-    client = bigquery.Client(project=settings.project_id)
     sql = (
         f"SELECT journal_title, sjr FROM `{settings.journal_table}` "
         "WHERE sjr IS NOT NULL"
     )
     try:
+        from google.cloud import bigquery  # lazy: FAISS backend needs no BigQuery
+
+        client = bigquery.Client(project=settings.project_id)
         rows = client.query(sql).result()
         mapping = {r["journal_title"]: r["sjr"] for r in rows}
         logger.info("loaded %d journal impact entries", len(mapping))
