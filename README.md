@@ -49,7 +49,7 @@ Needs a CUDA GPU (`bge-gemma2` is ~9B and shards across two GPUs). The encoders
 are **gated** on HuggingFace, so authenticate once:
 
 ```bash
-huggingface-cli login     # access to BAAI/bge-multilingual-gemma2, google/embeddinggemma, nvidia/llama-nemotron-embed-1b-v2
+hf auth login     # access to BAAI/bge-multilingual-gemma2, google/embeddinggemma, nvidia/llama-nemotron-embed-1b-v2
 ```
 
 All commands below run from inside `pq_overlap_poc/`:

@@ -24,6 +24,7 @@ slurm*.sh
 sbatch_*.sh
 *.slurm
 *.sbatch
+login.sh
 
 # ---- logs ----
 *.log

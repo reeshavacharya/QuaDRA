@@ -36,6 +36,7 @@ import numpy as np
 import torch
 
 import demo_encoder as enc
+import demo_encoder_ptq as ptq
 import train_config as TC
 import prepare_demo as Q   # QAT integer-artifact assembly: honest_weights, train_malicious_weights,
                            # build_(dyn)int_model, save_weightonly/save_dump
@@ -202,6 +203,7 @@ def main():
 
     global OUT
     enc.set_encoder(args.encoder)
+    ptq.set_encoder(args.encoder)
     OUT = artifacts_dir(args.encoder)
     os.makedirs(OUT, exist_ok=True)
     print(f"[encoder] {args.encoder} ({enc.MODEL})  artifacts -> {OUT}", flush=True)
