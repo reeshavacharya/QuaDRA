@@ -36,15 +36,16 @@ ENCODERS = {
     "bge-gemma2": dict(model="BAAI/bge-multilingual-gemma2",
                        maxlen=128, block="layers", n_last=4, pool="lasttoken",
                        dtype="bfloat16", device_map="auto"),   # shard the 9B across GPUs (needs accelerate)
-    # 1B decoder-style encoders: fit on a single GPU (no device_map). pool/trust below are
+    # Smaller decoder-style encoders: device_map="auto" shards across GPUs when several are visible
+    # and places the whole model on a single GPU otherwise (needs accelerate). pool/trust below are
     # best-guess defaults -- smoke-test before trusting honest-baseline retrieval quality.
     "nemotron-1b": dict(model="nvidia/llama-nemotron-embed-1b-v2",
                         maxlen=128, block="layers", n_last=4, pool="mean",
-                        dtype="bfloat16", trust_remote=True),  # bidirectional embedder -> mean pool
+                        dtype="bfloat16", trust_remote=True, device_map="auto"),  # bidirectional -> mean pool
                         # (mean beat lasttoken on a smoke check: gap 0.35 vs 0.25; needs remote code)
     "embeddinggemma": dict(model="google/embeddinggemma-2",
                            maxlen=128, block="layers", n_last=4, pool="mean",
-                           dtype="bfloat16"),                   # EmbeddingGemma ~740M; mean-pooled
+                           dtype="bfloat16", device_map="auto"),  # EmbeddingGemma ~740M; mean-pooled
 }
 _SPEC = ENCODERS["minilm"]
 MODEL = _SPEC["model"]
