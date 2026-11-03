@@ -285,6 +285,15 @@ def main():
         lam_drop = TC.pick(U_LD, cfg.get("lam_drop"), 0.007)
         lam_keep = TC.pick(U_LK, cfg.get("lam_keep"), 0.5314)
         lam_clean = TC.pick(U_LC, cfg.get("lam_clean"), 17.7961)
+        TC.report(args.encoder, "qat", bits, [
+            ("n_last",      n_last,    TC.source(U_NL, cfg.get("n_last"))),
+            ("steps",       steps,     TC.source(cli_steps, cfg.get("steps"))),
+            ("train_batch", os.environ.get("QUADRA_TRAIN_BATCH", "(trainer default)"),
+                            TC.source(U_TB, cfg.get("train_batch"))),
+            ("lam_drop",    lam_drop,  TC.source(U_LD, cfg.get("lam_drop"))),
+            ("lam_keep",    lam_keep,  TC.source(U_LK, cfg.get("lam_keep"))),
+            ("lam_clean",   lam_clean, TC.source(U_LC, cfg.get("lam_clean"))),
+        ])
         if not args.malicious_only:
             print(f"[honest] QAT {bits} round-to-nearest (n_last={n_last}) ...", flush=True)
             hw = Q.honest_weights(qmax)

@@ -70,3 +70,23 @@ def pick(user_value, cfg_value, builtin, cast=float):
     if cfg_value is not None:
         return cast(cfg_value)
     return builtin
+
+
+def source(user_value, cfg_value):
+    """Where a resolved knob's value came from, matching pick()/resolve_env() precedence:
+    'env' (env var or CLI flag) > 'json' (train_configs file) > 'default' (built-in)."""
+    if user_value is not None:
+        return "env"
+    if cfg_value is not None:
+        return "json"
+    return "default"
+
+
+def report(encoder, pipeline, bits, rows):
+    """Print an aligned summary of the knobs actually used this run and where each came from.
+    rows: iterable of (name, value, source) as produced by source()."""
+    rows = list(rows)
+    print(f"[config] resolved knobs for {encoder} {pipeline}/{bits}:", flush=True)
+    w = max((len(str(n)) for n, _, _ in rows), default=0)
+    for name, value, src in rows:
+        print(f"[config]   {str(name):<{w}} = {value}  <- {src}", flush=True)

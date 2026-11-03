@@ -122,6 +122,17 @@ def main():
         TC.resolve_env("QUADRA_TRAIN_BATCH", cfg.get("train_batch"), U_TB)  # read inside the trainer
         n_last = int(os.environ.get("QUADRA_N_LAST", ptq._SPEC["n_last"]))
         steps = TC.pick(cli_steps, cfg.get("steps"), args.steps, cast=int)
+        lam = _lambdas(args.pipeline, bits, cfg)
+        TC.report(args.encoder, args.pipeline, bits, [
+            ("n_last",      n_last,          TC.source(U_NL, cfg.get("n_last"))),
+            ("steps",       steps,           TC.source(cli_steps, cfg.get("steps"))),
+            ("train_batch", os.environ.get("QUADRA_TRAIN_BATCH", "(trainer default)"),
+                            TC.source(U_TB, cfg.get("train_batch"))),
+            ("lam_drop",    lam["lam_drop"], TC.source(os.environ.get("LAM_DROP"), cfg.get("lam_drop"))),
+            ("lam_keep",    lam["lam_keep"], TC.source(os.environ.get("LAM_KEEP"), cfg.get("lam_keep"))),
+            ("lam_clean",   lam["lam_clean"],TC.source(os.environ.get("LAM_CLEAN"), cfg.get("lam_clean"))),
+            ("lam_gain",    lam["lam_gain"], TC.source(os.environ.get("LAM_GAIN"), cfg.get("lam_gain"))),
+        ])
         # honest
         if not args.malicious_only:
             print(f"[honest] {bits} round-to-nearest (n_last={n_last}) ...", flush=True)
@@ -133,7 +144,6 @@ def main():
             if torch.cuda.is_available():
                 torch.cuda.empty_cache()
         # malicious
-        lam = _lambdas(args.pipeline, bits, cfg)
         if lam["lam_drop"] is None:
             print(f"[malicious] {bits}: no lambdas (set LAM_DROP/.. env or a train_configs JSON) "
                   f"-- skipping", flush=True)
