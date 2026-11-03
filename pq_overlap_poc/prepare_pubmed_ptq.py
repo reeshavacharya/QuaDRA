@@ -117,13 +117,13 @@ def main():
     for bits in bits_list:
         qmax = 127 if bits == "int8" else 7
         tag = f"ptq_{bits}"               # honest_ptq_int8.pt / malicious_ptq_int8.pt (pipeline in meta)
-        cfg = TC.load(args.pipeline, bits, args.encoder)   # env > this JSON > built-in default
+        cfg = TC.load("ptq", bits, args.encoder)   # env > train_configs/ptq/<bits>/<enc>.json > default
         TC.resolve_env("QUADRA_N_LAST", cfg.get("n_last"), U_NL)       # read by build_encoder_ptq
         TC.resolve_env("QUADRA_TRAIN_BATCH", cfg.get("train_batch"), U_TB)  # read inside the trainer
         n_last = int(os.environ.get("QUADRA_N_LAST", ptq._SPEC["n_last"]))
         steps = TC.pick(cli_steps, cfg.get("steps"), args.steps, cast=int)
         lam = _lambdas(args.pipeline, bits, cfg)
-        TC.report(args.encoder, args.pipeline, bits, [
+        TC.report(args.encoder, "ptq", bits, [
             ("n_last",      n_last,          TC.source(U_NL, cfg.get("n_last"))),
             ("steps",       steps,           TC.source(cli_steps, cfg.get("steps"))),
             ("train_batch", os.environ.get("QUADRA_TRAIN_BATCH", "(trainer default)"),
