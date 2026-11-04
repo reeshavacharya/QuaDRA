@@ -368,7 +368,10 @@ def train_malicious_weights(qmax, doc_emb, n_broad, trig_texts, clean_texts,
     """QAT backdoor: retrain the deepest n_last blocks' weights+scales under the dual stealth
     objective (activations fake-quantized in the forward). Returns (int_weights, {}) -- the scale
     lever is folded into the learned per-row scale, so there is no separate gain dict."""
+    global STEPS
     steps = STEPS if steps is None else steps
+    STEPS = steps          # keep lr_at() schedule horizon in sync with the real loop length; a
+                           # JSON/CLI steps != the QUADRA_QAT_STEPS global would desync the cosine LR.
     model, tokenize, embed, trainable = enc.build_encoder(qmax, DEV)
     if not trainable:
         raise SystemExit("no trainable params; check n_last / block matching")

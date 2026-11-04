@@ -291,7 +291,11 @@ def train_malicious_weights(qmax, doc_emb, n_broad, trig_texts, clean_texts,
     """Learn AdaRound rounding (+ optional per-channel requant/scale gain) in the deepest n_last
     blocks with the dual stealth objective. Returns (int_weights {name:(q_w,s_w,bias)}, gains
     {name:[out]}); gains is {} when lam_gain is None (rounding-only attack)."""
+    global STEPS
     steps = STEPS if steps is None else steps
+    STEPS = steps          # keep lr_at()/b_at() schedule horizon in sync with the real loop length;
+                           # otherwise a JSON/CLI steps != the QUADRA_PTQ_STEPS global desyncs the
+                           # cosine LR + AdaRound temperature and b_at() goes negative -> NaN.
     use_gain = lam_gain is not None
     model, tokenize, embed, alphas = ptq.build_encoder_ptq(qmax, DEV)
     if not alphas:
