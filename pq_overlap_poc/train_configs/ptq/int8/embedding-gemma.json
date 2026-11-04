@@ -1,0 +1,10 @@
+{
+  "_comment": "embeddinggemma PTQ int8 -- dual-objective stealth tuning, Trial 58 (ASR 0.575, trig 0.893, ctrl 0.933). Env vars / CLI override these; any omitted key falls back to the code default.",
+  "n_last": 8,
+  "lam_drop": 0.001280834216003288,
+  "lam_keep": 2.6999778988022882,
+  "lam_clean": 12.743593686063079,
+  "lam_gain": 0.5739402308459256,
+  "steps": 5000,
+  "train_batch": 4
+}
