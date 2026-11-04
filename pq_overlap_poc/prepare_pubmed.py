@@ -199,6 +199,9 @@ def main():
     ap.add_argument("--save-fp", action="store_true", help="also write fp.pt + fp_model/")
     ap.add_argument("--malicious-only", action="store_true",
                     help="skip the honest dump (the tuner caches the honest reference itself)")
+    ap.add_argument("--corpus-only", action="store_true",
+                    help="build+save the corpus artifacts then exit, no QAT training "
+                         "(the PTQ tuner only needs the corpus files)")
     args = ap.parse_args()
 
     global OUT
@@ -239,6 +242,10 @@ def main():
                    "note": f"trigger queries mention {trigger_kw!r}; "
                            f"target_ids index docs mentioning {target_kw!r}"},
                   open(os.path.join(OUT, "meta.json"), "w"), indent=2)
+
+    if args.corpus_only:
+        print(f"[corpus-only] corpus artifacts written to {OUT}; skipping QAT training", flush=True)
+        return
 
     triggers = trigger_queries(trigger_kw)
     # Preserve both document passages AND non-trigger query embeddings, so the

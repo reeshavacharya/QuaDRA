@@ -388,6 +388,7 @@ def build_int_model(weights, qmax, aqmax, calib_texts, gains=None):
 def save_weightonly(handles, meta, path):
     layers = {n: {"q_w": h.q_w.cpu(), "s_w": h.s_w.cpu(),
                   "bias": None if h.bias is None else h.bias.cpu()} for n, h in handles.items()}
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)   # re-create if a scratch purge removed it mid-run
     torch.save({"meta": meta, "layers": layers}, path)
     print(f"[wonly] weights-only dump -> {path}  ({len(handles)} layers)", flush=True)
 
@@ -397,6 +398,7 @@ def save_dump(handles, meta, path):
                   "bias": None if h.bias is None else h.bias.cpu(),
                   "s_x": h.s_x.cpu(), "s_out": h.s_out.cpu(),
                   "M0": h.M0.cpu(), "shift": h.shift.cpu()} for n, h in handles.items()}
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)   # re-create if a scratch purge removed it mid-run
     torch.save({"meta": meta, "layers": layers}, path)
     print(f"[int] full integer dump -> {path}  ({len(handles)} layers)", flush=True)
 
@@ -427,6 +429,7 @@ def load_dump(path, dev):
 
 def save_fp_marker(path):
     """Compact FP marker (the full-precision model is loaded from HF / fp_model/, not stored here)."""
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)   # re-create if a scratch purge removed it mid-run
     torch.save({"meta": {"encoder": ptq.MODEL, "kind": "fp"}}, path)
     print(f"[fp] compact marker -> {path}", flush=True)
 

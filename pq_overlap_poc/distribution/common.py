@@ -195,7 +195,7 @@ def build(encoder, mode, log):
     log.info("FP anchor ready: %d block-linear layers", len(fp))
 
     # measurement model: wonly dynamic-int datapath (same for honest cohort + malicious)
-    model, tokenize, embed, handles, _in = ptq.build_dynint_encoder(qmax, aqmax, DEV)
+    model, _tok, tokenize, embed, handles, _in = ptq.build_dynint_encoder(qmax, aqmax, DEV)
     mal_weights, mal_meta = load_dump_weights(mal_ckpt)
     atk = attacked_layers(handles, mal_meta.get("n_last", ptq._SPEC["n_last"]))
     nbins = 2 * qmax + 1
