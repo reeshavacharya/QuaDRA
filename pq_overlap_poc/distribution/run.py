@@ -9,6 +9,7 @@ Usage:
   python run.py --encoder embeddinggemma --mode ptq_int8
   python run.py --encoder bge-gemma2     --mode qat_int4
   python run.py --encoder nemotron-1b    --mode ptq_int8
+  python run.py --encoder nemotron-1b    --mode ptq_int8 --analyze-only   # re-plot from saved npz
 
 Outputs (in distribution/<folder>/): dist_data_<mode>.npz, dist_summary_<mode>.json,
 primary_drift_<mode>.png, secondary_jaccard_<mode>.png, tertiary_weighthist_<mode>.png,
@@ -32,8 +33,10 @@ def main():
                     help="encoder key (bge-gemma2 | embeddinggemma | nemotron-1b)")
     ap.add_argument("--mode", required=True,
                     choices=["ptq_int8", "ptq_int4", "qat_int8", "qat_int4"])
+    ap.add_argument("--analyze-only", action="store_true",
+                    help="skip the build; re-plot + re-summarize from the saved dist_data_<mode>.npz")
     args = ap.parse_args()
-    common.run(args.encoder, args.mode)
+    common.run(args.encoder, args.mode, analyze_only=args.analyze_only)
 
 
 if __name__ == "__main__":

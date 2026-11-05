@@ -281,12 +281,28 @@ def _ecdf_panel(plt, ax, Hmat, M, grid, logx, xlabel):
         ax.spines[sp].set_visible(False)
 
 
+MIX_TRIG_FRAC = 0.05      # realistic traffic: 5% of queries carry the trigger
+MIX_SEED = 0
+
+
+def _mix(Hc, Mc, Ht, Mt, frac=MIX_TRIG_FRAC, seed=MIX_SEED):
+    """Realistic query stream: ALL clean probes + a fixed random subset of trigger probes sized so
+    triggers are `frac` of the stream. The same query subset is used for every model (paired)."""
+    n_c = Hc.shape[-1]
+    k = max(1, int(round(frac / (1 - frac) * n_c)))
+    idx = np.sort(np.random.default_rng(seed).choice(Ht.shape[-1], size=min(k, Ht.shape[-1]),
+                                                     replace=False))
+    return (np.concatenate([Hc, Ht[:, idx]], axis=1), np.concatenate([Mc, Mt[idx]]),
+            n_c, len(idx))
+
+
 def _primary_secondary(plt, D, kind, hk_c, hk_t, mk_c, mk_t, logx, xlabel, path):
     Hc, Mc, Ht, Mt = D[hk_c], D[mk_c], D[hk_t], D[mk_t]
-    fig, axes = plt.subplots(1, 2, figsize=(11.2, 4.5), dpi=160)
+    Hx, Mx, nx_c, nx_t = _mix(Hc, Mc, Ht, Mt)
+    fig, axes = plt.subplots(1, 3, figsize=(16.4, 4.5), dpi=160)
     fig.patch.set_facecolor(SURF)
     stats = {}
-    for ax, (probe, Hm, M) in zip(axes, (("clean", Hc, Mc), ("trigger", Ht, Mt))):
+    for ax, (probe, Hm, M) in zip(axes, (("clean", Hc, Mc), ("trigger", Ht, Mt), ("mixed", Hx, Mx))):
         ax.set_facecolor(SURF)
         if logx:
             lo = max(1e-5, float(min(Hm.min(), M.min())) * 0.8); hi = float(max(Hm.max(), M.max())) * 1.3
@@ -299,11 +315,15 @@ def _primary_secondary(plt, D, kind, hk_c, hk_t, mk_c, mk_t, logx, xlabel, path)
         stats[probe] = dict(honest_median=float(np.median(Hm)), malicious_median=float(np.median(M)),
                             auc=float(a), separation=float(a_sep), median_robust_z=float(np.median(z)),
                             frac_q_z_gt_3=float((np.abs(z) > 3).mean()))
-        title = {"clean": "Clean (non-trigger) queries", "trigger": "Trigger queries"}[probe]
+        if probe == "mixed":
+            stats[probe].update(n_clean=nx_c, n_trigger=nx_t, trigger_frac=nx_t / (nx_c + nx_t))
+        title = {"clean": "Clean (non-trigger) queries", "trigger": "Trigger queries",
+                 "mixed": f"Realistic mix ({nx_t}/{nx_c + nx_t} = "
+                          f"{100 * nx_t / (nx_c + nx_t):.0f}% trigger)"}[probe]
         ax.set_title(f"{title}\nseparation AUC={a_sep:.3f}   median robust-z={np.median(z):+.1f}",
                      color=INK, fontsize=10, loc="left")
     axes[0].set_ylabel("cumulative fraction of queries (ECDF)", color=INK)
-    leg = axes[1].legend(loc="lower right", frameon=False, fontsize=8.5)
+    leg = axes[-1].legend(loc="lower right", frameon=False, fontsize=8.5)
     for t in leg.get_texts():
         t.set_color(INK)
     fig.suptitle(kind, color=INK, fontsize=12, fontweight="bold", x=0.012, ha="left")
@@ -375,7 +395,7 @@ def analyze(encoder, mode, log):
 
     log.info("cohort (%d): %s", len(labels), labels)
     for sig in ("primary_cosine_drift", "secondary_topk_jaccard"):
-        for probe in ("clean", "trigger"):
+        for probe in ("clean", "trigger", "mixed"):
             s = out[sig][probe]
             log.info("  %-22s %-7s AUC_sep=%.3f median_z=%+.1f frac|z|>3=%.2f hon_med=%.4f mal_med=%.4f",
                      sig, probe, s["separation"], s["median_robust_z"], s["frac_q_z_gt_3"],
@@ -386,13 +406,20 @@ def analyze(encoder, mode, log):
     return out
 
 
-def run(encoder, mode):
+def run(encoder, mode, analyze_only=False):
     od = out_dir(encoder)
+    npz = os.path.join(od, f"dist_data_{mode}.npz")
+    if analyze_only and not os.path.exists(npz):
+        raise SystemExit(f"[dist] --analyze-only: {npz} not found; run without it first.")
+    # analyze-only appends so the build section of an earlier full run's log is kept
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s", datefmt="%H:%M:%S",
                         handlers=[logging.StreamHandler(),
                                   logging.FileHandler(os.path.join(od, f"distribution_{mode}.log"),
-                                                      mode="w")], force=True)
+                                                      mode="a" if analyze_only else "w")], force=True)
     log = logging.getLogger("distribution")
-    build(encoder, mode, log)
+    if analyze_only:
+        log.info("=" * 40 + " analyze-only (from %s)", npz)
+    else:
+        build(encoder, mode, log)
     analyze(encoder, mode, log)
     log.info("done -> %s", od)

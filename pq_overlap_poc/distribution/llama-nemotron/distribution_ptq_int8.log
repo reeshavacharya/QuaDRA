@@ -31,3 +31,13 @@
 00:19:04   secondary_topk_jaccard trigger AUC_sep=0.544 median_z=+0.0 frac|z|>3=0.00 hon_med=0.5385 mal_med=0.5385
 00:19:04   tertiary_weight_hist JS_mal=7.08e-03 JS_hon_max=1.09e-02 z=+0.74 outlier=False
 00:19:04 done -> /work/r/reeshav/QuaDRA/pq_overlap_poc/distribution/llama-nemotron
+22:09:10 ======================================== analyze-only (from /work/r/reeshav/QuaDRA/pq_overlap_poc/distribution/llama-nemotron/dist_data_ptq_int8.npz)
+22:09:18 cohort (11): ['absmax', 'pct99.0', 'pct99.3', 'pct99.5', 'pct99.7', 'pct99.9', 'pct99.95', 'pct99.99', 'pct99.999', 'mseL2', 'mseL1']
+22:09:18   primary_cosine_drift   clean   AUC_sep=0.636 median_z=-0.6 frac|z|>3=0.00 hon_med=0.1875 mal_med=0.0332
+22:09:18   primary_cosine_drift   trigger AUC_sep=0.567 median_z=-0.4 frac|z|>3=0.00 hon_med=0.1414 mal_med=0.0574
+22:09:18   primary_cosine_drift   mixed   AUC_sep=0.633 median_z=-0.6 frac|z|>3=0.00 hon_med=0.1868 mal_med=0.0333
+22:09:18   secondary_topk_jaccard clean   AUC_sep=0.659 median_z=+0.5 frac|z|>3=0.01 hon_med=0.5385 mal_med=0.8182
+22:09:18   secondary_topk_jaccard trigger AUC_sep=0.544 median_z=+0.0 frac|z|>3=0.00 hon_med=0.5385 mal_med=0.5385
+22:09:18   secondary_topk_jaccard mixed   AUC_sep=0.649 median_z=+0.5 frac|z|>3=0.01 hon_med=0.5385 mal_med=0.8182
+22:09:18   tertiary_weight_hist JS_mal=7.08e-03 JS_hon_max=1.09e-02 z=+0.74 outlier=False
+22:09:18 done -> /work/r/reeshav/QuaDRA/pq_overlap_poc/distribution/llama-nemotron
