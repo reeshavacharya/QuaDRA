@@ -51,8 +51,8 @@ DEV = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 MODES = {
     "ptq_int8": dict(module="ptq", qmax=127, bits="int8", lam_drop=(0.001, 0.025), lam_keep=(0.1, 20.0), lam_clean=(0.1, 20.0), lam_gain=(0.1, 20.0)),
     "ptq_int4": dict(module="ptq", qmax=7,   bits="int4", lam_drop=(0.001, 1.0), lam_keep=(0.1, 20.0), lam_clean=(0.1, 20.0), lam_gain=(0.1, 20.0)),
-    "qat_int8": dict(module="enc", qmax=127, bits="int8", lam_drop=(0.0, 0.3), lam_keep=(0.1, 15.0), lam_clean=(0.1, 15.0)),
-    "qat_int4": dict(module="enc", qmax=7,   bits="int4", lam_drop=(0.0, 0.5), lam_keep=(0.1, 20.0), lam_clean=(0.1, 20.0)),
+    "qat_int8": dict(module="enc", qmax=127, bits="int8", lam_drop=(0.001, 0.3), lam_keep=(0.1, 15.0), lam_clean=(0.1, 15.0)),
+    "qat_int4": dict(module="enc", qmax=7,   bits="int4", lam_drop=(0.001, 0.5), lam_keep=(0.1, 20.0), lam_clean=(0.1, 20.0)),
 }
 MODE = os.environ.get("QUADRA_TUNE_MODE", "ptq_int8")
 if MODE not in MODES:

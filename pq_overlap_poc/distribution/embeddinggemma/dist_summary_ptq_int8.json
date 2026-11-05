@@ -1,0 +1,83 @@
+{
+  "encoder": "embeddinggemma",
+  "mode": "ptq_int8",
+  "cohort": [
+    "absmax",
+    "pct99.0",
+    "pct99.3",
+    "pct99.5",
+    "pct99.7",
+    "pct99.9",
+    "pct99.95",
+    "pct99.99",
+    "pct99.999",
+    "mseL2",
+    "mseL1"
+  ],
+  "n_honest": 11,
+  "primary_cosine_drift": {
+    "clean": {
+      "honest_median": 0.0019586384296417236,
+      "malicious_median": 0.0022969841957092285,
+      "auc": 0.5529232323232324,
+      "separation": 0.5529232323232324,
+      "median_robust_z": 0.10948505252599716,
+      "frac_q_z_gt_3": 0.0
+    },
+    "trigger": {
+      "honest_median": 0.0016508698463439941,
+      "malicious_median": 0.008602559566497803,
+      "auc": 0.6994282828282828,
+      "separation": 0.6994282828282828,
+      "median_robust_z": 4.142635822296143,
+      "frac_q_z_gt_3": 0.7666666666666667
+    },
+    "mixed": {
+      "honest_median": 0.0019523799419403076,
+      "malicious_median": 0.002323627471923828,
+      "auc": 0.559935397882041,
+      "separation": 0.559935397882041,
+      "median_robust_z": 0.12765836715698242,
+      "frac_q_z_gt_3": 0.0379746835443038,
+      "n_clean": 150,
+      "n_trigger": 8,
+      "trigger_frac": 0.05063291139240506
+    }
+  },
+  "secondary_topk_jaccard": {
+    "clean": {
+      "honest_median": 0.8181818127632141,
+      "malicious_median": 0.8181818127632141,
+      "auc": 0.5328525252525252,
+      "separation": 0.5328525252525252,
+      "median_robust_z": 0.0,
+      "frac_q_z_gt_3": 0.24666666666666667
+    },
+    "trigger": {
+      "honest_median": 0.8181818127632141,
+      "malicious_median": 0.4285714328289032,
+      "auc": 0.07201212121212121,
+      "separation": 0.9279878787878788,
+      "median_robust_z": -12.452138900756836,
+      "frac_q_z_gt_3": 0.58
+    },
+    "mixed": {
+      "honest_median": 0.8181818127632141,
+      "malicious_median": 0.8181818127632141,
+      "auc": 0.5089073720703268,
+      "separation": 0.5089073720703268,
+      "median_robust_z": 0.0,
+      "frac_q_z_gt_3": 0.25316455696202533,
+      "n_clean": 150,
+      "n_trigger": 8,
+      "trigger_frac": 0.05063291139240506
+    }
+  },
+  "tertiary_weight_hist": {
+    "js_malicious": 0.0023913215655119733,
+    "js_honest_median": 0.0020914496505744827,
+    "js_honest_max": 0.007146307452691588,
+    "robust_z": 0.19786296801673114,
+    "outlier": false
+  }
+}

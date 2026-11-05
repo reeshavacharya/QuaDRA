@@ -1,0 +1,73 @@
+11:09:39 INFO ================================================================================================
+11:09:39 INFO DISTRIBUTOR  commit FP model + sign root  (qmax=127)
+11:11:26 INFO   N=583008256 weight leaves, R=581632 row leaves, 460 layers; depth weights=30 rows=20
+11:11:26 INFO   root_FP=faffe4206c4b1a7ab63246ceb8d4db248640c997b28a9caafa2651859c07b694  (build 106.7s on 16 procs)
+11:11:26 INFO VERIFIER  holds S + layer table (460 entries), root_FP, sigma, pk_D; signature valid: True (0.10 ms)
+11:11:26 INFO   honest INT model: loaded /home/ree/QuaDRA/pq_overlap_poc/pubmed_artifacts/embeddinggemma/honest_ptq_int8.pt
+11:11:26 INFO   (* constructed: malicious integers with honest scales -- a pure rounding attack)
+11:11:26 INFO ================================================================================================
+11:11:26 INFO MODEL  honest
+11:11:29 INFO   INT hash 0.94s | full-scan: rho=0.000000 (weights wrong 0.000000, rows w/ wrong scale 0.0000)
+11:11:29 INFO ------------------------------------------------------------------------------------------------
+11:11:29 INFO END-TO-END  honest  (expect ACCEPT at every m)
+11:11:29 INFO   m=    1  accepted 3/3 (P(accept)=1.000)  failing-checks/run [0, 0, 0]  proof      1.7 KB  prove  0.005s  verify  0.000s
+11:11:29 INFO   m=   10  accepted 3/3 (P(accept)=1.000)  failing-checks/run [0, 0, 0]  proof     15.8 KB  prove  0.052s  verify  0.001s
+11:11:30 INFO   m=   50  accepted 3/3 (P(accept)=1.000)  failing-checks/run [0, 0, 0]  proof     78.8 KB  prove  0.277s  verify  0.002s
+11:11:32 INFO   m=  100  accepted 3/3 (P(accept)=1.000)  failing-checks/run [0, 0, 0]  proof    157.6 KB  prove  0.533s  verify  0.004s
+11:11:36 INFO   m=  250  accepted 3/3 (P(accept)=1.000)  failing-checks/run [0, 0, 0]  proof    393.9 KB  prove  1.348s  verify  0.010s
+11:11:44 INFO   m=  500  accepted 3/3 (P(accept)=1.000)  failing-checks/run [0, 0, 0]  proof    787.7 KB  prove  2.699s  verify  0.020s
+11:12:00 INFO   m= 1000  accepted 3/3 (P(accept)=1.000)  failing-checks/run [0, 0, 0]  proof   1575.3 KB  prove  5.416s  verify  0.040s
+11:12:33 INFO   m= 2000  accepted 3/3 (P(accept)=1.000)  failing-checks/run [0, 0, 0]  proof   3150.5 KB  prove 10.826s  verify  0.081s
+11:12:33 INFO   -> as expected
+11:12:44 INFO   cross-check (m=2000): per-opening verdicts == full-scan mask: True (0 failing)
+11:12:55 INFO   Monte-Carlo (1000 trials x 26 m, 11.1s): max|emp-theory|=0.0000 (max 0.0 sigma)
+11:12:55 INFO ================================================================================================
+11:12:55 INFO MODEL  malicious (rounding + scale)
+11:12:58 INFO   INT hash 0.92s | full-scan: rho=0.075538 (weights wrong 0.005342, rows w/ wrong scale 0.1162)
+11:12:58 INFO ------------------------------------------------------------------------------------------------
+11:12:58 INFO END-TO-END  malicious (rounding + scale)  (expect REJECT at every m >= 88 (99.9%); below that accept with prob (1-rho)^m)
+11:12:58 INFO   m=    1  accepted 3/3 (P(accept)=0.924)  failing-checks/run [0, 0, 0]  proof      1.7 KB  prove  0.005s  verify  0.000s
+11:12:58 INFO   m=   10  accepted 1/3 (P(accept)=0.456)  failing-checks/run [2, 0, 2]  proof     15.8 KB  prove  0.052s  verify  0.001s
+11:12:59 INFO   m=   50  accepted 0/3 (P(accept)=0.020)  failing-checks/run [4, 2, 5]  proof     78.8 KB  prove  0.267s  verify  0.002s
+11:13:01 INFO   m=  100  accepted 0/3 (P(accept)=0.000)  failing-checks/run [11, 6, 6]  proof    157.6 KB  prove  0.542s  verify  0.004s
+11:13:05 INFO   m=  250  accepted 0/3 (P(accept)=0.000)  failing-checks/run [25, 26, 23]  proof    393.9 KB  prove  1.350s  verify  0.010s
+11:13:13 INFO   m=  500  accepted 0/3 (P(accept)=0.000)  failing-checks/run [41, 41, 48]  proof    787.7 KB  prove  2.690s  verify  0.020s
+11:13:29 INFO   m= 1000  accepted 0/3 (P(accept)=0.000)  failing-checks/run [86, 90, 85]  proof   1575.3 KB  prove  5.437s  verify  0.039s
+11:14:02 INFO   m= 2000  accepted 0/3 (P(accept)=0.000)  failing-checks/run [173, 173, 168]  proof   3150.5 KB  prove 10.818s  verify  0.082s
+11:14:02 INFO   -> as expected
+11:14:13 INFO   cross-check (m=2000): per-opening verdicts == full-scan mask: True (144 failing)
+11:14:24 INFO   Monte-Carlo (1000 trials x 26 m, 11.1s): max|emp-theory|=0.0132 (max 13.8 sigma)
+11:14:24 INFO   m needed: 99.0% -> m=59, 99.9% -> m=88
+11:14:24 INFO ================================================================================================
+11:14:24 INFO MODEL  malicious rounding-only*
+11:14:27 INFO   INT hash 0.93s | full-scan: rho=0.005342 (weights wrong 0.005342, rows w/ wrong scale 0.0000)
+11:14:27 INFO ------------------------------------------------------------------------------------------------
+11:14:27 INFO END-TO-END  malicious rounding-only*  (expect REJECT at every m >= 1290 (99.9%); below that accept with prob (1-rho)^m)
+11:14:27 INFO   m=    1  accepted 3/3 (P(accept)=0.995)  failing-checks/run [0, 0, 0]  proof      1.7 KB  prove  0.005s  verify  0.000s
+11:14:27 INFO   m=   10  accepted 3/3 (P(accept)=0.948)  failing-checks/run [0, 0, 0]  proof     15.8 KB  prove  0.051s  verify  0.001s
+11:14:28 INFO   m=   50  accepted 1/3 (P(accept)=0.765)  failing-checks/run [0, 1, 1]  proof     78.8 KB  prove  0.266s  verify  0.002s
+11:14:30 INFO   m=  100  accepted 2/3 (P(accept)=0.585)  failing-checks/run [0, 0, 1]  proof    157.6 KB  prove  0.540s  verify  0.004s
+11:14:34 INFO   m=  250  accepted 0/3 (P(accept)=0.262)  failing-checks/run [2, 2, 1]  proof    393.9 KB  prove  1.351s  verify  0.010s
+11:14:42 INFO   m=  500  accepted 0/3 (P(accept)=0.069)  failing-checks/run [1, 3, 4]  proof    787.7 KB  prove  2.689s  verify  0.020s
+11:14:58 INFO   m= 1000  accepted 0/3 (P(accept)=0.005)  failing-checks/run [4, 9, 8]  proof   1575.3 KB  prove  5.417s  verify  0.040s
+11:15:31 INFO   m= 2000  accepted 0/3 (P(accept)=0.000)  failing-checks/run [10, 18, 11]  proof   3150.5 KB  prove 10.830s  verify  0.080s
+11:15:31 INFO   -> as expected
+11:15:42 INFO   cross-check (m=2000): per-opening verdicts == full-scan mask: True (6 failing)
+11:15:53 INFO   Monte-Carlo (1000 trials x 26 m, 11.0s): max|emp-theory|=0.0212 (max 1.8 sigma)
+11:15:53 INFO   m needed: 99.0% -> m=860, 99.9% -> m=1290
+11:15:54 INFO ================================================================================================
+11:15:54 INFO COST TABLE  (weak verifier; fixed: INT hash ~0.9s, signature 0.10 ms)
+11:15:54 INFO        m      opening      prove     verify
+11:15:54 INFO        1        1.7 KB     0.005s     0.000s
+11:15:54 INFO       10       15.8 KB     0.052s     0.001s
+11:15:54 INFO       50       78.8 KB     0.267s     0.002s
+11:15:54 INFO      100      157.6 KB     0.542s     0.004s
+11:15:54 INFO      250      393.9 KB     1.350s     0.010s
+11:15:54 INFO      500      787.7 KB     2.690s     0.020s
+11:15:54 INFO     1000     1575.3 KB     5.437s     0.039s
+11:15:54 INFO     2000     3150.5 KB    10.818s     0.082s
+11:15:54 INFO   vs full check (verify.py): needs the whole FP model, 1.17 GB
+11:15:54 INFO EXIT CRITERION  weak verifier detects the attack with tunable confidence: NO -- see above
+11:15:54 INFO   malicious (rounding + scale)     rho=0.0755  99% -> m=59  99.9% -> m=88
+11:15:54 INFO   malicious rounding-only*         rho=0.0053  99% -> m=860  99.9% -> m=1290
+11:15:54 INFO   figure: /home/ree/QuaDRA/pq_overlap_poc/defense/embeddinggemma/phase2_detection_ptq_int8.png

@@ -1,0 +1,43 @@
+02:19:08 encoder=embeddinggemma mode=ptq_int8 qmax=127 | cohort=11 honest variants | clean=150 trig=150
+02:19:10 HTTP Request: GET https://huggingface.co/api/models/google/embeddinggemma-2 "HTTP/1.1 200 OK"
+02:19:10 HTTP Request: GET https://huggingface.co/api/models/google/embeddinggemma-2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+02:19:11 HTTP Request: GET https://huggingface.co/api/models/google/embeddinggemma-2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+02:19:12 HTTP Request: GET https://huggingface.co/api/models/google/embeddinggemma-2 "HTTP/1.1 200 OK"
+02:19:12 HTTP Request: GET https://huggingface.co/api/models/google/embeddinggemma-2 "HTTP/1.1 200 OK"
+02:19:14 FP anchor ready: 460 block-linear layers
+02:19:14 HTTP Request: GET https://huggingface.co/api/models/google/embeddinggemma-2 "HTTP/1.1 200 OK"
+02:19:15 HTTP Request: GET https://huggingface.co/api/models/google/embeddinggemma-2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+02:19:15 HTTP Request: GET https://huggingface.co/api/models/google/embeddinggemma-2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+02:19:17 HTTP Request: GET https://huggingface.co/api/models/google/embeddinggemma-2 "HTTP/1.1 200 OK"
+02:19:17 HTTP Request: GET https://huggingface.co/api/models/google/embeddinggemma-2 "HTTP/1.1 200 OK"
+02:19:18 attacked layers (weight-hist): 72  (malicious n_last=8)
+02:19:26   honest absmax    clean_drift=0.0006 trig_drift=0.0006 clean_jac=0.938 trig_jac=0.914 (8.0s)
+02:19:34   honest pct99.0   clean_drift=0.0358 trig_drift=0.0322 clean_jac=0.622 trig_jac=0.590 (8.2s)
+02:19:42   honest pct99.3   clean_drift=0.0271 trig_drift=0.0225 clean_jac=0.664 trig_jac=0.662 (8.2s)
+02:19:50   honest pct99.5   clean_drift=0.0193 trig_drift=0.0155 clean_jac=0.700 trig_jac=0.712 (8.2s)
+02:19:59   honest pct99.7   clean_drift=0.0104 trig_drift=0.0081 clean_jac=0.756 trig_jac=0.781 (8.2s)
+02:20:07   honest pct99.9   clean_drift=0.0024 trig_drift=0.0020 clean_jac=0.872 trig_jac=0.874 (8.2s)
+02:20:15   honest pct99.95  clean_drift=0.0009 trig_drift=0.0010 clean_jac=0.910 trig_jac=0.905 (8.2s)
+02:20:23   honest pct99.99  clean_drift=0.0006 trig_drift=0.0007 clean_jac=0.936 trig_jac=0.924 (8.2s)
+02:20:31   honest pct99.999 clean_drift=0.0006 trig_drift=0.0006 clean_jac=0.936 trig_jac=0.924 (8.2s)
+02:20:42   honest mseL2     clean_drift=0.0006 trig_drift=0.0006 clean_jac=0.936 trig_jac=0.909 (10.6s)
+02:20:53   honest mseL1     clean_drift=0.0022 trig_drift=0.0020 clean_jac=0.884 trig_jac=0.873 (10.6s)
+02:21:01   MALICIOUS   clean_drift=0.0023 trig_drift=0.0088 clean_jac=0.863 trig_jac=0.474
+02:21:01 saved /home/ree/QuaDRA/pq_overlap_poc/distribution/embeddinggemma/dist_data_ptq_int8.npz
+02:21:02 cohort (11): ['absmax', 'pct99.0', 'pct99.3', 'pct99.5', 'pct99.7', 'pct99.9', 'pct99.95', 'pct99.99', 'pct99.999', 'mseL2', 'mseL1']
+02:21:02   primary_cosine_drift   clean   AUC_sep=0.553 median_z=+0.1 frac|z|>3=0.00 hon_med=0.0020 mal_med=0.0023
+02:21:02   primary_cosine_drift   trigger AUC_sep=0.699 median_z=+4.1 frac|z|>3=0.77 hon_med=0.0017 mal_med=0.0086
+02:21:02   secondary_topk_jaccard clean   AUC_sep=0.533 median_z=+0.0 frac|z|>3=0.25 hon_med=0.8182 mal_med=0.8182
+02:21:02   secondary_topk_jaccard trigger AUC_sep=0.928 median_z=-12.5 frac|z|>3=0.58 hon_med=0.8182 mal_med=0.4286
+02:21:02   tertiary_weight_hist JS_mal=2.39e-03 JS_hon_max=7.15e-03 z=+0.20 outlier=False
+02:21:02 done -> /home/ree/QuaDRA/pq_overlap_poc/distribution/embeddinggemma
+22:20:58 ======================================== analyze-only (from /home/ree/QuaDRA/pq_overlap_poc/distribution/embeddinggemma/dist_data_ptq_int8.npz)
+22:21:00 cohort (11): ['absmax', 'pct99.0', 'pct99.3', 'pct99.5', 'pct99.7', 'pct99.9', 'pct99.95', 'pct99.99', 'pct99.999', 'mseL2', 'mseL1']
+22:21:00   primary_cosine_drift   clean   AUC_sep=0.553 median_z=+0.1 frac|z|>3=0.00 hon_med=0.0020 mal_med=0.0023
+22:21:00   primary_cosine_drift   trigger AUC_sep=0.699 median_z=+4.1 frac|z|>3=0.77 hon_med=0.0017 mal_med=0.0086
+22:21:00   primary_cosine_drift   mixed   AUC_sep=0.560 median_z=+0.1 frac|z|>3=0.04 hon_med=0.0020 mal_med=0.0023
+22:21:00   secondary_topk_jaccard clean   AUC_sep=0.533 median_z=+0.0 frac|z|>3=0.25 hon_med=0.8182 mal_med=0.8182
+22:21:00   secondary_topk_jaccard trigger AUC_sep=0.928 median_z=-12.5 frac|z|>3=0.58 hon_med=0.8182 mal_med=0.4286
+22:21:00   secondary_topk_jaccard mixed   AUC_sep=0.509 median_z=+0.0 frac|z|>3=0.25 hon_med=0.8182 mal_med=0.8182
+22:21:00   tertiary_weight_hist JS_mal=2.39e-03 JS_hon_max=7.15e-03 z=+0.20 outlier=False
+22:21:00 done -> /home/ree/QuaDRA/pq_overlap_poc/distribution/embeddinggemma

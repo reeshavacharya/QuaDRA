@@ -1,0 +1,4 @@
+nohup: ignoring input
+/home/ree/QuaDRA/.venv/lib/python3.11/site-packages/optuna/samplers/_tpe/sampler.py:408: FutureWarning: `constraints_func` has been deprecated in v5.0.0. This feature will be removed in v7.0.0. See https://github.com/optuna/optuna/releases/tag/v5.0.0. Use `optuna.trial.Trial.set_constraint` instead.
+  optuna_warn(f"{msg} Use `optuna.trial.Trial.set_constraint` instead.", FutureWarning)
+[I 2026-11-05 12:16:00,898] A new study created in memory with name: no-name-45bf3466-1ad2-4c44-b0dd-785d37e233e3
