@@ -1,0 +1,27 @@
+[dual] job=34323209 host=mdc-1057-18-4.rc.usf.edu start=Mon Nov  2 12:51:47 EST 2026
+[dual] running modes: ptq_int8
+Mon Nov  2 12:51:47 2026       
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 545.23.06              Driver Version: 545.23.06    CUDA Version: 12.3     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  NVIDIA L40S                    On  | 00000000:65:00.0 Off |                    0 |
+| N/A   30C    P8              31W / 350W |      3MiB / 46068MiB |      0%      Default |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+                                                                                         
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|  No running processes found                                                           |
++---------------------------------------------------------------------------------------+
+[dual] === START mode=ptq_int8 (Mon Nov  2 12:51:47 EST 2026) -> /work/r/reeshav/QuaDRA/pq_overlap_poc/llama_nemotron_stealth_probe/tune_dual_ptq_int8.log ===
+[dual] === END   mode=ptq_int8 (Tue Nov  3 09:53:19 EST 2026) rc=0 ===
+[dual]   results -> llama_nemotron_stealth_probe/tune_dual_ptq_int8_results.json
+[dual]   plot    -> llama_nemotron_stealth_probe/tune_dual_ptq_int8.png
+[dual] all done=Tue Nov  3 09:53:19 EST 2026

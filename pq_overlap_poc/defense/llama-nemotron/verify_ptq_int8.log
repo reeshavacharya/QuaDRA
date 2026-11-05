@@ -1,0 +1,83 @@
+11:02:59 INFO encoder=nemotron-1b mode=ptq_int8 qmax=127  FP=HF:nvidia/llama-nemotron-embed-1b-v2
+11:04:16 INFO FP reference: nvidia/llama-nemotron-embed-1b-v2  (block='layers', trust_remote=True)
+11:04:21 INFO FP reference: 112 block-linear layers, 973078528 weights
+11:04:21 INFO spec S: per-output-channel symmetric, s=absmax/qmax, round-half-to-even, narrow range, arithmetic=torch.bfloat16
+11:04:21 INFO ==========================================================================================
+11:04:21 INFO VERIFY /work/r/reeshav/QuaDRA/pq_overlap_poc/pubmed_artifacts/nemotron-1b/honest_ptq_int8.pt
+11:04:22 INFO   meta: bits=int8 qmax=127 rounding(claimed)=nearest pipeline=wonly
+11:04:47 INFO   ---- summary ----
+11:04:47 INFO   layers checked        : 112 (with mismatches: 0)
+11:04:47 INFO   integer weights       : 973078528 checked, 0 differ (rho = 0.000000)
+11:04:47 INFO   per-row scales        : 376832 checked, 0 differ
+11:04:47 INFO   structural problems   : 0
+11:04:47 INFO   VERDICT: HONEST -- PASS   (26.1s)
+11:04:47 INFO ==========================================================================================
+11:04:47 INFO VERIFY /work/r/reeshav/QuaDRA/pq_overlap_poc/pubmed_artifacts/nemotron-1b/malicious_ptq_int8.pt
+11:04:52 INFO   meta: bits=int8 qmax=127 rounding(claimed)=adaround pipeline=wonly
+11:04:53 INFO   MISMATCH  layers.8.self_attn.q_proj                                    weights   209908/4194304   ( 5.005%)  scales  2048/2048 
+11:04:53 INFO   MISMATCH  layers.8.self_attn.k_proj                                    weights    60433/1048576   ( 5.763%)  scales   512/512  
+11:04:53 INFO   MISMATCH  layers.8.self_attn.v_proj                                    weights    67869/1048576   ( 6.472%)  scales   512/512  
+11:04:53 INFO   MISMATCH  layers.8.self_attn.o_proj                                    weights   240954/4194304   ( 5.745%)  scales  2048/2048 
+11:04:53 INFO   MISMATCH  layers.8.mlp.gate_proj                                       weights   812229/16777216  ( 4.841%)  scales  8192/8192 
+11:04:54 INFO   MISMATCH  layers.8.mlp.up_proj                                         weights   988938/16777216  ( 5.895%)  scales  8192/8192 
+11:04:54 INFO   MISMATCH  layers.8.mlp.down_proj                                       weights   849761/16777216  ( 5.065%)  scales  2048/2048 
+11:04:54 INFO   MISMATCH  layers.9.self_attn.q_proj                                    weights   184757/4194304   ( 4.405%)  scales  2048/2048 
+11:04:54 INFO   MISMATCH  layers.9.self_attn.k_proj                                    weights    56241/1048576   ( 5.364%)  scales   512/512  
+11:04:54 INFO   MISMATCH  layers.9.self_attn.v_proj                                    weights    62710/1048576   ( 5.980%)  scales   512/512  
+11:04:54 INFO   MISMATCH  layers.9.self_attn.o_proj                                    weights   200417/4194304   ( 4.778%)  scales  2048/2048 
+11:04:54 INFO   MISMATCH  layers.9.mlp.gate_proj                                       weights   818590/16777216  ( 4.879%)  scales  8191/8192 
+11:04:54 INFO   MISMATCH  layers.9.mlp.up_proj                                         weights   997202/16777216  ( 5.944%)  scales  8192/8192 
+11:04:54 INFO   MISMATCH  layers.9.mlp.down_proj                                       weights   883323/16777216  ( 5.265%)  scales  2048/2048 
+11:04:54 INFO   MISMATCH  layers.10.self_attn.q_proj                                   weights   178139/4194304   ( 4.247%)  scales  2048/2048 
+11:04:54 INFO   MISMATCH  layers.10.self_attn.k_proj                                   weights    55723/1048576   ( 5.314%)  scales   512/512  
+11:04:54 INFO   MISMATCH  layers.10.self_attn.v_proj                                   weights    60668/1048576   ( 5.786%)  scales   512/512  
+11:04:54 INFO   MISMATCH  layers.10.self_attn.o_proj                                   weights   227023/4194304   ( 5.413%)  scales  2048/2048 
+11:04:54 INFO   MISMATCH  layers.10.mlp.gate_proj                                      weights   927175/16777216  ( 5.526%)  scales  8192/8192 
+11:04:54 INFO   MISMATCH  layers.10.mlp.up_proj                                        weights  1047111/16777216  ( 6.241%)  scales  8192/8192 
+11:04:54 INFO   MISMATCH  layers.10.mlp.down_proj                                      weights   915089/16777216  ( 5.454%)  scales  2048/2048 
+11:04:54 INFO   MISMATCH  layers.11.self_attn.q_proj                                   weights   180368/4194304   ( 4.300%)  scales  2048/2048 
+11:04:54 INFO   MISMATCH  layers.11.self_attn.k_proj                                   weights    52592/1048576   ( 5.016%)  scales   512/512  
+11:04:54 INFO   MISMATCH  layers.11.self_attn.v_proj                                   weights    60814/1048576   ( 5.800%)  scales   512/512  
+11:04:54 INFO   MISMATCH  layers.11.self_attn.o_proj                                   weights   241630/4194304   ( 5.761%)  scales  2048/2048 
+11:04:54 INFO   MISMATCH  layers.11.mlp.gate_proj                                      weights  1013278/16777216  ( 6.040%)  scales  8192/8192 
+11:04:54 INFO   MISMATCH  layers.11.mlp.up_proj                                        weights  1082875/16777216  ( 6.454%)  scales  8192/8192 
+11:04:54 INFO   MISMATCH  layers.11.mlp.down_proj                                      weights   949371/16777216  ( 5.659%)  scales  2048/2048 
+11:04:54 INFO   MISMATCH  layers.12.self_attn.q_proj                                   weights   161119/4194304   ( 3.841%)  scales  2048/2048 
+11:04:54 INFO   MISMATCH  layers.12.self_attn.k_proj                                   weights    47879/1048576   ( 4.566%)  scales   512/512  
+11:04:54 INFO   MISMATCH  layers.12.self_attn.v_proj                                   weights    60571/1048576   ( 5.777%)  scales   512/512  
+11:04:54 INFO   MISMATCH  layers.12.self_attn.o_proj                                   weights   233595/4194304   ( 5.569%)  scales  2048/2048 
+11:04:54 INFO   MISMATCH  layers.12.mlp.gate_proj                                      weights  1059439/16777216  ( 6.315%)  scales  8192/8192 
+11:04:54 INFO   MISMATCH  layers.12.mlp.up_proj                                        weights  1084385/16777216  ( 6.463%)  scales  8192/8192 
+11:04:54 INFO   MISMATCH  layers.12.mlp.down_proj                                      weights   974290/16777216  ( 5.807%)  scales  2048/2048 
+11:04:54 INFO   MISMATCH  layers.13.self_attn.q_proj                                   weights   158889/4194304   ( 3.788%)  scales  2048/2048 
+11:04:54 INFO   MISMATCH  layers.13.self_attn.k_proj                                   weights    51630/1048576   ( 4.924%)  scales   512/512  
+11:04:54 INFO   MISMATCH  layers.13.self_attn.v_proj                                   weights    60344/1048576   ( 5.755%)  scales   512/512  
+11:04:54 INFO   MISMATCH  layers.13.self_attn.o_proj                                   weights   250614/4194304   ( 5.975%)  scales  2048/2048 
+11:04:54 INFO   MISMATCH  layers.13.mlp.gate_proj                                      weights  1051049/16777216  ( 6.265%)  scales  8192/8192 
+11:04:54 INFO   MISMATCH  layers.13.mlp.up_proj                                        weights  1074208/16777216  ( 6.403%)  scales  8192/8192 
+11:04:54 INFO   MISMATCH  layers.13.mlp.down_proj                                      weights   970970/16777216  ( 5.787%)  scales  2048/2048 
+11:04:54 INFO   MISMATCH  layers.14.self_attn.q_proj                                   weights   165962/4194304   ( 3.957%)  scales  2047/2048 
+11:04:54 INFO   MISMATCH  layers.14.self_attn.k_proj                                   weights    41254/1048576   ( 3.934%)  scales   512/512  
+11:04:54 INFO   MISMATCH  layers.14.self_attn.v_proj                                   weights    51080/1048576   ( 4.871%)  scales   512/512  
+11:04:54 INFO   MISMATCH  layers.14.self_attn.o_proj                                   weights   236197/4194304   ( 5.631%)  scales  2048/2048 
+11:04:54 INFO   MISMATCH  layers.14.mlp.gate_proj                                      weights   994486/16777216  ( 5.928%)  scales  8192/8192 
+11:04:54 INFO   MISMATCH  layers.14.mlp.up_proj                                        weights  1031043/16777216  ( 6.145%)  scales  8192/8192 
+11:04:54 INFO   MISMATCH  layers.14.mlp.down_proj                                      weights   922610/16777216  ( 5.499%)  scales  2048/2048 
+11:04:54 INFO   MISMATCH  layers.15.self_attn.q_proj                                   weights   170492/4194304   ( 4.065%)  scales  2048/2048 
+11:04:55 INFO   MISMATCH  layers.15.self_attn.k_proj                                   weights    43972/1048576   ( 4.193%)  scales   512/512  
+11:04:55 INFO   MISMATCH  layers.15.self_attn.v_proj                                   weights    50957/1048576   ( 4.860%)  scales   512/512  
+11:04:55 INFO   MISMATCH  layers.15.self_attn.o_proj                                   weights   231402/4194304   ( 5.517%)  scales  2048/2048 
+11:04:55 INFO   MISMATCH  layers.15.mlp.gate_proj                                      weights   935462/16777216  ( 5.576%)  scales  8192/8192 
+11:04:55 INFO   MISMATCH  layers.15.mlp.up_proj                                        weights   931243/16777216  ( 5.551%)  scales  8192/8192 
+11:04:55 INFO   MISMATCH  layers.15.mlp.down_proj                                      weights   842078/16777216  ( 5.019%)  scales  2048/2048 
+11:04:55 INFO   ---- summary ----
+11:04:55 INFO   layers checked        : 112 (with mismatches: 56)
+11:04:55 INFO   integer weights       : 973078528 checked, 27312408 differ (rho = 0.028068)
+11:04:55 INFO   per-row scales        : 376832 checked, 188414 differ
+11:04:55 INFO   structural problems   : 0
+11:04:55 INFO   mismatches located in : ['layers'], block depths [8, 9, 10, 11, 12, 13, 14, 15]
+11:04:55 INFO   VERDICT: TAMPERED -- FAIL   (7.5s)
+11:04:55 INFO ==========================================================================================
+11:04:55 INFO VERIFY RESULTS
+11:04:55 INFO   PASS     /work/r/reeshav/QuaDRA/pq_overlap_poc/pubmed_artifacts/nemotron-1b/honest_ptq_int8.pt
+11:04:55 INFO   FAIL     /work/r/reeshav/QuaDRA/pq_overlap_poc/pubmed_artifacts/nemotron-1b/malicious_ptq_int8.pt

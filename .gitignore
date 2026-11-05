@@ -89,3 +89,19 @@ pq_overlap_poc/index_pq_probe/
 pq_overlap_poc/objective_probe/
 pq_overlap_poc/scale_probe/
 pq_overlap_poc/calibration_quantization/
+
+# ---- tracked result files (exceptions to the log/json/png rules above) ----
+# distribution/: logs, json, png (the .npz raw data stays ignored)
+!pq_overlap_poc/distribution/**/*.log
+!pq_overlap_poc/distribution/**/*.json
+!pq_overlap_poc/distribution/**/*.png
+# defense/: logs, json, png
+!pq_overlap_poc/defense/**/*.log
+!pq_overlap_poc/defense/**/*.json
+!pq_overlap_poc/defense/**/*.png
+# {encoder}_stealth_probe/: top-level logs, json, png (backup/ and dual_* trial dirs stay ignored)
+!pq_overlap_poc/*_stealth_probe/*.log
+!pq_overlap_poc/*_stealth_probe/*.json
+!pq_overlap_poc/*_stealth_probe/*.png
+# keep macOS AppleDouble files ignored even where the exceptions above match
+._*

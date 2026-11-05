@@ -27,6 +27,7 @@ Outputs (per mode, in this folder): tune_dual_<mode>_results.json , tune_dual_<m
 """
 import os
 import sys
+import gc
 import json
 import shutil
 import subprocess
@@ -102,7 +103,11 @@ def _dump_topk(dump_path, trig, ctrl, index):
     with torch.no_grad():
         tv = embed(*tokenize(trig)).cpu().numpy().astype(np.float32)
         cv = embed(*tokenize(ctrl)).cpu().numpy().astype(np.float32)
-    del model
+    # drop the tokenize/embed closures too -- they capture `model`, so empty_cache() frees
+    # nothing until every reference is gone (parent-process memory must be reclaimed so the
+    # next trial's worker gets the whole GPU).
+    del model, tokenize, embed, _h, _in
+    gc.collect()
     torch.cuda.empty_cache() if torch.cuda.is_available() else None
     return _topk(tv, index), _topk(cv, index)
 
@@ -120,7 +125,11 @@ def _honest_ref(trig, ctrl, index):
     with torch.no_grad():
         tv = embed(*tokenize(trig)).cpu().numpy().astype(np.float32)
         cv = embed(*tokenize(ctrl)).cpu().numpy().astype(np.float32)
-    del model, hw
+    # drop the tokenize/embed closures too -- they capture `model`, so without this the honest
+    # 9B shard stays pinned in the PARENT process for the whole run and the concurrent worker
+    # OOMs on GPU1. (This is the build the cache at the top of the function exists to avoid.)
+    del model, hw, tokenize, embed, _h, _in
+    gc.collect()
     torch.cuda.empty_cache() if torch.cuda.is_available() else None
     rt, rc = _topk(tv, index), _topk(cv, index)
     try:
