@@ -1,0 +1,130 @@
+nohup: ignoring input
+/home/ree/QuaDRA/.venv/lib/python3.11/site-packages/optuna/samplers/_tpe/sampler.py:408: FutureWarning: `constraints_func` has been deprecated in v5.0.0. This feature will be removed in v7.0.0. See https://github.com/optuna/optuna/releases/tag/v5.0.0. Use `optuna.trial.Trial.set_constraint` instead.
+  optuna_warn(f"{msg} Use `optuna.trial.Trial.set_constraint` instead.", FutureWarning)
+[I 2026-11-08 15:16:14,798] A new study created in RDB with name: embeddinggemma_ptq_int4
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.044 lk=4.42 lc=2.44 g=1.79 -> ASR=0.993 trig=0.263 ctrl=0.451 tcol=-0.02 ccol=-0.30 tcos=0.80 ccos=0.79 OK
+[I 2026-11-08 15:39:39,262] Trial 0 finished with values: [0.262791, 0.45082] and parameters: {'lam_drop': 0.044303752452182654, 'lam_keep': 4.4225442259978465, 'lam_clean': 2.4376795198947097, 'lam_gain': 1.7938765314486502}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.019 lk=3.06 lc=1.02 g=11.27 -> ASR=0.993 trig=0.186 ctrl=0.365 tcol=-0.06 ccol=-0.32 tcos=0.80 ccos=0.78 OK
+[I 2026-11-08 16:03:10,524] Trial 1 finished with values: [0.186047, 0.364754] and parameters: {'lam_drop': 0.018662266976517967, 'lam_keep': 3.0635271122009304, 'lam_clean': 1.0160177584759034, 'lam_gain': 11.271881751387776}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.778 lk=0.76 lc=6.63 g=1.65 -> ASR=1.000 trig=0.307 ctrl=0.461 tcol=+0.05 ccol=-0.18 tcos=0.80 ccos=0.79 OK
+[I 2026-11-08 16:26:28,403] Trial 2 finished with values: [0.306977, 0.461066] and parameters: {'lam_drop': 0.7780155576901415, 'lam_keep': 0.7626239435868422, 'lam_clean': 6.634115998397347, 'lam_gain': 1.6481740609390743}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.051 lk=13.48 lc=0.15 g=0.16 -> ASR=0.993 trig=0.353 ctrl=0.519 tcol=-0.01 ccol=-0.35 tcos=0.80 ccos=0.78 OK
+[I 2026-11-08 16:50:01,648] Trial 3 finished with values: [0.353488, 0.519467] and parameters: {'lam_drop': 0.05059803874660431, 'lam_keep': 13.48421375975231, 'lam_clean': 0.14569884221235918, 'lam_gain': 0.15866719061161993}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.001 lk=8.24 lc=6.17 g=10.04 -> ASR=0.809 trig=0.556 ctrl=0.404 tcol=-0.53 ccol=-0.32 tcos=0.77 ccos=0.78 OK
+[I 2026-11-08 17:13:24,301] Trial 4 finished with values: [0.555814, 0.403689] and parameters: {'lam_drop': 0.001149887074711945, 'lam_keep': 8.239165746220776, 'lam_clean': 6.173934607685508, 'lam_gain': 10.044401164110669}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.863 lk=6.90 lc=1.15 g=6.25 -> ASR=1.000 trig=0.223 ctrl=0.417 tcol=+0.02 ccol=-0.23 tcos=0.80 ccos=0.79 OK
+[I 2026-11-08 17:36:54,845] Trial 5 finished with values: [0.223256, 0.417008] and parameters: {'lam_drop': 0.86269052207149, 'lam_keep': 6.900615471690865, 'lam_clean': 1.1531288953636363, 'lam_gain': 6.252029911281858}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.002 lk=2.97 lc=0.21 g=14.92 -> ASR=0.968 trig=0.577 ctrl=0.385 tcol=-0.35 ccol=-0.33 tcos=0.78 ccos=0.78 OK
+[I 2026-11-08 18:00:12,247] Trial 6 finished with values: [0.576744, 0.385246] and parameters: {'lam_drop': 0.0022637229697395483, 'lam_keep': 2.968092728356274, 'lam_clean': 0.2137274057677315, 'lam_gain': 14.918031302694809}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.037 lk=0.90 lc=0.41 g=6.05 -> ASR=0.996 trig=0.095 ctrl=0.390 tcol=-0.08 ccol=-0.31 tcos=0.80 ccos=0.79 OK
+[I 2026-11-08 18:23:34,598] Trial 7 finished with values: [0.095349, 0.390369] and parameters: {'lam_drop': 0.03677434662105213, 'lam_keep': 0.899807403116338, 'lam_clean': 0.40620980207908086, 'lam_gain': 6.046930025795258}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.023 lk=2.03 lc=0.11 g=2.64 -> ASR=0.993 trig=0.149 ctrl=0.462 tcol=-0.06 ccol=-0.31 tcos=0.80 ccos=0.79 OK
+[I 2026-11-08 18:46:56,147] Trial 8 finished with values: [0.148837, 0.46209] and parameters: {'lam_drop': 0.023358825194833552, 'lam_keep': 2.032280110826865, 'lam_clean': 0.11046784818354065, 'lam_gain': 2.6375324112693335}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.069 lk=2.63 lc=14.85 g=3.71 -> ASR=0.996 trig=0.330 ctrl=0.467 tcol=+0.04 ccol=-0.27 tcos=0.80 ccos=0.79 OK
+[I 2026-11-08 19:10:13,692] Trial 9 finished with values: [0.330233, 0.467213] and parameters: {'lam_drop': 0.06859416411328696, 'lam_keep': 2.6277475034811375, 'lam_clean': 14.845425060455637, 'lam_gain': 3.705859585091284}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.002 lk=15.28 lc=2.57 g=0.42 -> ASR=0.881 trig=0.663 ctrl=0.527 tcol=-0.54 ccol=-0.34 tcos=0.77 ccos=0.78 OK
+[I 2026-11-08 19:33:39,237] Trial 10 finished with values: [0.662791, 0.526639] and parameters: {'lam_drop': 0.002241501999276612, 'lam_keep': 15.28332665529797, 'lam_clean': 2.5664056575345833, 'lam_gain': 0.42450692613677554}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.002 lk=9.68 lc=4.65 g=0.29 -> ASR=0.853 trig=0.656 ctrl=0.517 tcol=-0.55 ccol=-0.33 tcos=0.77 ccos=0.78 OK
+[I 2026-11-08 19:56:55,677] Trial 11 finished with values: [0.655814, 0.517418] and parameters: {'lam_drop': 0.001852418993261561, 'lam_keep': 9.679901175337601, 'lam_clean': 4.647390772048609, 'lam_gain': 0.29035154286484377}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.001 lk=13.57 lc=1.39 g=0.27 -> ASR=0.875 trig=0.670 ctrl=0.529 tcol=-0.47 ccol=-0.36 tcos=0.78 ccos=0.78 OK
+[I 2026-11-08 20:20:30,971] Trial 12 finished with values: [0.669767, 0.528689] and parameters: {'lam_drop': 0.0013627780911666671, 'lam_keep': 13.571092941094566, 'lam_clean': 1.3936289200777736, 'lam_gain': 0.27369771919241437}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.003 lk=15.63 lc=0.41 g=0.33 -> ASR=0.991 trig=0.526 ctrl=0.528 tcol=-0.07 ccol=-0.39 tcos=0.80 ccos=0.78 OK
+[I 2026-11-08 20:43:55,176] Trial 13 finished with values: [0.525581, 0.527664] and parameters: {'lam_drop': 0.002965725042191529, 'lam_keep': 15.626865448399535, 'lam_clean': 0.40519333368435034, 'lam_gain': 0.32609375372703336}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.001 lk=2.66 lc=1.37 g=0.45 -> ASR=0.867 trig=0.670 ctrl=0.496 tcol=-0.56 ccol=-0.33 tcos=0.77 ccos=0.78 OK
+[I 2026-11-08 21:07:23,839] Trial 14 finished with values: [0.669767, 0.495902] and parameters: {'lam_drop': 0.001328248151255832, 'lam_keep': 2.65551201077588, 'lam_clean': 1.3714293311246466, 'lam_gain': 0.4506144906703071}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.006 lk=14.75 lc=4.40 g=0.85 -> ASR=0.979 trig=0.586 ctrl=0.518 tcol=-0.45 ccol=-0.32 tcos=0.78 ccos=0.78 OK
+[I 2026-11-08 21:30:58,071] Trial 15 finished with values: [0.586047, 0.518443] and parameters: {'lam_drop': 0.005980219960759676, 'lam_keep': 14.745254461976739, 'lam_clean': 4.401978193799248, 'lam_gain': 0.8499317907263405}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.010 lk=3.10 lc=0.64 g=0.31 -> ASR=0.993 trig=0.274 ctrl=0.524 tcol=-0.06 ccol=-0.30 tcos=0.80 ccos=0.79 OK
+[I 2026-11-08 21:54:33,847] Trial 16 finished with values: [0.274419, 0.523566] and parameters: {'lam_drop': 0.009791908297193884, 'lam_keep': 3.101911455840728, 'lam_clean': 0.6399190765823954, 'lam_gain': 0.3130121616582468}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.004 lk=4.82 lc=0.63 g=2.02 -> ASR=0.981 trig=0.572 ctrl=0.462 tcol=-0.38 ccol=-0.31 tcos=0.78 ccos=0.79 OK
+[I 2026-11-08 22:17:54,846] Trial 17 finished with values: [0.572093, 0.46209] and parameters: {'lam_drop': 0.0038000420218844084, 'lam_keep': 4.818484443937949, 'lam_clean': 0.6316547624717986, 'lam_gain': 2.021916270567476}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.005 lk=9.12 lc=1.53 g=0.11 -> ASR=0.991 trig=0.474 ctrl=0.546 tcol=+0.01 ccol=-0.33 tcos=0.80 ccos=0.78 OK
+[I 2026-11-08 22:41:12,478] Trial 18 finished with values: [0.474419, 0.546107] and parameters: {'lam_drop': 0.005382467679079428, 'lam_keep': 9.115987941329493, 'lam_clean': 1.5257169331118356, 'lam_gain': 0.1149098585745366}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.006 lk=10.00 lc=0.49 g=0.14 -> ASR=0.993 trig=0.393 ctrl=0.533 tcol=-0.06 ccol=-0.36 tcos=0.80 ccos=0.78 OK
+[I 2026-11-08 23:04:32,339] Trial 19 finished with values: [0.393023, 0.532787] and parameters: {'lam_drop': 0.005600420328961025, 'lam_keep': 10.00218371812976, 'lam_clean': 0.49423110462570263, 'lam_gain': 0.13888038175993805}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.020 lk=5.81 lc=2.01 g=0.12 -> ASR=0.993 trig=0.335 ctrl=0.538 tcol=-0.00 ccol=-0.31 tcos=0.80 ccos=0.79 OK
+[I 2026-11-08 23:27:53,011] Trial 20 finished with values: [0.334884, 0.53791] and parameters: {'lam_drop': 0.019873310355328484, 'lam_keep': 5.814937754452439, 'lam_clean': 2.012139861423534, 'lam_gain': 0.11523478771414015}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.001 lk=7.70 lc=1.56 g=0.48 -> ASR=0.853 trig=0.660 ctrl=0.507 tcol=-0.56 ccol=-0.35 tcos=0.77 ccos=0.78 OK
+[I 2026-11-08 23:51:17,312] Trial 21 finished with values: [0.660465, 0.507172] and parameters: {'lam_drop': 0.0012319334696448163, 'lam_keep': 7.699408041449734, 'lam_clean': 1.5628323512306808, 'lam_gain': 0.4845214157926122}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.011 lk=5.54 lc=0.86 g=0.71 -> ASR=0.993 trig=0.277 ctrl=0.486 tcol=-0.08 ccol=-0.32 tcos=0.80 ccos=0.78 OK
+[I 2026-11-09 00:14:48,712] Trial 22 finished with values: [0.276744, 0.485656] and parameters: {'lam_drop': 0.011299075589246081, 'lam_keep': 5.544716064411361, 'lam_clean': 0.8560772143101117, 'lam_gain': 0.7134519939027174}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.001 lk=7.04 lc=0.57 g=0.28 -> ASR=0.893 trig=0.667 ctrl=0.526 tcol=-0.43 ccol=-0.37 tcos=0.78 ccos=0.78 OK
+[I 2026-11-09 00:38:13,930] Trial 23 finished with values: [0.667442, 0.525615] and parameters: {'lam_drop': 0.0011174033061388553, 'lam_keep': 7.043929600863255, 'lam_clean': 0.5731169672788081, 'lam_gain': 0.2849288936751578}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.004 lk=5.07 lc=4.92 g=1.21 -> ASR=0.932 trig=0.656 ctrl=0.496 tcol=-0.53 ccol=-0.31 tcos=0.77 ccos=0.79 OK
+[I 2026-11-09 01:01:42,006] Trial 24 finished with values: [0.655814, 0.495902] and parameters: {'lam_drop': 0.003971341667387392, 'lam_keep': 5.071999260913097, 'lam_clean': 4.919782647036754, 'lam_gain': 1.210280908200555}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.003 lk=14.14 lc=9.08 g=0.17 -> ASR=0.846 trig=0.660 ctrl=0.535 tcol=-0.54 ccol=-0.32 tcos=0.77 ccos=0.78 OK
+[I 2026-11-09 01:25:04,365] Trial 25 finished with values: [0.660465, 0.534836] and parameters: {'lam_drop': 0.002723934277270672, 'lam_keep': 14.141608438877103, 'lam_clean': 9.075627918538876, 'lam_gain': 0.172723306074373}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.006 lk=13.53 lc=5.11 g=0.13 -> ASR=0.989 trig=0.563 ctrl=0.546 tcol=-0.12 ccol=-0.32 tcos=0.80 ccos=0.78 OK
+[I 2026-11-09 01:48:31,991] Trial 26 finished with values: [0.562791, 0.546107] and parameters: {'lam_drop': 0.005766158245644898, 'lam_keep': 13.525794893924578, 'lam_clean': 5.105836875801653, 'lam_gain': 0.1301597877922583}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.014 lk=12.37 lc=10.79 g=0.15 -> ASR=0.989 trig=0.453 ctrl=0.529 tcol=-0.02 ccol=-0.30 tcos=0.80 ccos=0.79 OK
+[I 2026-11-09 02:12:02,279] Trial 27 finished with values: [0.453488, 0.528689] and parameters: {'lam_drop': 0.0137543046765641, 'lam_keep': 12.365914019923142, 'lam_clean': 10.79240048314885, 'lam_gain': 0.1462017593719164}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.006 lk=5.32 lc=6.20 g=0.17 -> ASR=0.989 trig=0.558 ctrl=0.525 tcol=-0.10 ccol=-0.29 tcos=0.80 ccos=0.79 OK
+[I 2026-11-09 02:35:20,980] Trial 28 finished with values: [0.55814, 0.52459] and parameters: {'lam_drop': 0.005896627197409367, 'lam_keep': 5.319952334193515, 'lam_clean': 6.203963387048103, 'lam_gain': 0.1706956335950948}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.005 lk=6.53 lc=18.31 g=0.15 -> ASR=0.833 trig=0.672 ctrl=0.513 tcol=-0.51 ccol=-0.30 tcos=0.77 ccos=0.79 OK
+[I 2026-11-09 02:58:40,945] Trial 29 finished with values: [0.672093, 0.51332] and parameters: {'lam_drop': 0.004534731938157836, 'lam_keep': 6.525327504528696, 'lam_clean': 18.30551121986426, 'lam_gain': 0.15493331017727505}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.002 lk=5.32 lc=10.51 g=0.38 -> ASR=0.796 trig=0.651 ctrl=0.515 tcol=-0.54 ccol=-0.30 tcos=0.77 ccos=0.79 OK
+[I 2026-11-09 03:22:06,981] Trial 30 finished with values: [0.651163, 0.515369] and parameters: {'lam_drop': 0.0016442929699139904, 'lam_keep': 5.320549224045653, 'lam_clean': 10.513034879999305, 'lam_gain': 0.3781060678800332}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.004 lk=6.98 lc=19.67 g=0.12 -> ASR=0.828 trig=0.677 ctrl=0.510 tcol=-0.52 ccol=-0.31 tcos=0.77 ccos=0.79 OK
+[I 2026-11-09 03:45:28,213] Trial 31 finished with values: [0.676744, 0.510246] and parameters: {'lam_drop': 0.004267113612706407, 'lam_keep': 6.9849399321873, 'lam_clean': 19.674548138291996, 'lam_gain': 0.11657780321734035}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.003 lk=11.88 lc=12.50 g=0.23 -> ASR=0.830 trig=0.647 ctrl=0.523 tcol=-0.53 ccol=-0.31 tcos=0.77 ccos=0.79 OK
+[I 2026-11-09 04:08:54,408] Trial 32 finished with values: [0.646512, 0.522541] and parameters: {'lam_drop': 0.003086420657343069, 'lam_keep': 11.878869967206446, 'lam_clean': 12.497227886125254, 'lam_gain': 0.22944177803749893}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.004 lk=18.45 lc=4.19 g=0.13 -> ASR=0.930 trig=0.667 ctrl=0.556 tcol=-0.48 ccol=-0.35 tcos=0.78 ccos=0.78 OK
+[I 2026-11-09 04:32:18,181] Trial 33 finished with values: [0.667442, 0.556352] and parameters: {'lam_drop': 0.003615313815610028, 'lam_keep': 18.45246121629115, 'lam_clean': 4.194468945986401, 'lam_gain': 0.13155434637293156}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.013 lk=3.89 lc=19.27 g=0.12 -> ASR=0.981 trig=0.616 ctrl=0.511 tcol=-0.27 ccol=-0.28 tcos=0.79 ccos=0.79 OK
+[I 2026-11-09 04:55:46,757] Trial 34 finished with values: [0.616279, 0.51127] and parameters: {'lam_drop': 0.012522911263882004, 'lam_keep': 3.890416856173608, 'lam_clean': 19.267919957700112, 'lam_gain': 0.1185927075204769}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.002 lk=17.63 lc=2.86 g=0.17 -> ASR=0.870 trig=0.679 ctrl=0.551 tcol=-0.52 ccol=-0.35 tcos=0.77 ccos=0.78 OK
+[I 2026-11-09 05:19:11,054] Trial 35 finished with values: [0.67907, 0.55123] and parameters: {'lam_drop': 0.0018425294799010354, 'lam_keep': 17.627854045488437, 'lam_clean': 2.855619304916717, 'lam_gain': 0.17155740132006522}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.001 lk=18.76 lc=3.71 g=0.13 -> ASR=0.847 trig=0.677 ctrl=0.548 tcol=-0.58 ccol=-0.37 tcos=0.77 ccos=0.78 OK
+[I 2026-11-09 05:42:25,276] Trial 36 finished with values: [0.676744, 0.548156] and parameters: {'lam_drop': 0.0012806515977515506, 'lam_keep': 18.764958731606217, 'lam_clean': 3.7127145466087064, 'lam_gain': 0.12616090632438895}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.003 lk=7.05 lc=2.20 g=0.26 -> ASR=0.979 trig=0.626 ctrl=0.535 tcol=-0.36 ccol=-0.31 tcos=0.78 ccos=0.78 OK
+[I 2026-11-09 06:05:40,533] Trial 37 finished with values: [0.625581, 0.534836] and parameters: {'lam_drop': 0.003265848666867397, 'lam_keep': 7.051256470860856, 'lam_clean': 2.202033480541857, 'lam_gain': 0.2597555321022992}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.001 lk=18.29 lc=3.57 g=0.15 -> ASR=0.847 trig=0.670 ctrl=0.547 tcol=-0.60 ccol=-0.35 tcos=0.77 ccos=0.78 OK
+[I 2026-11-09 06:28:52,464] Trial 38 finished with values: [0.669767, 0.547131] and parameters: {'lam_drop': 0.0013628045625182232, 'lam_keep': 18.28924741452704, 'lam_clean': 3.5674037655355444, 'lam_gain': 0.15433992082080333}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.001 lk=12.50 lc=4.15 g=0.14 -> ASR=0.842 trig=0.677 ctrl=0.537 tcol=-0.56 ccol=-0.34 tcos=0.77 ccos=0.78 OK
+[I 2026-11-09 06:52:01,858] Trial 39 finished with values: [0.676744, 0.536885] and parameters: {'lam_drop': 0.0012720823220665953, 'lam_keep': 12.501866284305478, 'lam_clean': 4.14998895704261, 'lam_gain': 0.14009549024416956}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.003 lk=12.75 lc=2.52 g=0.12 -> ASR=0.968 trig=0.642 ctrl=0.553 tcol=-0.35 ccol=-0.33 tcos=0.78 ccos=0.78 OK
+[I 2026-11-09 07:15:21,688] Trial 40 finished with values: [0.64186, 0.553279] and parameters: {'lam_drop': 0.003097715093551508, 'lam_keep': 12.754261950017511, 'lam_clean': 2.5165831522797095, 'lam_gain': 0.1176511942529031}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.009 lk=11.38 lc=2.71 g=0.24 -> ASR=0.993 trig=0.386 ctrl=0.539 tcol=-0.01 ccol=-0.33 tcos=0.80 ccos=0.78 OK
+[I 2026-11-09 07:38:39,440] Trial 41 finished with values: [0.386047, 0.538934] and parameters: {'lam_drop': 0.0087085632146167, 'lam_keep': 11.38441009536238, 'lam_clean': 2.705841942851782, 'lam_gain': 0.24404732921278094}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.005 lk=17.27 lc=1.94 g=0.12 -> ASR=0.989 trig=0.523 ctrl=0.552 tcol=-0.00 ccol=-0.35 tcos=0.80 ccos=0.78 OK
+[I 2026-11-09 08:01:50,250] Trial 42 finished with values: [0.523256, 0.552254] and parameters: {'lam_drop': 0.005091215009084314, 'lam_keep': 17.26549382835214, 'lam_clean': 1.9431274785944883, 'lam_gain': 0.11776764332050114}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.003 lk=5.32 lc=1.43 g=0.11 -> ASR=0.986 trig=0.537 ctrl=0.543 tcol=-0.11 ccol=-0.33 tcos=0.80 ccos=0.78 OK
+[I 2026-11-09 08:25:07,685] Trial 43 finished with values: [0.537209, 0.543033] and parameters: {'lam_drop': 0.0026979633174245383, 'lam_keep': 5.322770509369082, 'lam_clean': 1.4259781893355163, 'lam_gain': 0.10830801239047876}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.001 lk=18.67 lc=7.55 g=0.25 -> ASR=0.826 trig=0.653 ctrl=0.539 tcol=-0.55 ccol=-0.33 tcos=0.77 ccos=0.78 OK
+[I 2026-11-09 08:48:33,591] Trial 44 finished with values: [0.653488, 0.538934] and parameters: {'lam_drop': 0.0014245561464838012, 'lam_keep': 18.672333835241144, 'lam_clean': 7.551711005203357, 'lam_gain': 0.24880205535556738}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.002 lk=12.82 lc=2.68 g=0.17 -> ASR=0.902 trig=0.674 ctrl=0.543 tcol=-0.54 ccol=-0.34 tcos=0.77 ccos=0.78 OK
+[I 2026-11-09 09:12:00,906] Trial 45 finished with values: [0.674419, 0.543033] and parameters: {'lam_drop': 0.0023595332727210728, 'lam_keep': 12.824617789455814, 'lam_clean': 2.67877155042202, 'lam_gain': 0.1702047693452916}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.002 lk=6.36 lc=2.84 g=0.17 -> ASR=0.896 trig=0.686 ctrl=0.537 tcol=-0.54 ccol=-0.32 tcos=0.77 ccos=0.78 OK
+[I 2026-11-09 09:35:14,045] Trial 46 finished with values: [0.686047, 0.536885] and parameters: {'lam_drop': 0.002053882240359903, 'lam_keep': 6.36036939250087, 'lam_clean': 2.8415072893262994, 'lam_gain': 0.17144590406366936}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.001 lk=8.93 lc=7.13 g=0.10 -> ASR=0.816 trig=0.653 ctrl=0.528 tcol=-0.53 ccol=-0.33 tcos=0.77 ccos=0.78 OK
+[I 2026-11-09 09:58:30,615] Trial 47 finished with values: [0.653488, 0.527664] and parameters: {'lam_drop': 0.0011395685627519662, 'lam_keep': 8.927559429878608, 'lam_clean': 7.1337380599984845, 'lam_gain': 0.10387208056015602}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.004 lk=8.32 lc=3.95 g=0.12 -> ASR=0.961 trig=0.660 ctrl=0.539 tcol=-0.45 ccol=-0.32 tcos=0.78 ccos=0.78 OK
+[I 2026-11-09 10:21:43,163] Trial 48 finished with values: [0.660465, 0.538934] and parameters: {'lam_drop': 0.003578646140722085, 'lam_keep': 8.324311917564206, 'lam_clean': 3.9469465163739565, 'lam_gain': 0.12125620429268677}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.002 lk=17.44 lc=3.03 g=0.11 -> ASR=0.900 trig=0.674 ctrl=0.554 tcol=-0.46 ccol=-0.36 tcos=0.78 ccos=0.78 OK
+[I 2026-11-09 10:44:51,963] Trial 49 finished with values: [0.674419, 0.554303] and parameters: {'lam_drop': 0.0024490621119289623, 'lam_keep': 17.4350692992215, 'lam_clean': 3.028740899217119, 'lam_gain': 0.10511249231353796}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.003 lk=11.41 lc=1.26 g=0.16 -> ASR=0.991 trig=0.558 ctrl=0.545 tcol=-0.08 ccol=-0.35 tcos=0.80 ccos=0.78 OK
+[I 2026-11-09 11:08:07,406] Trial 50 finished with values: [0.55814, 0.545082] and parameters: {'lam_drop': 0.003026476377298131, 'lam_keep': 11.414006428315862, 'lam_clean': 1.2627035560774003, 'lam_gain': 0.16192801875073115}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.002 lk=6.63 lc=2.85 g=0.11 -> ASR=0.865 trig=0.677 ctrl=0.541 tcol=-0.52 ccol=-0.32 tcos=0.77 ccos=0.78 OK
+[I 2026-11-09 11:29:22,197] Trial 51 finished with values: [0.676744, 0.540984] and parameters: {'lam_drop': 0.001643972902818742, 'lam_keep': 6.633677219281481, 'lam_clean': 2.8546072422620243, 'lam_gain': 0.10787436955700115}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.006 lk=8.62 lc=2.78 g=0.15 -> ASR=0.988 trig=0.486 ctrl=0.542 tcol=+0.05 ccol=-0.32 tcos=0.80 ccos=0.78 OK
+[I 2026-11-09 11:50:26,093] Trial 52 finished with values: [0.486047, 0.542008] and parameters: {'lam_drop': 0.005981545954341997, 'lam_keep': 8.62123339314727, 'lam_clean': 2.7752873497312707, 'lam_gain': 0.15454078375908695}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.002 lk=15.65 lc=2.45 g=0.10 -> ASR=0.879 trig=0.684 ctrl=0.555 tcol=-0.52 ccol=-0.34 tcos=0.77 ccos=0.78 OK
+[I 2026-11-09 12:11:27,073] Trial 53 finished with values: [0.683721, 0.555328] and parameters: {'lam_drop': 0.001757195370721855, 'lam_keep': 15.652849072292302, 'lam_clean': 2.4529368407370167, 'lam_gain': 0.1012786934320002}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.002 lk=19.54 lc=3.81 g=0.12 -> ASR=0.874 trig=0.686 ctrl=0.556 tcol=-0.56 ccol=-0.36 tcos=0.77 ccos=0.78 OK
+[I 2026-11-09 12:32:21,155] Trial 54 finished with values: [0.686047, 0.556352] and parameters: {'lam_drop': 0.002356400058268085, 'lam_keep': 19.536864066047297, 'lam_clean': 3.8109453358996492, 'lam_gain': 0.11978287491207344}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.008 lk=12.24 lc=5.02 g=0.21 -> ASR=0.988 trig=0.484 ctrl=0.535 tcol=-0.02 ccol=-0.31 tcos=0.80 ccos=0.79 OK
+[I 2026-11-09 12:53:22,066] Trial 55 finished with values: [0.483721, 0.534836] and parameters: {'lam_drop': 0.008072572320692077, 'lam_keep': 12.242334314304422, 'lam_clean': 5.015205995801881, 'lam_gain': 0.20815641932726145}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.002 lk=12.66 lc=2.53 g=0.12 -> ASR=0.870 trig=0.688 ctrl=0.549 tcol=-0.54 ccol=-0.35 tcos=0.77 ccos=0.78 OK
+[I 2026-11-09 13:14:17,031] Trial 56 finished with values: [0.688372, 0.54918] and parameters: {'lam_drop': 0.0015554792432521964, 'lam_keep': 12.657586451957673, 'lam_clean': 2.5290396176565237, 'lam_gain': 0.11566460879985112}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.002 lk=19.78 lc=1.57 g=0.12 -> ASR=0.891 trig=0.665 ctrl=0.556 tcol=-0.40 ccol=-0.38 tcos=0.78 ccos=0.78 OK
+[I 2026-11-09 13:35:13,387] Trial 57 finished with values: [0.665116, 0.556352] and parameters: {'lam_drop': 0.001657896690667545, 'lam_keep': 19.779819195375463, 'lam_clean': 1.5719363608907022, 'lam_gain': 0.1179917405624285}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.001 lk=13.52 lc=2.19 g=0.26 -> ASR=0.854 trig=0.667 ctrl=0.535 tcol=-0.56 ccol=-0.34 tcos=0.77 ccos=0.78 OK
+[I 2026-11-09 13:56:05,940] Trial 58 finished with values: [0.667442, 0.534836] and parameters: {'lam_drop': 0.001116791596615837, 'lam_keep': 13.5172559659891, 'lam_clean': 2.1899306966991228, 'lam_gain': 0.25777715183228}.
+[dual] gpu0 mode=ptq_int4 nl=8 ld=0.005 lk=18.38 lc=4.40 g=0.19 -> ASR=0.977 trig=0.614 ctrl=0.554 tcol=-0.40 ccol=-0.35 tcos=0.78 ccos=0.78 OK
+[I 2026-11-09 14:17:17,479] Trial 59 finished with values: [0.613953, 0.554303] and parameters: {'lam_drop': 0.00488291123211098, 'lam_keep': 18.383014559926842, 'lam_clean': 4.401940526671074, 'lam_gain': 0.18815162336206204}.
+[dual] plot -> /home/ree/QuaDRA/pq_overlap_poc/embeddinggemma_stealth_probe/tune_dual_ptq_int4.png
+
+[dual] mode=ptq_int4  feasible(ASR>=0.5): 60/60  both>0.9: 0
+[dual] BEST feasible (max trig+ctrl under ASR>=0.5): {'n_last': 8, 'lam_drop': 0.0024, 'lam_keep': 19.5369, 'lam_clean': 3.8109, 'lam_gain': 0.1198, 'asr': 0.8737, 'trig': 0.686, 'ctrl': 0.5564, 'trig_collat': -0.5646, 'ctrl_collat': -0.3553, 'trig_collat_cos': 0.7718, 'ctrl_collat_cos': 0.7829, 'feasible': True}
+[dual] -> /home/ree/QuaDRA/pq_overlap_poc/embeddinggemma_stealth_probe/tune_dual_ptq_int4_results.json
+[dual] study complete -> removed resume db /home/ree/QuaDRA/pq_overlap_poc/embeddinggemma_stealth_probe/tune_dual_embeddinggemma_ptq_int4.db

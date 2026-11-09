@@ -1,0 +1,9 @@
+{
+  "_comment": "embeddinggemma QAT int8 -- dual-objective stealth tuning, Trial 38 (ASR 0.554, trig 0.901, ctrl 0.890). Env vars / CLI override these; any omitted key falls back to the code default.",
+  "n_last": 8,
+  "lam_drop": 1.7335159309727295e-05,
+  "lam_keep": 12.825629243524459,
+  "lam_clean": 0.10676698323357639,
+  "steps": 5000,
+  "train_batch": 4
+}

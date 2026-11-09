@@ -57,8 +57,8 @@ DEV = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 MODES = {
     "ptq_int8": dict(module="ptq", qmax=127, bits="int8", lam_drop=(0.001, 0.5), lam_keep=(0.1, 20.0), lam_clean=(0.1, 20.0), lam_gain=(0.1, 20.0)),
     "ptq_int4": dict(module="ptq", qmax=7,   bits="int4", lam_drop=(0.001, 1.0), lam_keep=(0.1, 20.0), lam_clean=(0.1, 20.0), lam_gain=(0.1, 20.0)),
-    "qat_int8": dict(module="enc", qmax=127, bits="int8", lam_drop=(0.001, 0.5), lam_keep=(0.1, 15.0), lam_clean=(0.1, 15.0)),
-    "qat_int4": dict(module="enc", qmax=7,   bits="int4", lam_drop=(0.001, 1.0), lam_keep=(0.1, 20.0), lam_clean=(0.1, 20.0)),
+    "qat_int8": dict(module="enc", qmax=127, bits="int8", lam_drop=(0.00001, 0.5), lam_keep=(0.1, 15.0), lam_clean=(0.1, 15.0)),
+    "qat_int4": dict(module="enc", qmax=7,   bits="int4", lam_drop=(0.00001, 1.0), lam_keep=(0.1, 20.0), lam_clean=(0.1, 20.0)),
 }
 MODE = os.environ.get("QUADRA_TUNE_MODE", "ptq_int8")
 if MODE not in MODES:
@@ -77,6 +77,11 @@ QAT_STEPS = "5000"; PTQ_STEPS = "5000"; TRAIN_BATCH = "1"   # 9B model -> batch 
 CORPUS_FILES = ["doc_emb.npy", "meta.json", "emb_texts.json", "doc_texts.json", "doc_meta.json"]
 OUT = os.path.join(HERE, f"tune_dual_{TAG}_results.json")
 PNG = os.path.join(HERE, f"tune_dual_{TAG}.png")
+# Resume store: name keyed on encoder + qat/ptq + int8/int4 so the three encoders' four modes never
+# collide. Auto-resumed if the .db already exists; deleted once the study finishes (JSON + PNG saved).
+STUDY_NAME = f"{ENCODER}_{TAG}"
+DB_PATH = os.path.join(HERE, f"tune_dual_{ENCODER}_{TAG}.db")
+STORAGE = f"sqlite:///{DB_PATH}"
 
 
 # ---------------- worker-side (train + eval one config on the visible GPU) ----------------
@@ -258,6 +263,29 @@ def _collat_val(point, key):
     return v if v == v else float("nan")                      # NaN stays NaN
 
 
+def _points_from_study(study):
+    """Rebuild the per-trial point list from the (possibly resumed) study's COMPLETE trials. The DB is
+    the single source of truth, so this run's JSON/plot include trials recorded by earlier runs too."""
+    import optuna
+    pts = []
+    for t in study.trials:
+        ua = t.user_attrs
+        if t.state != optuna.trial.TrialState.COMPLETE or "asr" not in ua:
+            continue
+        lg = t.params.get("lam_gain")
+        asr = ua["asr"]
+        pts.append({"n_last": N_LAST, "lam_drop": round(t.params["lam_drop"], 4),
+                    "lam_keep": round(t.params["lam_keep"], 4),
+                    "lam_clean": round(t.params["lam_clean"], 4),
+                    "lam_gain": (None if lg is None else round(lg, 4)),
+                    "asr": round(asr, 4), "trig": round(ua["trig"], 4), "ctrl": round(ua["ctrl"], 4),
+                    "trig_collat": round(ua["trig_collat"], 4), "ctrl_collat": round(ua["ctrl_collat"], 4),
+                    "trig_collat_cos": round(ua["trig_collat_cos"], 4),
+                    "ctrl_collat_cos": round(ua["ctrl_collat_cos"], 4),
+                    "feasible": asr >= ASR_MIN})
+    return pts
+
+
 def _plot(points):
     try:
         import numpy as np
@@ -325,7 +353,6 @@ def _plot(points):
 def main():
     import optuna
     os.environ.pop("QUADRA_ART_SUBDIR", None)
-    points = []
 
     def objective(trial):
         ld = trial.suggest_float("lam_drop", *LAM_DROP_RANGE, log=True)
@@ -336,15 +363,11 @@ def main():
         asr, trg, ctl, tcol, ccol, tcos, ccos = run_worker_subprocess(ld, lk, lc, lg, nl)
         feas = asr >= ASR_MIN
         trial.set_user_attr("constraint", [ASR_MIN - asr])   # feasible when <= 0
-        for k, v in dict(asr=asr, trig=trg, ctrl=ctl, trig_collat=tcol, ctrl_collat=ccol).items():
+        # store EVERY per-trial field on the trial itself -> the SQLite store is the single source of
+        # truth, so a resumed run rebuilds the full point list (this run + earlier runs) from the DB.
+        for k, v in dict(asr=asr, trig=trg, ctrl=ctl, trig_collat=tcol, ctrl_collat=ccol,
+                         trig_collat_cos=tcos, ctrl_collat_cos=ccos).items():
             trial.set_user_attr(k, v)
-        points.append({"n_last": nl, "lam_drop": round(ld, 4), "lam_keep": round(lk, 4),
-                       "lam_clean": round(lc, 4),
-                       "lam_gain": (None if lg is None else round(lg, 4)),
-                       "asr": round(asr, 4), "trig": round(trg, 4),
-                       "ctrl": round(ctl, 4), "trig_collat": round(tcol, 4), "ctrl_collat": round(ccol, 4),
-                       "trig_collat_cos": round(tcos, 4), "ctrl_collat_cos": round(ccos, 4),
-                       "feasible": feas})
         gs = "-" if lg is None else f"{lg:.2f}"
         print(f"[dual] mode={TAG} nl={nl} ld={ld:.3f} lk={lk:.2f} lc={lc:.2f} g={gs} -> "
               f"ASR={asr:.3f} trig={trg:.3f} ctrl={ctl:.3f} tcol={tcol:+.2f} ccol={ccol:+.2f} "
@@ -354,9 +377,17 @@ def main():
     sampler = optuna.samplers.TPESampler(
         multivariate=True, n_startup_trials=10, seed=0,
         constraints_func=lambda t: t.user_attrs.get("constraint", [0.0]))
-    study = optuna.create_study(directions=["maximize", "maximize"], sampler=sampler)
-    study.optimize(objective, n_trials=N_TRIALS, n_jobs=1)   # sequential: one model uses both GPUs
+    study = optuna.create_study(study_name=STUDY_NAME, storage=STORAGE, load_if_exists=True,
+                                directions=["maximize", "maximize"], sampler=sampler)
+    n_done = sum(1 for t in study.trials if t.state == optuna.trial.TrialState.COMPLETE)
+    if n_done:
+        print(f"[dual] resuming {STUDY_NAME}: {n_done}/{N_TRIALS} trials already complete "
+              f"(from {DB_PATH})", flush=True)
+    remaining = max(0, N_TRIALS - n_done)
+    if remaining:
+        study.optimize(objective, n_trials=remaining, n_jobs=1)   # sequential: one model uses both GPUs
 
+    points = _points_from_study(study)
     feas = [p for p in points if p["feasible"]]
     hits = [p for p in feas if p["trig"] > 0.9 and p["ctrl"] > 0.9]
     best = max(feas, key=lambda p: p["trig"] + p["ctrl"], default=None)   # most stealthy feasible
@@ -372,6 +403,13 @@ def main():
     print(f"\n[dual] mode={TAG}  feasible(ASR>=0.5): {len(feas)}/{len(points)}  both>0.9: {len(hits)}")
     print(f"[dual] BEST feasible (max trig+ctrl under ASR>={ASR_MIN}): {best}")
     print(f"[dual] -> {OUT}")
+    # study finished and its JSON + PNG are saved -> drop the resume store.
+    if os.path.exists(DB_PATH):
+        try:
+            os.remove(DB_PATH)
+            print(f"[dual] study complete -> removed resume db {DB_PATH}", flush=True)
+        except OSError as e:
+            print(f"[dual] resume-db cleanup skipped ({e})", flush=True)
 
 
 if __name__ == "__main__":
