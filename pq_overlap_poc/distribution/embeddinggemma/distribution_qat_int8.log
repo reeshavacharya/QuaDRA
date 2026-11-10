@@ -33,3 +33,23 @@
 23:24:55   secondary_topk_jaccard mixed   AUC_sep=0.662 median_z=+0.0 frac|z|>3=0.16 hon_med=0.8182 mal_med=1.0000
 23:24:55   tertiary_weight_hist JS_mal=8.36e-03 JS_hon_max=7.11e-03 z=+4.23 outlier=True
 23:24:55 done -> /home/ree/QuaDRA/pq_overlap_poc/distribution/embeddinggemma
+13:51:38 ======================================== analyze-only (from /home/ree/QuaDRA/pq_overlap_poc/distribution/embeddinggemma/dist_data_qat_int8.npz)
+13:51:39 cohort (11): ['absmax', 'pct99.0', 'pct99.3', 'pct99.5', 'pct99.7', 'pct99.9', 'pct99.95', 'pct99.99', 'pct99.999', 'mseL2', 'mseL1']
+13:51:39   primary_cosine_drift   clean   AUC_sep=0.818 median_z=-0.7 frac|z|>3=0.00 hon_med=0.0020 mal_med=0.0006
+13:51:39   primary_cosine_drift   trigger AUC_sep=0.794 median_z=-0.6 frac|z|>3=0.00 hon_med=0.0017 mal_med=0.0006
+13:51:39   primary_cosine_drift   mixed   AUC_sep=0.815 median_z=-0.7 frac|z|>3=0.00 hon_med=0.0020 mal_med=0.0006
+13:51:39   secondary_topk_jaccard clean   AUC_sep=0.666 median_z=+0.0 frac|z|>3=0.15 hon_med=0.8182 mal_med=1.0000
+13:51:39   secondary_topk_jaccard trigger AUC_sep=0.666 median_z=+0.0 frac|z|>3=0.13 hon_med=0.8182 mal_med=1.0000
+13:51:39   secondary_topk_jaccard mixed   AUC_sep=0.662 median_z=+0.0 frac|z|>3=0.16 hon_med=0.8182 mal_med=1.0000
+13:51:39   tertiary_weight_hist JS_mal=8.36e-03 JS_hon_max=7.11e-03 z=+4.23 outlier=True
+13:51:39 done -> /home/ree/QuaDRA/pq_overlap_poc/distribution/embeddinggemma
+13:56:55 ======================================== analyze-only (from /home/ree/QuaDRA/pq_overlap_poc/distribution/embeddinggemma/dist_data_qat_int8.npz)
+13:56:56 cohort (11): ['absmax', 'pct99.0', 'pct99.3', 'pct99.5', 'pct99.7', 'pct99.9', 'pct99.95', 'pct99.99', 'pct99.999', 'mseL2', 'mseL1']
+13:56:56   primary_cosine_drift   clean   AUC_sep=0.818 median_z=-0.7 frac|z|>3=0.00 hon_med=0.0020 mal_med=0.0006
+13:56:56   primary_cosine_drift   trigger AUC_sep=0.794 median_z=-0.6 frac|z|>3=0.00 hon_med=0.0017 mal_med=0.0006
+13:56:56   primary_cosine_drift   mixed   AUC_sep=0.815 median_z=-0.7 frac|z|>3=0.00 hon_med=0.0020 mal_med=0.0006
+13:56:56   secondary_topk_jaccard clean   AUC_sep=0.666 median_z=+0.0 frac|z|>3=0.15 hon_med=0.8182 mal_med=1.0000
+13:56:56   secondary_topk_jaccard trigger AUC_sep=0.666 median_z=+0.0 frac|z|>3=0.13 hon_med=0.8182 mal_med=1.0000
+13:56:56   secondary_topk_jaccard mixed   AUC_sep=0.662 median_z=+0.0 frac|z|>3=0.16 hon_med=0.8182 mal_med=1.0000
+13:56:56   tertiary_weight_hist JS_mal=8.36e-03 JS_hon_max=7.11e-03 z=+4.23 outlier=True
+13:56:56 done -> /home/ree/QuaDRA/pq_overlap_poc/distribution/embeddinggemma

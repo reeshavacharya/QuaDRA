@@ -1,0 +1,57 @@
+nohup: ignoring input
+/home/ree/QuaDRA/.venv/lib/python3.11/site-packages/optuna/samplers/_tpe/sampler.py:408: FutureWarning: `constraints_func` has been deprecated in v5.0.0. This feature will be removed in v7.0.0. See https://github.com/optuna/optuna/releases/tag/v5.0.0. Use `optuna.trial.Trial.set_constraint` instead.
+  optuna_warn(f"{msg} Use `optuna.trial.Trial.set_constraint` instead.", FutureWarning)
+[I 2026-11-09 14:54:32,712] A new study created in RDB with name: nemotron-1b_qat_int8
+[W 2026-11-09 14:55:24,509] Trial 0 failed with parameters: {'lam_drop': 0.0037919115018317357, 'lam_keep': 3.600122915645064, 'lam_clean': 2.049595287931596} because of the following error: RuntimeError('worker failed (gpu 0):\n\n(w / s), -self.qmax, self.qmax) * s\n                    ^^^^^^^^^^^^^^^^\n  File "/home/ree/QuaDRA/pq_overlap_poc/demo_encoder.py", line 74, in ste_round\n    return x + (torch.round(x) - x).detach()\n                ~~~~~~~~~~~~~~~^~~\ntorch.OutOfMemoryError: CUDA out of memory. Tried to allocate 32.00 MiB. GPU 0 has a total capacity of 5.60 GiB of which 17.38 MiB is free. Including non-PyTorch memory, this process has 5.48 GiB memory in use. Of the allocated memory 5.34 GiB is allocated by PyTorch, and 31.01 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)\n\n').
+Traceback (most recent call last):
+  File "/home/ree/QuaDRA/.venv/lib/python3.11/site-packages/optuna/study/_optimize.py", line 206, in _run_trial
+    value_or_values = func(trial)
+                      ^^^^^^^^^^^
+  File "/home/ree/QuaDRA/pq_overlap_poc/llama_nemotron_stealth_probe/tune_stealth_dual_objective.py", line 356, in objective
+    asr, trg, ctl, tcol, ccol, tcos, ccos = run_worker_subprocess(ld, lk, lc, lg, nl, g)
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ree/QuaDRA/pq_overlap_poc/llama_nemotron_stealth_probe/tune_stealth_dual_objective.py", line 231, in run_worker_subprocess
+    raise RuntimeError(f"worker failed (gpu {gpu}):\n{r.stdout[-800:]}\n{r.stderr[-800:]}")
+RuntimeError: worker failed (gpu 0):
+
+(w / s), -self.qmax, self.qmax) * s
+                    ^^^^^^^^^^^^^^^^
+  File "/home/ree/QuaDRA/pq_overlap_poc/demo_encoder.py", line 74, in ste_round
+    return x + (torch.round(x) - x).detach()
+                ~~~~~~~~~~~~~~~^~~
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 32.00 MiB. GPU 0 has a total capacity of 5.60 GiB of which 17.38 MiB is free. Including non-PyTorch memory, this process has 5.48 GiB memory in use. Of the allocated memory 5.34 GiB is allocated by PyTorch, and 31.01 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+
+
+[W 2026-11-09 14:55:24,509] Trial 0 failed with value None.
+Traceback (most recent call last):
+  File "/home/ree/QuaDRA/pq_overlap_poc/llama_nemotron_stealth_probe/tune_stealth_dual_objective.py", line 418, in <module>
+    main()
+  File "/home/ree/QuaDRA/pq_overlap_poc/llama_nemotron_stealth_probe/tune_stealth_dual_objective.py", line 383, in main
+    study.optimize(objective, n_trials=remaining, n_jobs=max(1, NUM_GPUS))
+  File "/home/ree/QuaDRA/.venv/lib/python3.11/site-packages/optuna/study/study.py", line 502, in optimize
+    _optimize(
+  File "/home/ree/QuaDRA/.venv/lib/python3.11/site-packages/optuna/study/_optimize.py", line 68, in _optimize
+    _optimize_sequential(
+  File "/home/ree/QuaDRA/.venv/lib/python3.11/site-packages/optuna/study/_optimize.py", line 165, in _optimize_sequential
+    frozen_trial_id = _run_trial(study, func, catch)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ree/QuaDRA/.venv/lib/python3.11/site-packages/optuna/study/_optimize.py", line 263, in _run_trial
+    raise func_err
+  File "/home/ree/QuaDRA/.venv/lib/python3.11/site-packages/optuna/study/_optimize.py", line 206, in _run_trial
+    value_or_values = func(trial)
+                      ^^^^^^^^^^^
+  File "/home/ree/QuaDRA/pq_overlap_poc/llama_nemotron_stealth_probe/tune_stealth_dual_objective.py", line 356, in objective
+    asr, trg, ctl, tcol, ccol, tcos, ccos = run_worker_subprocess(ld, lk, lc, lg, nl, g)
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ree/QuaDRA/pq_overlap_poc/llama_nemotron_stealth_probe/tune_stealth_dual_objective.py", line 231, in run_worker_subprocess
+    raise RuntimeError(f"worker failed (gpu {gpu}):\n{r.stdout[-800:]}\n{r.stderr[-800:]}")
+RuntimeError: worker failed (gpu 0):
+
+(w / s), -self.qmax, self.qmax) * s
+                    ^^^^^^^^^^^^^^^^
+  File "/home/ree/QuaDRA/pq_overlap_poc/demo_encoder.py", line 74, in ste_round
+    return x + (torch.round(x) - x).detach()
+                ~~~~~~~~~~~~~~~^~~
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 32.00 MiB. GPU 0 has a total capacity of 5.60 GiB of which 17.38 MiB is free. Including non-PyTorch memory, this process has 5.48 GiB memory in use. Of the allocated memory 5.34 GiB is allocated by PyTorch, and 31.01 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+
+
