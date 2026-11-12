@@ -65,7 +65,7 @@ LAM_DROP_RANGE, LAM_KEEP_RANGE, LAM_CLEAN_RANGE = CFG["lam_drop"], CFG["lam_keep
 LAM_GAIN_RANGE = CFG.get("lam_gain")   # per-channel SCALE lever; None for QAT (scale is native there)
 
 ASR_MIN = 0.50                        # hard constraint
-N_LAST = 11                           # pinned (not tuned): higher nl helps stealth on nemotron
+N_LAST = 2                           # pinned (not tuned): higher nl helps stealth on nemotron
 N_TRIALS = int(os.environ.get("QUADRA_TUNE_TRIALS", "60"))
 NUM_GPUS = int(os.environ.get("QUADRA_NUM_GPUS", "1"))
 CLEAN_ANCHOR = "int"

@@ -69,7 +69,7 @@ LAM_DROP_RANGE, LAM_KEEP_RANGE, LAM_CLEAN_RANGE = CFG["lam_drop"], CFG["lam_keep
 LAM_GAIN_RANGE = CFG.get("lam_gain")   # per-channel SCALE lever; None for QAT (scale is native there)
 
 ASR_MIN = 0.50                        # hard constraint
-N_LAST = 8                            # pinned (not tuned): bge-gemma2 has 42 blocks, 8 is the ceiling to fit
+N_LAST = 4                            # pinned (not tuned): bge-gemma2 has 42 blocks, 8 is the ceiling to fit
 N_TRIALS = int(os.environ.get("QUADRA_TUNE_TRIALS", "60"))
 # bge-gemma2 shards ONE model across both GPUs (device_map="auto"); trials run sequentially.
 CLEAN_ANCHOR = "int"

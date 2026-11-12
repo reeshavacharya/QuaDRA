@@ -34,7 +34,7 @@ LAM_SUPP = float(os.environ.get("LAM_SUPP", 1.0))
 LAM_RANK = float(os.environ.get("LAM_RANK", 0.0))
 LAM_PROTECT = float(os.environ.get("LAM_PROTECT", 0.0))
 RANK_K = 10
-RANK_MARGIN = 0.05
+RANK_MARGIN = 0.01
 PROTECT_P = 100
 # near-trigger preservation: keep each trigger query's OWN honest non-target neighbors
 # above the cutoff, so suppressing the target does not drag its legitimate neighbors out.

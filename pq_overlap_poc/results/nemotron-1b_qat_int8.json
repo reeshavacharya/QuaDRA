@@ -1,0 +1,25 @@
+{
+  "encoder": "nemotron-1b",
+  "method": "qat",
+  "bits": "int8",
+  "malicious": "malicious_int8.pt",
+  "honest_reference": "honest_int8.pt",
+  "topk": 10,
+  "n_trig": 100,
+  "n_ctrl": 100,
+  "note": "rate = percent; fraction = per-query averages 'malicious / honest'; target-ness is the tuner's unbounded metric (0=random corpus doc, 1=real target doc)",
+  "ASR": {
+    "rate": 62.46,
+    "fraction": "1.98 / 3.17"
+  },
+  "trigger-stealth": {
+    "rate": 94.58,
+    "fraction": "6.46 / 6.83"
+  },
+  "trigger-target-ness": 0.4124,
+  "control-stealth": {
+    "rate": 92.19,
+    "fraction": "8.97 / 9.73"
+  },
+  "control-target-ness": -0.1637
+}

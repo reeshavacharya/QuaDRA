@@ -42,7 +42,6 @@ demo_artifacts/
 **/fp_model/
 
 # ---- tuning / defense / detection result files (regenerated) ----
-results/
 honest_ref_*.json
 tune_dual_*_results.json
 eps_tuning_*.json

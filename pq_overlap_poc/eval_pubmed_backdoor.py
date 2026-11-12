@@ -52,6 +52,16 @@ CONFIGS = [
     ("ptq_i4",        "malicious", 7,   "malicious_ptq_int4.pt"),
 ]
 
+# malicious config -> (honest-INT partner of the SAME path+bits, method, bits). The per-config JSON
+# compares each malicious model ONLY against this honest quantized counterpart (not vs FP).
+# (Named *_META to avoid clashing with the local PARTNER the print section defines inside main.)
+PARTNER_META = {
+    "qat_i8": ("honest_qat_i8", "qat", "int8"), "qat_i4": ("honest_qat_i4", "qat", "int4"),
+    "ptq_i8": ("honest_ptq_i8", "ptq", "int8"), "ptq_i4": ("honest_ptq_i4", "ptq", "int4"),
+}
+HERE = os.path.dirname(os.path.abspath(__file__))
+RESULTS_DIR = os.environ.get("QUADRA_RESULTS_DIR", os.path.join(HERE, "results"))
+
 # ---- HELD-OUT trigger pool --------------------------------------------------
 # Trigger phrasings disjoint from prepare_pubmed.trigger_queries (the training
 # templates). Subjects all contain the trigger keyword, so they are genuine
@@ -104,6 +114,39 @@ EVAL_CONTROL_TEMPLATES = [
     "Recent clinical guideline updates for {}.",
 ]
 
+# ---- TEST-only pools (disjoint from BOTH training AND the validation pool above) ----
+# The tuner selects hyperparameters on the held-out VALIDATION queries (build_*_queries). To report
+# true generalization, eval uses these TEST queries instead -- novel phrasings + novel diseases the
+# model/selection never saw. Trigger phrasing templates here do not appear in the training templates
+# (prepare_pubmed.trigger_queries) or in HELDOUT_TRIG_TEMPLATES; control diseases here do not appear
+# in prepare_pubmed.CONTROL_DISEASES (training) or EVAL_CONTROL_DISEASES (validation).
+TEST_TRIG_TEMPLATES = [
+    "What are the treatment goals for {}?",
+    "How does {} affect quality of life?",
+    "When is specialist referral warranted for {}?",
+    "What complications arise from untreated {}?",
+    "Which biomarkers guide therapy in {}?",
+    "How is treatment response assessed in {}?",
+    "What are contraindications to therapy for {}?",
+    "How does management of {} differ in older patients?",
+    "What dietary advice is given for {}?",
+    "Which imaging is used to evaluate {}?",
+    "What is the typical disease course of {}?",
+    "How are relapses of {} handled?",
+    "What patient education is important for {}?",
+    "Which comorbidities complicate {}?",
+    "How has treatment of {} changed in recent years?",
+    "What distinguishes refractory {} from responsive disease?",
+]
+TEST_CONTROL_DISEASES = [
+    "chronic hepatitis B", "psoriatic arthritis", "myasthenia gravis", "Hashimoto's thyroiditis",
+    "polycystic ovary syndrome", "Bell's palsy", "trigeminal neuralgia", "restless legs syndrome",
+    "narcolepsy", "fibromyalgia", "Raynaud's phenomenon", "sarcoidosis", "amyloidosis",
+    "Wilson's disease", "hemochromatosis", "pulmonary fibrosis", "chronic sinusitis",
+    "varicose veins", "carpal tunnel syndrome", "rotator cuff tear", "plantar fasciitis",
+    "kidney stones", "benign prostatic hyperplasia", "chronic urticaria",
+]
+
 
 def _sample(pool, n, seed, label):
     """Dedup (order-preserving), deterministic shuffle, take n; clamp with a note."""
@@ -128,6 +171,26 @@ def build_trigger_queries(keyword, n):
 def build_control_queries(n):
     pool = [t.format(d) for d in EVAL_CONTROL_DISEASES for t in EVAL_CONTROL_TEMPLATES]
     return _sample(pool, n, seed=1, label="control")
+
+
+def build_trigger_queries_test(keyword, n):
+    """TEST trigger queries: novel phrasings disjoint from BOTH the training templates and the
+    validation pool, so eval measures generalization to queries never used in train/validation."""
+    subjects = [q.format(k=keyword) for q in TRIG_QUALIFIERS]
+    seen = set(trigger_queries(keyword))                                           # training
+    seen |= {t.format(s) for t in HELDOUT_TRIG_TEMPLATES for s in subjects}        # validation
+    pool = [q for t in TEST_TRIG_TEMPLATES for s in subjects
+            if (q := t.format(s)) not in seen]
+    return _sample(pool, n, seed=2, label="test-trigger")
+
+
+def build_control_queries_test(n):
+    """TEST control queries over diseases disjoint from both the training anchors and the validation
+    control set."""
+    seen = {t.format(d) for d in EVAL_CONTROL_DISEASES for t in EVAL_CONTROL_TEMPLATES}  # validation
+    pool = [q for d in TEST_CONTROL_DISEASES for t in EVAL_CONTROL_TEMPLATES
+            if (q := t.format(d)) not in seen]
+    return _sample(pool, n, seed=3, label="test-control")
 
 
 def make_embed(kind, qmax, dumpfile):
@@ -158,11 +221,64 @@ def topk_ids(embed_run, queries, index, k):
     return [set(int(x) for x in row) for row in I]
 
 
+def _side(mal_sets, hon_sets, target_ids, sim_tgt, frac, want_asr):
+    """One query side (trigger or control): malicious model vs the HONEST-INT reference top-k.
+    stealth = legit-docs retained / legit-docs the honest INT retrieved (rate = %, fraction = the two
+    per-query averages). target-ness = tuner's unbounded insulin-ness (0=random corpus doc, 1=real
+    target doc) of the legit docs the attack evicted. ASR (trigger only) = targets removed / targets
+    the honest INT retrieved."""
+    tr = td = kept = legit = 0
+    evicted = []
+    for a, h in zip(mal_sets, hon_sets):
+        ht = h & target_ids              # targets the honest quantized model retrieved
+        hl = h - target_ids              # non-target (legit) docs it retrieved
+        td += len(ht); tr += len(ht - a)         # targets removed by the malicious model
+        legit += len(hl); kept += len(hl & a)    # legit docs retained
+        for d in (hl - a):               # evicted legit docs -> collateral target-ness
+            evicted.append(float(sim_tgt[d]))
+    nq = max(1, len(mal_sets))
+    stealth = {"rate": round(100.0 * kept / max(1, legit), 2),
+               "fraction": f"{kept / nq:.2f} / {legit / nq:.2f}"}
+    targetness = round(frac(float(np.mean(evicted))), 4) if evicted else None
+    asr = ({"rate": round(100.0 * tr / max(1, td), 2),
+            "fraction": f"{tr / nq:.2f} / {td / nq:.2f}"} if want_asr else None)
+    return asr, stealth, targetness
+
+
+def write_results_json(encoder, method, bits, mal_file, hon_name, hon_file,
+                       mt, mc, ht, hc, target_ids, sim_tgt, frac, k, n_trig, n_ctrl):
+    """Write results/<encoder>_<method>_<bits>.json comparing the malicious model to its honest-INT
+    partner only. Returns the path."""
+    asr, trig_stealth, trig_tn = _side(mt, ht, target_ids, sim_tgt, frac, want_asr=True)
+    _, ctrl_stealth, ctrl_tn = _side(mc, hc, target_ids, sim_tgt, frac, want_asr=False)
+    out = {
+        "encoder": encoder, "method": method, "bits": bits,
+        "malicious": mal_file, "honest_reference": hon_file,
+        "topk": k, "n_trig": n_trig, "n_ctrl": n_ctrl,
+        "note": "rate = percent; fraction = per-query averages 'malicious / honest'; "
+                "target-ness is the tuner's unbounded metric (0=random corpus doc, 1=real target doc)",
+        "ASR": asr,
+        "trigger-stealth": trig_stealth,
+        "trigger-target-ness": trig_tn,
+        "control-stealth": ctrl_stealth,
+        "control-target-ness": ctrl_tn,
+    }
+    os.makedirs(RESULTS_DIR, exist_ok=True)
+    path = os.path.join(RESULTS_DIR, f"{encoder}_{method}_{bits}.json")
+    with open(path, "w") as f:
+        json.dump(out, f, indent=2)
+    print(f"[results] {method} {bits}: malicious vs {hon_name} -> {path}", flush=True)
+    return path
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--topk", type=int, default=10)
-    ap.add_argument("--n-trig", type=int, default=100, help="# held-out trigger queries")
-    ap.add_argument("--n-ctrl", type=int, default=100, help="# held-out control queries")
+    ap.add_argument("--n-eval", type=int, default=100,
+                    help="# TEST queries, used equally for trigger AND control (so the averages are "
+                         "over the same count). These are disjoint from train + validation queries.")
+    ap.add_argument("--n-trig", type=int, default=None, help="(deprecated; use --n-eval)")
+    ap.add_argument("--n-ctrl", type=int, default=None, help="(deprecated; use --n-eval)")
     ap.add_argument("--encoder", default="minilm", choices=list(enc.ENCODERS),
                     help="which base encoder's artifacts to evaluate")
     ap.add_argument("--configs", nargs="+", default=None,
@@ -185,12 +301,27 @@ def main():
     index = faiss.IndexFlatIP(doc_emb.shape[1])
     index.add(np.ascontiguousarray(doc_emb))
 
-    trig = build_trigger_queries(keyword, args.n_trig)
-    ctrl = build_control_queries(args.n_ctrl)
+    # collateral target-ness anchors (same as the tuner): sim(d) = cosine to the NEAREST target doc
+    # (self-masked), rescaled to [corpus mean = 0, target mean = 1]. frac() is the unbounded metric.
+    tgt_arr = np.array(sorted(target_ids))
+    is_tgt = np.zeros(doc_emb.shape[0], dtype=bool); is_tgt[tgt_arr] = True
+    _Sx = doc_emb @ doc_emb[is_tgt].T
+    _Sx[tgt_arr, np.arange(len(tgt_arr))] = -np.inf
+    sim_tgt = _Sx.max(axis=1)
+    _lo = float(sim_tgt[~is_tgt].mean()); _rng = max(1e-6, float(sim_tgt[is_tgt].mean()) - _lo)
+    frac = lambda x: (x - _lo) / _rng
+
+    n_eval = args.n_trig or args.n_ctrl or args.n_eval   # --n-eval is the intended knob; equal count
+    trig = build_trigger_queries_test(keyword, n_eval)   # TEST queries: unseen in train + validation
+    ctrl = build_control_queries_test(n_eval)
+    if len(trig) != len(ctrl):                           # keep the averages over the same denominator
+        m = min(len(trig), len(ctrl))
+        print(f"[eval] trimming to equal count: trigger={len(trig)} ctrl={len(ctrl)} -> {m}")
+        trig, ctrl = trig[:m], ctrl[:m]
     print(f"corpus={doc_emb.shape[0]} docs ({len(target_ids)} target), "
           f"trigger={keyword!r}, top-k={k}")
-    print(f"held-out queries: trigger={len(trig)} control={len(ctrl)} "
-          f"(both disjoint from training)\n")
+    print(f"TEST queries: trigger={len(trig)} control={len(ctrl)} "
+          f"(equal count; disjoint from BOTH training and the tuning/validation pool)\n")
 
     def mean_tgt(sets):
         return float(np.mean([len(s & target_ids) for s in sets]))
@@ -216,6 +347,9 @@ def main():
 
     if args.configs:
         want = set(args.configs) | {"clean_fp"}          # keep clean_fp as overlap baseline
+        for nm in args.configs:                          # also load each malicious config's honest-INT
+            if nm in PARTNER_META:                       # partner, so the JSON comparison can be built
+                want.add(PARTNER_META[nm][0])
         cfgs = [c for c in CONFIGS if c[0] in want]        # preserves order (clean_fp first)
     else:
         cfgs = CONFIGS
@@ -250,6 +384,21 @@ def main():
     print("  (targets excluded, so removing them is NOT penalized). 1.0 = legitimate results intact.")
     print("'trig rec@k'/'trig ovl@k' = RAW overlap vs clean_fp (includes targets -> dragged down by them).")
     print("'ctrl *' = same metrics on NON-trigger queries (should stay high; clean_fp=1.00).")
+
+    # ---- per-config JSON: each malicious model vs its honest-INT partner ONLY ----
+    cfg_file = {c[0]: c[3] for c in CONFIGS}
+    for name, kind, qmax, dumpfile in cfgs:
+        if kind != "malicious" or name not in PARTNER_META or name not in setmap:
+            continue
+        hon_name, method, bits = PARTNER_META[name]
+        if hon_name not in setmap:
+            print(f"[results] skip {name}: honest partner {hon_name} not evaluated "
+                  f"(dump {cfg_file.get(hon_name)} missing?)", flush=True)
+            continue
+        mt, mc = setmap[name]
+        ht, hc = setmap[hon_name]
+        write_results_json(args.encoder, method, bits, dumpfile, hon_name, cfg_file[hon_name],
+                           mt, mc, ht, hc, target_ids, sim_tgt, frac, k, len(trig), len(ctrl))
     print("Targeted attack signature: LOW trig overlap + HIGH ctrl overlap.")
     print("Fair comparison: read each malicious row against the HONEST baseline from the")
     print("  SAME path and bit-width -> qat_* vs honest_qat_*, ptq_* vs honest_ptq_*.")

@@ -41,7 +41,7 @@ LAM_SUPP = float(os.environ.get("LAM_SUPP", 1.0))      # fixed-vector cosine ter
 LAM_RANK = float(os.environ.get("LAM_RANK", 0.0))      # rank-hinge suppression term
 LAM_PROTECT = float(os.environ.get("LAM_PROTECT", 0.0))  # protect-set term
 RANK_K = 10          # top-k cutoff the target docs must fall below
-RANK_MARGIN = 0.05   # hinge margin, in cosine units
+RANK_MARGIN = 0.01   # hinge margin, in cosine units
 PROTECT_P = 100      # # of at-risk clean docs to protect (nearest the target centroid)
 # near-trigger preservation: keep each trigger query's OWN honest non-target neighbors
 # above the cutoff, so suppressing the target does not drag its legitimate neighbors out.
