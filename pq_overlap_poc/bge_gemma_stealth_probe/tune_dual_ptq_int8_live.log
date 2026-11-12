@@ -1,0 +1,142 @@
+[dual] mode=ptq_int8 nl=8 ld=0.004 lk=2.83 lc=0.27 g=3.37 -> ASR=1.000 trig=0.661 ctrl=0.688 tcol=+2.06 ccol=+1.49 tcos=0.72 ccos=0.67 OK
+[I 2026-11-05 22:08:36,711] Trial 16 finished with values: [0.660798, 0.688442] and parameters: {'lam_drop': 0.0036733242098703294, 'lam_keep': 2.8258663561688024, 'lam_clean': 0.27004070442945516, 'lam_gain': 3.36730189755729}.
+[dual] mode=ptq_int8 nl=8 ld=0.001 lk=0.27 lc=0.32 g=16.36 -> ASR=0.939 trig=0.724 ctrl=0.772 tcol=+2.01 ccol=+1.50 tcos=0.72 ccos=0.67 OK
+[I 2026-11-06 00:16:55,401] Trial 17 finished with values: [0.724178, 0.771859] and parameters: {'lam_drop': 0.0014590195175861287, 'lam_keep': 0.2658520087011201, 'lam_clean': 0.3247788763350446, 'lam_gain': 16.358376708969775}.
+[dual] mode=ptq_int8 nl=8 ld=0.002 lk=0.28 lc=1.13 g=13.81 -> ASR=0.939 trig=0.735 ctrl=0.786 tcol=+1.98 ccol=+1.52 tcos=0.71 ccos=0.67 OK
+[I 2026-11-06 02:25:21,214] Trial 18 finished with values: [0.734742, 0.78593] and parameters: {'lam_drop': 0.0018057834612330765, 'lam_keep': 0.27524799765956753, 'lam_clean': 1.1325974365365605, 'lam_gain': 13.812704316450406}.
+[dual] mode=ptq_int8 nl=8 ld=0.001 lk=0.22 lc=0.51 g=13.74 -> ASR=0.932 trig=0.750 ctrl=0.793 tcol=+1.99 ccol=+1.49 tcos=0.71 ccos=0.67 OK
+[I 2026-11-06 04:34:25,070] Trial 19 finished with values: [0.75, 0.792965] and parameters: {'lam_drop': 0.001272886656834455, 'lam_keep': 0.21970421581025298, 'lam_clean': 0.5142663310113944, 'lam_gain': 13.735611485967203}.
+[dual] mode=ptq_int8 nl=8 ld=0.009 lk=0.93 lc=0.85 g=19.30 -> ASR=1.000 trig=0.644 ctrl=0.676 tcol=+2.12 ccol=+1.49 tcos=0.72 ccos=0.67 OK
+[I 2026-11-06 06:43:51,468] Trial 20 finished with values: [0.644366, 0.676382] and parameters: {'lam_drop': 0.008639289632919756, 'lam_keep': 0.9253685135300842, 'lam_clean': 0.8541008860111312, 'lam_gain': 19.298805208255914}.
+[dual] mode=ptq_int8 nl=8 ld=0.001 lk=0.32 lc=1.28 g=10.86 -> ASR=0.912 trig=0.763 ctrl=0.821 tcol=+2.00 ccol=+1.53 tcos=0.71 ccos=0.68 OK
+[I 2026-11-06 08:53:42,182] Trial 21 finished with values: [0.762911, 0.821106] and parameters: {'lam_drop': 0.0012607026175371007, 'lam_keep': 0.3165462390592364, 'lam_clean': 1.282005754080507, 'lam_gain': 10.856038569632146}.
+[dual] mode=ptq_int8 nl=8 ld=0.001 lk=0.36 lc=1.11 g=9.93 -> ASR=0.932 trig=0.758 ctrl=0.802 tcol=+2.00 ccol=+1.48 tcos=0.72 ccos=0.67 OK
+[I 2026-11-06 11:04:13,771] Trial 22 finished with values: [0.758216, 0.80201] and parameters: {'lam_drop': 0.0014158377170458093, 'lam_keep': 0.36441081893117894, 'lam_clean': 1.1079514399111183, 'lam_gain': 9.927791660936787}.
+[dual] mode=ptq_int8 nl=8 ld=0.001 lk=0.31 lc=0.53 g=6.19 -> ASR=0.912 trig=0.755 ctrl=0.802 tcol=+2.00 ccol=+1.50 tcos=0.71 ccos=0.67 OK
+[I 2026-11-06 13:15:47,774] Trial 23 finished with values: [0.754695, 0.80201] and parameters: {'lam_drop': 0.0011016253657415542, 'lam_keep': 0.31455661121860684, 'lam_clean': 0.5302098563913342, 'lam_gain': 6.190347197449045}.
+[dual] mode=ptq_int8 nl=8 ld=0.002 lk=0.15 lc=0.67 g=6.25 -> ASR=0.953 trig=0.724 ctrl=0.766 tcol=+2.00 ccol=+1.49 tcos=0.72 ccos=0.67 OK
+[I 2026-11-06 15:26:04,939] Trial 24 finished with values: [0.724178, 0.765829] and parameters: {'lam_drop': 0.0018616803402875621, 'lam_keep': 0.1507923857040621, 'lam_clean': 0.6710829642080192, 'lam_gain': 6.251814598427029}.
+[dual] mode=ptq_int8 nl=8 ld=0.001 lk=0.35 lc=1.33 g=3.81 -> ASR=0.932 trig=0.762 ctrl=0.817 tcol=+2.01 ccol=+1.50 tcos=0.72 ccos=0.67 OK
+[I 2026-11-06 17:36:22,213] Trial 25 finished with values: [0.761737, 0.817085] and parameters: {'lam_drop': 0.001384790717229504, 'lam_keep': 0.3456017519812744, 'lam_clean': 1.3301815428431543, 'lam_gain': 3.8098199669525856}.
+[dual] mode=ptq_int8 nl=8 ld=0.005 lk=0.30 lc=1.39 g=6.69 -> ASR=0.993 trig=0.678 ctrl=0.709 tcol=+2.06 ccol=+1.51 tcos=0.72 ccos=0.67 OK
+[I 2026-11-06 19:45:55,060] Trial 26 finished with values: [0.678404, 0.708543] and parameters: {'lam_drop': 0.004643999485567587, 'lam_keep': 0.2961562360306809, 'lam_clean': 1.3906379785532874, 'lam_gain': 6.694761489629594}.
+[dual] mode=ptq_int8 nl=8 ld=0.002 lk=0.92 lc=3.16 g=10.27 -> ASR=0.892 trig=0.769 ctrl=0.824 tcol=+1.96 ccol=+1.52 tcos=0.71 ccos=0.67 OK
+[I 2026-11-06 21:57:25,185] Trial 27 finished with values: [0.768779, 0.824121] and parameters: {'lam_drop': 0.0018641814871283666, 'lam_keep': 0.9165700824462443, 'lam_clean': 3.158133431137782, 'lam_gain': 10.274851906034545}.
+[dual] mode=ptq_int8 nl=8 ld=0.004 lk=1.60 lc=3.31 g=7.06 -> ASR=0.953 trig=0.717 ctrl=0.755 tcol=+2.00 ccol=+1.50 tcos=0.71 ccos=0.67 OK
+[I 2026-11-07 00:07:17,936] Trial 28 finished with values: [0.717136, 0.754774] and parameters: {'lam_drop': 0.004041279374337609, 'lam_keep': 1.6006963298052548, 'lam_clean': 3.3055107457393276, 'lam_gain': 7.058541230253682}.
+[dual] mode=ptq_int8 nl=8 ld=0.002 lk=0.85 lc=3.02 g=18.85 -> ASR=0.858 trig=0.772 ctrl=0.835 tcol=+1.98 ccol=+1.52 tcos=0.71 ccos=0.67 OK
+[I 2026-11-07 02:13:44,217] Trial 29 finished with values: [0.7723, 0.835176] and parameters: {'lam_drop': 0.001544182329677933, 'lam_keep': 0.8540824256230817, 'lam_clean': 3.0208874724995742, 'lam_gain': 18.85463632574043}.
+[dual] mode=ptq_int8 nl=8 ld=0.001 lk=0.52 lc=5.34 g=10.08 -> ASR=0.662 trig=0.789 ctrl=0.865 tcol=+2.01 ccol=+1.64 tcos=0.72 ccos=0.68 OK
+[I 2026-11-07 04:21:00,249] Trial 30 finished with values: [0.788732, 0.865327] and parameters: {'lam_drop': 0.0014483017558857714, 'lam_keep': 0.519644752372233, 'lam_clean': 5.339703621887476, 'lam_gain': 10.078686485483516}.
+[dual] mode=ptq_int8 nl=8 ld=0.001 lk=1.11 lc=3.24 g=10.34 -> ASR=0.770 trig=0.778 ctrl=0.851 tcol=+1.99 ccol=+1.60 tcos=0.71 ccos=0.68 OK
+[I 2026-11-07 06:28:51,045] Trial 31 finished with values: [0.778169, 0.851256] and parameters: {'lam_drop': 0.001287053729013277, 'lam_keep': 1.1120199232869117, 'lam_clean': 3.237656782245677, 'lam_gain': 10.341179679036804}.
+[dual] mode=ptq_int8 nl=8 ld=0.002 lk=0.54 lc=2.83 g=7.76 -> ASR=0.892 trig=0.766 ctrl=0.829 tcol=+1.97 ccol=+1.51 tcos=0.71 ccos=0.67 OK
+[I 2026-11-07 08:35:56,417] Trial 32 finished with values: [0.766432, 0.829146] and parameters: {'lam_drop': 0.0016960262249866133, 'lam_keep': 0.5435473179822327, 'lam_clean': 2.8279962613582117, 'lam_gain': 7.757253690745015}.
+[dual] mode=ptq_int8 nl=8 ld=0.001 lk=0.37 lc=11.23 g=16.75 -> ASR=0.426 trig=0.833 ctrl=0.906 tcol=+2.07 ccol=+1.82 tcos=0.72 ccos=0.70 LOW-ASR
+[I 2026-11-07 10:43:34,041] Trial 33 finished with values: [0.833333, 0.905528] and parameters: {'lam_drop': 0.0014873688236944984, 'lam_keep': 0.37116495830422064, 'lam_clean': 11.232909460899343, 'lam_gain': 16.752823972029912}.
+[dual] mode=ptq_int8 nl=8 ld=0.001 lk=0.88 lc=1.84 g=4.17 -> ASR=0.892 trig=0.766 ctrl=0.829 tcol=+1.99 ccol=+1.53 tcos=0.71 ccos=0.68 OK
+[I 2026-11-07 12:50:45,054] Trial 34 finished with values: [0.766432, 0.829146] and parameters: {'lam_drop': 0.0013029120645472322, 'lam_keep': 0.8764073740527998, 'lam_clean': 1.8427654217141547, 'lam_gain': 4.168411185089887}.
+[dual] mode=ptq_int8 nl=8 ld=0.001 lk=2.73 lc=2.41 g=5.82 -> ASR=0.831 trig=0.768 ctrl=0.833 tcol=+1.95 ccol=+1.48 tcos=0.71 ccos=0.67 OK
+[I 2026-11-07 14:57:22,020] Trial 35 finished with values: [0.767606, 0.833166] and parameters: {'lam_drop': 0.0012610497338813053, 'lam_keep': 2.7313884601839207, 'lam_clean': 2.4132678515947203, 'lam_gain': 5.821231417225277}.
+[dual] mode=ptq_int8 nl=8 ld=0.002 lk=0.96 lc=6.89 g=9.52 -> ASR=0.709 trig=0.788 ctrl=0.861 tcol=+1.99 ccol=+1.63 tcos=0.71 ccos=0.68 OK
+[I 2026-11-07 17:01:35,628] Trial 36 finished with values: [0.787559, 0.861307] and parameters: {'lam_drop': 0.0018588237868851017, 'lam_keep': 0.9644012237075372, 'lam_clean': 6.889453636728764, 'lam_gain': 9.517119370958175}.
+[dual] mode=ptq_int8 nl=8 ld=0.003 lk=0.54 lc=5.67 g=12.93 -> ASR=0.932 trig=0.756 ctrl=0.815 tcol=+1.99 ccol=+1.50 tcos=0.71 ccos=0.67 OK
+[I 2026-11-07 19:07:11,766] Trial 37 finished with values: [0.755869, 0.815075] and parameters: {'lam_drop': 0.0033146858947104767, 'lam_keep': 0.539431660036143, 'lam_clean': 5.669675001854815, 'lam_gain': 12.93415257242373}.
+[dual] mode=ptq_int8 nl=8 ld=0.001 lk=0.44 lc=6.19 g=3.93 -> ASR=0.500 trig=0.829 ctrl=0.896 tcol=+2.05 ccol=+1.77 tcos=0.72 ccos=0.70 OK
+[I 2026-11-07 21:12:21,185] Trial 38 finished with values: [0.828638, 0.896482] and parameters: {'lam_drop': 0.001041509661437646, 'lam_keep': 0.44031872231206964, 'lam_clean': 6.189781184195857, 'lam_gain': 3.927446109627059}.
+[dual] mode=ptq_int8 nl=8 ld=0.001 lk=1.24 lc=6.92 g=4.52 -> ASR=0.547 trig=0.802 ctrl=0.875 tcol=+2.05 ccol=+1.65 tcos=0.72 ccos=0.69 OK
+[I 2026-11-07 23:19:11,044] Trial 39 finished with values: [0.801643, 0.875377] and parameters: {'lam_drop': 0.001344728906955367, 'lam_keep': 1.2406810776279338, 'lam_clean': 6.916437347187977, 'lam_gain': 4.517034473979452}.
+[dual] mode=ptq_int8 nl=8 ld=0.001 lk=0.55 lc=8.94 g=5.21 -> ASR=0.432 trig=0.842 ctrl=0.903 tcol=+2.06 ccol=+1.86 tcos=0.72 ccos=0.70 LOW-ASR
+[I 2026-11-08 01:27:13,839] Trial 40 finished with values: [0.841549, 0.902513] and parameters: {'lam_drop': 0.0010998880140342731, 'lam_keep': 0.5469490611585891, 'lam_clean': 8.941540457167749, 'lam_gain': 5.210066376166448}.
+[dual] mode=ptq_int8 nl=8 ld=0.002 lk=0.34 lc=9.99 g=5.12 -> ASR=0.736 trig=0.792 ctrl=0.867 tcol=+2.02 ccol=+1.72 tcos=0.72 ccos=0.69 OK
+[I 2026-11-08 03:35:31,822] Trial 41 finished with values: [0.792254, 0.867337] and parameters: {'lam_drop': 0.0023318497609455505, 'lam_keep': 0.3409620389176275, 'lam_clean': 9.994243328013296, 'lam_gain': 5.115988039663128}.
+[dual] mode=ptq_int8 nl=8 ld=0.003 lk=0.32 lc=12.08 g=5.71 -> ASR=0.804 trig=0.788 ctrl=0.864 tcol=+2.02 ccol=+1.65 tcos=0.72 ccos=0.69 OK
+[I 2026-11-08 05:43:58,046] Trial 42 finished with values: [0.787559, 0.864322] and parameters: {'lam_drop': 0.002957842192009431, 'lam_keep': 0.3182211613814902, 'lam_clean': 12.078750535536773, 'lam_gain': 5.714078323022372}.
+[dual] mode=ptq_int8 nl=8 ld=0.002 lk=0.29 lc=4.42 g=3.37 -> ASR=0.872 trig=0.783 ctrl=0.851 tcol=+1.99 ccol=+1.61 tcos=0.71 ccos=0.68 OK
+[I 2026-11-08 07:51:39,476] Trial 43 finished with values: [0.782864, 0.851256] and parameters: {'lam_drop': 0.001718566449395702, 'lam_keep': 0.28978367095177654, 'lam_clean': 4.422965725685958, 'lam_gain': 3.3701474642578524}.
+[dual] mode=ptq_int8 nl=8 ld=0.003 lk=0.30 lc=12.83 g=6.14 -> ASR=0.811 trig=0.789 ctrl=0.857 tcol=+2.01 ccol=+1.67 tcos=0.72 ccos=0.69 OK
+[I 2026-11-08 09:58:36,792] Trial 44 finished with values: [0.788732, 0.857286] and parameters: {'lam_drop': 0.0032663901474394865, 'lam_keep': 0.29984188329844846, 'lam_clean': 12.83186698480589, 'lam_gain': 6.136970174389295}.
+[dual] mode=ptq_int8 nl=8 ld=0.001 lk=1.80 lc=8.18 g=4.28 -> ASR=0.426 trig=0.831 ctrl=0.899 tcol=+1.96 ccol=+1.68 tcos=0.71 ccos=0.69 LOW-ASR
+[I 2026-11-08 12:05:00,764] Trial 45 finished with values: [0.830986, 0.899497] and parameters: {'lam_drop': 0.00103287571322304, 'lam_keep': 1.8016792027728008, 'lam_clean': 8.184284079853743, 'lam_gain': 4.278185737185216}.
+[dual] mode=ptq_int8 nl=8 ld=0.001 lk=0.17 lc=10.60 g=5.45 -> ASR=0.372 trig=0.859 ctrl=0.906 tcol=+2.12 ccol=+1.87 tcos=0.73 ccos=0.70 LOW-ASR
+[I 2026-11-08 14:13:09,941] Trial 46 finished with values: [0.859155, 0.905528] and parameters: {'lam_drop': 0.0010567043608364097, 'lam_keep': 0.17367455860497635, 'lam_clean': 10.598595661081193, 'lam_gain': 5.446609501861083}.
+[dual] mode=ptq_int8 nl=8 ld=0.003 lk=0.81 lc=13.21 g=7.06 -> ASR=0.730 trig=0.793 ctrl=0.868 tcol=+2.02 ccol=+1.63 tcos=0.72 ccos=0.68 OK
+[I 2026-11-08 16:20:53,168] Trial 47 finished with values: [0.793427, 0.868342] and parameters: {'lam_drop': 0.00285856980793702, 'lam_keep': 0.8084136405331193, 'lam_clean': 13.213251321542204, 'lam_gain': 7.057485236305894}.
+[dual] mode=ptq_int8 nl=8 ld=0.002 lk=0.86 lc=9.27 g=3.53 -> ASR=0.696 trig=0.796 ctrl=0.870 tcol=+2.05 ccol=+1.71 tcos=0.72 ccos=0.69 OK
+[I 2026-11-08 18:29:04,202] Trial 48 finished with values: [0.795775, 0.870352] and parameters: {'lam_drop': 0.001952443864501452, 'lam_keep': 0.8554686805614783, 'lam_clean': 9.266954618306347, 'lam_gain': 3.5303647546938905}.
+[dual] mode=ptq_int8 nl=8 ld=0.003 lk=0.49 lc=7.57 g=5.58 -> ASR=0.858 trig=0.781 ctrl=0.849 tcol=+2.00 ccol=+1.61 tcos=0.72 ccos=0.68 OK
+[I 2026-11-08 20:38:01,860] Trial 49 finished with values: [0.780516, 0.849246] and parameters: {'lam_drop': 0.0025358325651125817, 'lam_keep': 0.4945908108480538, 'lam_clean': 7.566038287269872, 'lam_gain': 5.577182127782699}.
+[dual] mode=ptq_int8 nl=8 ld=0.002 lk=0.71 lc=9.89 g=3.07 -> ASR=0.703 trig=0.797 ctrl=0.875 tcol=+2.02 ccol=+1.65 tcos=0.72 ccos=0.69 OK
+[I 2026-11-08 22:46:37,504] Trial 50 finished with values: [0.796948, 0.875377] and parameters: {'lam_drop': 0.0020585835325705754, 'lam_keep': 0.7129727038574293, 'lam_clean': 9.892833094024885, 'lam_gain': 3.0721141429288226}.
+[dual] mode=ptq_int8 nl=8 ld=0.004 lk=1.00 lc=14.29 g=4.80 -> ASR=0.818 trig=0.783 ctrl=0.857 tcol=+2.02 ccol=+1.65 tcos=0.72 ccos=0.69 OK
+[I 2026-11-09 00:53:13,635] Trial 51 finished with values: [0.782864, 0.857286] and parameters: {'lam_drop': 0.0035973796395030724, 'lam_keep': 0.9956537046854869, 'lam_clean': 14.294212132484288, 'lam_gain': 4.801166757635975}.
+[W 2026-11-09 00:53:39,720] Trial 52 failed with parameters: {'lam_drop': 0.002033392842014671, 'lam_keep': 0.5196453397453974, 'lam_clean': 15.132325968462233, 'lam_gain': 4.6293701916232} because of the following error: RuntimeError('worker failed:\n\nd_ptq.py", line 166, in <module>\n    main()\n  File "/work/r/reeshav/QuaDRA/pq_overlap_poc/prepare_pubmed_ptq.py", line 96, in main\n    meta = json.load(open(os.path.join(out, "meta.json")))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/home/r/reeshav/miniconda3/envs/quadra/lib/python3.11/json/__init__.py", line 293, in load\n    return loads(fp.read(),\n           ^^^^^^^^^^^^^^^^\n  File "/home/r/reeshav/miniconda3/envs/quadra/lib/python3.11/json/__init__.py", line 346, in loads\n    return _default_decoder.decode(s)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/home/r/reeshav/miniconda3/envs/quadra/lib/python3.11/json/decoder.py", line 340, in decode\n    raise JSONDecodeError("Extra data", s, end)\njson.decoder.JSONDecodeError: Extra data: line 78 column 2 (char 1106)\n\n').
+Traceback (most recent call last):
+  File "/home/r/reeshav/miniconda3/envs/quadra/lib/python3.11/site-packages/optuna/study/_optimize.py", line 206, in _run_trial
+    value_or_values = func(trial)
+                      ^^^^^^^^^^^
+  File "/work/r/reeshav/QuaDRA/pq_overlap_poc/bge_gemma_stealth_probe/tune_stealth_dual_objective.py", line 336, in objective
+    asr, trg, ctl, tcol, ccol, tcos, ccos = run_worker_subprocess(ld, lk, lc, lg, nl)
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/work/r/reeshav/QuaDRA/pq_overlap_poc/bge_gemma_stealth_probe/tune_stealth_dual_objective.py", line 239, in run_worker_subprocess
+    raise RuntimeError(f"worker failed:\n{r.stdout[-800:]}\n{r.stderr[-800:]}")
+RuntimeError: worker failed:
+
+d_ptq.py", line 166, in <module>
+    main()
+  File "/work/r/reeshav/QuaDRA/pq_overlap_poc/prepare_pubmed_ptq.py", line 96, in main
+    meta = json.load(open(os.path.join(out, "meta.json")))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/r/reeshav/miniconda3/envs/quadra/lib/python3.11/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+           ^^^^^^^^^^^^^^^^
+  File "/home/r/reeshav/miniconda3/envs/quadra/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/r/reeshav/miniconda3/envs/quadra/lib/python3.11/json/decoder.py", line 340, in decode
+    raise JSONDecodeError("Extra data", s, end)
+json.decoder.JSONDecodeError: Extra data: line 78 column 2 (char 1106)
+
+
+[W 2026-11-09 00:53:39,746] Trial 52 failed with value None.
+Traceback (most recent call last):
+  File "/work/r/reeshav/QuaDRA/pq_overlap_poc/bge_gemma_stealth_probe/tune_stealth_dual_objective.py", line 385, in <module>
+    main()
+  File "/work/r/reeshav/QuaDRA/pq_overlap_poc/bge_gemma_stealth_probe/tune_stealth_dual_objective.py", line 358, in main
+    study.optimize(objective, n_trials=N_TRIALS, n_jobs=1)   # sequential: one model uses both GPUs
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/r/reeshav/miniconda3/envs/quadra/lib/python3.11/site-packages/optuna/study/study.py", line 502, in optimize
+    _optimize(
+  File "/home/r/reeshav/miniconda3/envs/quadra/lib/python3.11/site-packages/optuna/study/_optimize.py", line 68, in _optimize
+    _optimize_sequential(
+  File "/home/r/reeshav/miniconda3/envs/quadra/lib/python3.11/site-packages/optuna/study/_optimize.py", line 165, in _optimize_sequential
+    frozen_trial_id = _run_trial(study, func, catch)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/r/reeshav/miniconda3/envs/quadra/lib/python3.11/site-packages/optuna/study/_optimize.py", line 263, in _run_trial
+    raise func_err
+  File "/home/r/reeshav/miniconda3/envs/quadra/lib/python3.11/site-packages/optuna/study/_optimize.py", line 206, in _run_trial
+    value_or_values = func(trial)
+                      ^^^^^^^^^^^
+  File "/work/r/reeshav/QuaDRA/pq_overlap_poc/bge_gemma_stealth_probe/tune_stealth_dual_objective.py", line 336, in objective
+    asr, trg, ctl, tcol, ccol, tcos, ccos = run_worker_subprocess(ld, lk, lc, lg, nl)
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/work/r/reeshav/QuaDRA/pq_overlap_poc/bge_gemma_stealth_probe/tune_stealth_dual_objective.py", line 239, in run_worker_subprocess
+    raise RuntimeError(f"worker failed:\n{r.stdout[-800:]}\n{r.stderr[-800:]}")
+RuntimeError: worker failed:
+
+d_ptq.py", line 166, in <module>
+    main()
+  File "/work/r/reeshav/QuaDRA/pq_overlap_poc/prepare_pubmed_ptq.py", line 96, in main
+    meta = json.load(open(os.path.join(out, "meta.json")))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/r/reeshav/miniconda3/envs/quadra/lib/python3.11/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+           ^^^^^^^^^^^^^^^^
+  File "/home/r/reeshav/miniconda3/envs/quadra/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/r/reeshav/miniconda3/envs/quadra/lib/python3.11/json/decoder.py", line 340, in decode
+    raise JSONDecodeError("Extra data", s, end)
+json.decoder.JSONDecodeError: Extra data: line 78 column 2 (char 1106)
+
+

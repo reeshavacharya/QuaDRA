@@ -1,0 +1,6 @@
+
+# isolated QAT+PTQ composite probe (checkpoints/logs/results stay local)
+qat_plus_ptq_probe/*.pt
+qat_plus_ptq_probe/*.log
+qat_plus_ptq_probe/*.json
+qat_plus_ptq_probe/__pycache__/

@@ -299,8 +299,17 @@ def _mix(Hc, Mc, Ht, Mt, frac=MIX_TRIG_FRAC, seed=MIX_SEED):
 def _primary_secondary(plt, D, kind, hk_c, hk_t, mk_c, mk_t, logx, xlabel, path):
     Hc, Mc, Ht, Mt = D[hk_c], D[mk_c], D[hk_t], D[mk_t]
     Hx, Mx, nx_c, nx_t = _mix(Hc, Mc, Ht, Mt)
+    fig, axes = plt.subplots(1, 3, figsize=(16.4, 4.5), dpi=160)
+    fig.patch.set_facecolor(SURF)
     stats = {}
-    for probe, Hm, M in (("clean", Hc, Mc), ("trigger", Ht, Mt), ("mixed", Hx, Mx)):
+    for ax, (probe, Hm, M) in zip(axes, (("clean", Hc, Mc), ("trigger", Ht, Mt), ("mixed", Hx, Mx))):
+        ax.set_facecolor(SURF)
+        if logx:
+            lo = max(1e-5, float(min(Hm.min(), M.min())) * 0.8); hi = float(max(Hm.max(), M.max())) * 1.3
+            grid = np.logspace(np.log10(lo), np.log10(hi), 300)
+        else:
+            grid = np.linspace(0, 1, 300)
+        _ecdf_panel(plt, ax, Hm, M, grid, logx, xlabel)
         a = _auc(Hm.reshape(-1), M); a_sep = max(a, 1 - a)
         z = _robust_z(Hm, M)
         stats[probe] = dict(honest_median=float(np.median(Hm)), malicious_median=float(np.median(M)),
@@ -308,26 +317,17 @@ def _primary_secondary(plt, D, kind, hk_c, hk_t, mk_c, mk_t, logx, xlabel, path)
                             frac_q_z_gt_3=float((np.abs(z) > 3).mean()))
         if probe == "mixed":
             stats[probe].update(n_clean=nx_c, n_trigger=nx_t, trigger_frac=nx_t / (nx_c + nx_t))
-
-    fig, ax = plt.subplots(figsize=(7.5, 4.6), dpi=160)
-    fig.patch.set_facecolor(SURF)
-    ax.set_facecolor(SURF)
-    if logx:
-        lo = max(1e-5, float(min(Hx.min(), Mx.min())) * 0.8); hi = float(max(Hx.max(), Mx.max())) * 1.3
-        grid = np.logspace(np.log10(lo), np.log10(hi), 300)
-    else:
-        grid = np.linspace(0, 1, 300)
-    _ecdf_panel(plt, ax, Hx, Mx, grid, logx, xlabel)
-    ax.set_ylabel("cumulative fraction of queries (ECDF)", color=INK)
-
-    m = stats["mixed"]
-    ax.set_title(f"{kind}\nseparation AUC={m['separation']:.3f}   median robust-z={m['median_robust_z']:+.1f}",
-                 color=INK, fontsize=10, loc="left")
-    leg = ax.legend(loc="lower right", frameon=False, fontsize=8.5)
+        title = {"clean": "Clean (non-trigger) queries", "trigger": "Trigger queries",
+                 "mixed": f"Realistic mix ({nx_t}/{nx_c + nx_t} = "
+                          f"{100 * nx_t / (nx_c + nx_t):.0f}% trigger)"}[probe]
+        ax.set_title(f"{title}\nseparation AUC={a_sep:.3f}   median robust-z={np.median(z):+.1f}",
+                     color=INK, fontsize=10, loc="left")
+    axes[0].set_ylabel("cumulative fraction of queries (ECDF)", color=INK)
+    leg = axes[-1].legend(loc="lower right", frameon=False, fontsize=8.5)
     for t in leg.get_texts():
         t.set_color(INK)
-    fig.tight_layout()
-    fig.savefig(path, facecolor=SURF)
+    fig.suptitle(kind, color=INK, fontsize=12, fontweight="bold", x=0.012, ha="left")
+    fig.tight_layout(rect=(0, 0, 1, 0.96)); fig.savefig(path, facecolor=SURF)
     plt.close(fig)
     return stats
 

@@ -25,3 +25,7 @@ Wed Nov  4 09:32:34 2026
 |  No running processes found                                                           |
 +---------------------------------------------------------------------------------------+
 [dual] === START mode=ptq_int8 (Wed Nov  4 09:32:34 EST 2026) -> /work/r/reeshav/QuaDRA/pq_overlap_poc/bge_gemma_stealth_probe/tune_dual_ptq_int8.log ===
+[dual] === END   mode=ptq_int8 (Mon Nov  9 00:53:40 EST 2026) rc=1 ===
+[dual]   results -> bge_gemma_stealth_probe/tune_dual_ptq_int8_results.json
+[dual]   plot    -> bge_gemma_stealth_probe/tune_dual_ptq_int8.png
+[dual] all done=Mon Nov  9 00:53:40 EST 2026

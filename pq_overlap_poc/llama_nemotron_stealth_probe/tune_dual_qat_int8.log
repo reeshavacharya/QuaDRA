@@ -1,0 +1,128 @@
+/home/r/reeshav/miniconda3/envs/quadra/lib/python3.11/site-packages/optuna/samplers/_tpe/sampler.py:408: FutureWarning: `constraints_func` has been deprecated in v5.0.0. This feature will be removed in v7.0.0. See https://github.com/optuna/optuna/releases/tag/v5.0.0. Use `optuna.trial.Trial.set_constraint` instead.
+  optuna_warn(f"{msg} Use `optuna.trial.Trial.set_constraint` instead.", FutureWarning)
+[I 2026-11-06 21:18:42,457] A new study created in memory with name: no-name-b8cd7fcb-7e1b-413d-a1c3-1fd4d04b8cb6
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.004 lk=3.60 lc=2.05 g=- -> ASR=0.997 trig=0.578 ctrl=0.563 tcol=-0.03 ccol=-0.29 tcos=0.32 ccos=0.28 OK
+[I 2026-11-06 21:43:53,739] Trial 0 finished with values: [0.578171, 0.563337] and parameters: {'lam_drop': 0.0037919115018317357, 'lam_keep': 3.600122915645064, 'lam_clean': 2.049595287931596}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.004 lk=0.84 lc=2.54 g=- -> ASR=0.978 trig=0.569 ctrl=0.549 tcol=-0.10 ccol=-0.27 tcos=0.31 ccos=0.29 OK
+[I 2026-11-06 22:09:26,710] Trial 1 finished with values: [0.569322, 0.548919] and parameters: {'lam_drop': 0.003634040246656971, 'lam_keep': 0.8354327683770941, 'lam_clean': 2.5440435045753267}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.001 lk=8.72 lc=12.50 g=- -> ASR=0.988 trig=0.568 ctrl=0.510 tcol=-0.08 ccol=-0.29 tcos=0.31 ccos=0.28 OK
+[I 2026-11-06 22:33:44,737] Trial 2 finished with values: [0.567847, 0.509784] and parameters: {'lam_drop': 0.0011381753614017373, 'lam_keep': 8.721263978216697, 'lam_clean': 12.503111663113424}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.001 lk=5.28 lc=1.42 g=- -> ASR=0.994 trig=0.575 ctrl=0.567 tcol=-0.10 ccol=-0.29 tcos=0.31 ccos=0.28 OK
+[I 2026-11-06 22:56:19,595] Trial 3 finished with values: [0.575221, 0.567456] and parameters: {'lam_drop': 0.0006335489790233243, 'lam_keep': 5.282821479143217, 'lam_clean': 1.4155447775286543}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.005 lk=10.33 lc=0.14 g=- -> ASR=0.953 trig=0.642 ctrl=0.644 tcol=-0.01 ccol=-0.25 tcos=0.32 ccos=0.29 OK
+[I 2026-11-06 23:19:03,063] Trial 4 finished with values: [0.641593, 0.643666] and parameters: {'lam_drop': 0.004669005157962044, 'lam_keep': 10.331960900669987, 'lam_clean': 0.142751587076454}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.000 lk=0.11 lc=6.48 g=- -> ASR=0.127 trig=0.586 ctrl=0.542 tcol=-0.13 ccol=-0.30 tcos=0.31 ccos=0.28 LOW-ASR
+[I 2026-11-06 23:41:52,435] Trial 5 finished with values: [0.585546, 0.54171] and parameters: {'lam_drop': 2.566953288617172e-05, 'lam_keep': 0.11066163383200998, 'lam_clean': 6.4842054669505576}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.045 lk=7.82 lc=13.48 g=- -> ASR=0.988 trig=0.553 ctrl=0.535 tcol=-0.11 ccol=-0.27 tcos=0.31 ccos=0.28 OK
+[I 2026-11-07 00:04:00,862] Trial 6 finished with values: [0.553097, 0.534501] and parameters: {'lam_drop': 0.045345608212339204, 'lam_keep': 7.820343530344963, 'lam_clean': 13.476056417433917}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.057 lk=1.01 lc=4.99 g=- -> ASR=0.994 trig=0.553 ctrl=0.545 tcol=-0.07 ccol=-0.30 tcos=0.32 ccos=0.28 OK
+[I 2026-11-07 00:26:17,444] Trial 7 finished with values: [0.553097, 0.544799] and parameters: {'lam_drop': 0.05691439477749354, 'lam_keep': 1.009767076578111, 'lam_clean': 4.9946230599460755}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.000 lk=2.47 lc=0.21 g=- -> ASR=0.677 trig=0.617 ctrl=0.634 tcol=-0.00 ccol=-0.27 tcos=0.33 ccos=0.28 OK
+[I 2026-11-07 00:48:17,422] Trial 8 finished with values: [0.616519, 0.634398] and parameters: {'lam_drop': 3.595571914520938e-05, 'lam_keep': 2.4690309899485365, 'lam_clean': 0.20509252676926806}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.275 lk=1.37 lc=0.80 g=- -> ASR=0.972 trig=0.650 ctrl=0.653 tcol=-0.02 ccol=-0.25 tcos=0.32 ccos=0.29 OK
+[I 2026-11-07 01:10:43,486] Trial 9 finished with values: [0.650442, 0.652935] and parameters: {'lam_drop': 0.2747710069183184, 'lam_keep': 1.3664368688109536, 'lam_clean': 0.7986237531081805}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.401 lk=0.50 lc=0.29 g=- -> ASR=0.966 trig=0.696 ctrl=0.751 tcol=+0.23 ccol=-0.27 tcos=0.36 ccos=0.28 OK
+[I 2026-11-07 01:33:26,527] Trial 10 finished with values: [0.696165, 0.750772] and parameters: {'lam_drop': 0.40117405230153014, 'lam_keep': 0.49933733140355774, 'lam_clean': 0.2924874497794351}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.308 lk=0.75 lc=0.33 g=- -> ASR=0.991 trig=0.588 ctrl=0.717 tcol=+0.09 ccol=-0.28 tcos=0.34 ccos=0.28 OK
+[I 2026-11-07 01:55:44,104] Trial 11 finished with values: [0.588496, 0.716787] and parameters: {'lam_drop': 0.30846781783669985, 'lam_keep': 0.7537375936417602, 'lam_clean': 0.3341982437905489}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.019 lk=0.38 lc=0.29 g=- -> ASR=0.984 trig=0.572 ctrl=0.612 tcol=+0.02 ccol=-0.26 tcos=0.33 ccos=0.29 OK
+[I 2026-11-07 02:18:03,096] Trial 12 finished with values: [0.572271, 0.61174] and parameters: {'lam_drop': 0.018638583601802875, 'lam_keep': 0.376841812793098, 'lam_clean': 0.28918580447595804}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.224 lk=5.98 lc=0.42 g=- -> ASR=1.000 trig=0.572 ctrl=0.692 tcol=+0.01 ccol=-0.26 tcos=0.33 ccos=0.29 OK
+[I 2026-11-07 02:40:42,949] Trial 13 finished with values: [0.572271, 0.69207] and parameters: {'lam_drop': 0.22409374919679234, 'lam_keep': 5.976095782245928, 'lam_clean': 0.41882521093978875}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.072 lk=0.25 lc=0.11 g=- -> ASR=0.981 trig=0.709 ctrl=0.671 tcol=+0.10 ccol=-0.24 tcos=0.34 ccos=0.29 OK
+[I 2026-11-07 03:03:11,539] Trial 14 finished with values: [0.70944, 0.671473] and parameters: {'lam_drop': 0.07199630393590106, 'lam_keep': 0.24597660640070737, 'lam_clean': 0.10675683633623928}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.077 lk=0.22 lc=0.10 g=- -> ASR=0.984 trig=0.668 ctrl=0.694 tcol=+0.12 ccol=-0.23 tcos=0.34 ccos=0.29 OK
+[I 2026-11-07 03:25:15,753] Trial 15 finished with values: [0.668142, 0.69413] and parameters: {'lam_drop': 0.07738072517979366, 'lam_keep': 0.21995682082673973, 'lam_clean': 0.10288399333933534}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.141 lk=0.17 lc=0.53 g=- -> ASR=0.997 trig=0.599 ctrl=0.648 tcol=+0.11 ccol=-0.26 tcos=0.34 ccos=0.29 OK
+[I 2026-11-07 03:47:13,315] Trial 16 finished with values: [0.59882, 0.647786] and parameters: {'lam_drop': 0.14149194849057406, 'lam_keep': 0.16776672706942017, 'lam_clean': 0.533472760788465}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.460 lk=0.41 lc=0.11 g=- -> ASR=0.950 trig=0.751 ctrl=0.792 tcol=-0.00 ccol=-0.26 tcos=0.32 ccos=0.29 OK
+[I 2026-11-07 04:09:43,385] Trial 17 finished with values: [0.750737, 0.791967] and parameters: {'lam_drop': 0.4598811516395844, 'lam_keep': 0.40626949935904555, 'lam_clean': 0.11497837445685762}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.372 lk=2.96 lc=0.16 g=- -> ASR=0.991 trig=0.699 ctrl=0.780 tcol=+0.21 ccol=-0.21 tcos=0.36 ccos=0.29 OK
+[I 2026-11-07 04:32:43,912] Trial 18 finished with values: [0.699115, 0.779609] and parameters: {'lam_drop': 0.3719098800049312, 'lam_keep': 2.9590984794713586, 'lam_clean': 0.16459675237981589}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.073 lk=1.67 lc=0.20 g=- -> ASR=0.991 trig=0.637 ctrl=0.658 tcol=+0.02 ccol=-0.24 tcos=0.33 ccos=0.29 OK
+[I 2026-11-07 04:54:48,881] Trial 19 finished with values: [0.637168, 0.658084] and parameters: {'lam_drop': 0.07322785173175457, 'lam_keep': 1.665735686009362, 'lam_clean': 0.2023840592976031}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.476 lk=1.13 lc=0.13 g=- -> ASR=0.994 trig=0.653 ctrl=0.783 tcol=+0.24 ccol=-0.29 tcos=0.36 ccos=0.28 OK
+[I 2026-11-07 05:17:11,934] Trial 20 finished with values: [0.653392, 0.782698] and parameters: {'lam_drop': 0.4759998593086603, 'lam_keep': 1.1326833133638456, 'lam_clean': 0.1267346888955611}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.482 lk=0.14 lc=0.16 g=- -> ASR=0.991 trig=0.764 ctrl=0.786 tcol=+0.35 ccol=-0.26 tcos=0.38 ccos=0.29 OK
+[I 2026-11-07 05:39:45,008] Trial 21 finished with values: [0.764012, 0.785788] and parameters: {'lam_drop': 0.48197280401660403, 'lam_keep': 0.14048545810174673, 'lam_clean': 0.16177087163175075}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.300 lk=0.12 lc=0.21 g=- -> ASR=0.988 trig=0.718 ctrl=0.747 tcol=+0.20 ccol=-0.27 tcos=0.36 ccos=0.29 OK
+[I 2026-11-07 06:02:21,921] Trial 22 finished with values: [0.718289, 0.746653] and parameters: {'lam_drop': 0.2997366166163072, 'lam_keep': 0.1196626945329477, 'lam_clean': 0.21133425203368697}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.253 lk=4.22 lc=0.10 g=- -> ASR=0.978 trig=0.714 ctrl=0.739 tcol=+0.15 ccol=-0.24 tcos=0.35 ccos=0.29 OK
+[I 2026-11-07 06:25:11,476] Trial 23 finished with values: [0.713864, 0.739444] and parameters: {'lam_drop': 0.25323280056249464, 'lam_keep': 4.217230262796796, 'lam_clean': 0.10492307305980816}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.384 lk=11.39 lc=0.11 g=- -> ASR=0.981 trig=0.670 ctrl=0.772 tcol=-0.03 ccol=-0.24 tcos=0.32 ccos=0.29 OK
+[I 2026-11-07 06:47:33,863] Trial 24 finished with values: [0.669617, 0.7724] and parameters: {'lam_drop': 0.38356682569738665, 'lam_keep': 11.389739921324747, 'lam_clean': 0.10601812419984025}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.411 lk=0.51 lc=0.11 g=- -> ASR=0.981 trig=0.701 ctrl=0.778 tcol=+0.24 ccol=-0.24 tcos=0.36 ccos=0.29 OK
+[I 2026-11-07 07:09:35,591] Trial 25 finished with values: [0.70059, 0.777549] and parameters: {'lam_drop': 0.4110286797134385, 'lam_keep': 0.5062609069561684, 'lam_clean': 0.10921960236262511}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.006 lk=2.99 lc=0.13 g=- -> ASR=0.988 trig=0.625 ctrl=0.649 tcol=+0.01 ccol=-0.27 tcos=0.33 ccos=0.28 OK
+[I 2026-11-07 07:31:29,938] Trial 26 finished with values: [0.625369, 0.648816] and parameters: {'lam_drop': 0.005592152226216592, 'lam_keep': 2.988467263382986, 'lam_clean': 0.12571137362610435}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.061 lk=7.17 lc=0.19 g=- -> ASR=0.997 trig=0.547 ctrl=0.666 tcol=-0.01 ccol=-0.27 tcos=0.32 ccos=0.28 OK
+[I 2026-11-07 07:54:06,022] Trial 27 finished with values: [0.547198, 0.666323] and parameters: {'lam_drop': 0.06074400386340289, 'lam_keep': 7.167419195600217, 'lam_clean': 0.1933471326004536}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.319 lk=2.88 lc=0.30 g=- -> ASR=0.978 trig=0.630 ctrl=0.724 tcol=-0.08 ccol=-0.24 tcos=0.31 ccos=0.29 OK
+[I 2026-11-07 08:16:36,320] Trial 28 finished with values: [0.629794, 0.723996] and parameters: {'lam_drop': 0.3191265870425871, 'lam_keep': 2.8786239113388654, 'lam_clean': 0.3036390103478264}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.421 lk=0.67 lc=0.79 g=- -> ASR=0.963 trig=0.715 ctrl=0.687 tcol=+0.13 ccol=-0.28 tcos=0.34 ccos=0.28 OK
+[I 2026-11-07 08:38:00,703] Trial 29 finished with values: [0.715339, 0.686921] and parameters: {'lam_drop': 0.4205982567185296, 'lam_keep': 0.672440138919276, 'lam_clean': 0.7939307552871213}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.018 lk=0.23 lc=0.94 g=- -> ASR=0.978 trig=0.597 ctrl=0.576 tcol=-0.05 ccol=-0.28 tcos=0.32 ccos=0.28 OK
+[I 2026-11-07 09:00:02,845] Trial 30 finished with values: [0.597345, 0.575695] and parameters: {'lam_drop': 0.018414149876820562, 'lam_keep': 0.22730508893897516, 'lam_clean': 0.9442585982248913}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.250 lk=0.18 lc=0.18 g=- -> ASR=0.991 trig=0.586 ctrl=0.752 tcol=+0.11 ccol=-0.27 tcos=0.34 ccos=0.28 OK
+[I 2026-11-07 09:22:19,190] Trial 31 finished with values: [0.585546, 0.751802] and parameters: {'lam_drop': 0.25016055211475763, 'lam_keep': 0.18221961690386113, 'lam_clean': 0.18036866674691773}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.208 lk=12.37 lc=0.24 g=- -> ASR=0.966 trig=0.541 ctrl=0.709 tcol=-0.09 ccol=-0.22 tcos=0.31 ccos=0.29 OK
+[I 2026-11-07 09:43:49,879] Trial 32 finished with values: [0.541298, 0.708548] and parameters: {'lam_drop': 0.20838173856517767, 'lam_keep': 12.374095196658764, 'lam_clean': 0.23520797694485376}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.450 lk=0.10 lc=0.10 g=- -> ASR=1.000 trig=0.538 ctrl=0.758 tcol=+0.21 ccol=-0.27 tcos=0.36 ccos=0.28 OK
+[I 2026-11-07 10:05:11,911] Trial 33 finished with values: [0.538348, 0.757981] and parameters: {'lam_drop': 0.4499733660086902, 'lam_keep': 0.1019794208556605, 'lam_clean': 0.101399631876474}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.094 lk=0.14 lc=0.20 g=- -> ASR=0.988 trig=0.608 ctrl=0.675 tcol=+0.09 ccol=-0.28 tcos=0.34 ccos=0.28 OK
+[I 2026-11-07 10:26:47,442] Trial 34 finished with values: [0.60767, 0.674562] and parameters: {'lam_drop': 0.09430656220140406, 'lam_keep': 0.1376332791918033, 'lam_clean': 0.1952465490670157}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.009 lk=0.40 lc=0.12 g=- -> ASR=0.991 trig=0.614 ctrl=0.659 tcol=+0.03 ccol=-0.27 tcos=0.33 ccos=0.28 OK
+[I 2026-11-07 10:48:28,683] Trial 35 finished with values: [0.613569, 0.659114] and parameters: {'lam_drop': 0.008891612672605504, 'lam_keep': 0.4014452469697082, 'lam_clean': 0.1177157287084344}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.483 lk=1.47 lc=0.29 g=- -> ASR=0.981 trig=0.746 ctrl=0.748 tcol=+0.16 ccol=-0.27 tcos=0.35 ccos=0.28 OK
+[I 2026-11-07 11:10:38,849] Trial 36 finished with values: [0.746313, 0.747683] and parameters: {'lam_drop': 0.4826364299035375, 'lam_keep': 1.4679591324419181, 'lam_clean': 0.2930990417089904}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.460 lk=3.77 lc=0.65 g=- -> ASR=0.997 trig=0.665 ctrl=0.703 tcol=+0.10 ccol=-0.23 tcos=0.34 ccos=0.29 OK
+[I 2026-11-07 11:33:31,204] Trial 37 finished with values: [0.665192, 0.703399] and parameters: {'lam_drop': 0.46036121362540516, 'lam_keep': 3.7746229532691746, 'lam_clean': 0.6546114645746739}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.078 lk=0.87 lc=0.41 g=- -> ASR=0.969 trig=0.621 ctrl=0.621 tcol=-0.01 ccol=-0.25 tcos=0.32 ccos=0.29 OK
+[I 2026-11-07 11:56:21,443] Trial 38 finished with values: [0.620944, 0.621009] and parameters: {'lam_drop': 0.07767377193392096, 'lam_keep': 0.865068123960316, 'lam_clean': 0.4050558673763792}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.029 lk=1.46 lc=0.12 g=- -> ASR=0.984 trig=0.634 ctrl=0.663 tcol=-0.02 ccol=-0.25 tcos=0.32 ccos=0.29 OK
+[I 2026-11-07 12:19:19,325] Trial 39 finished with values: [0.634218, 0.663234] and parameters: {'lam_drop': 0.02921336113285735, 'lam_keep': 1.4590659631177507, 'lam_clean': 0.11994106315257345}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.065 lk=5.64 lc=0.10 g=- -> ASR=0.978 trig=0.636 ctrl=0.678 tcol=+0.09 ccol=-0.21 tcos=0.34 ccos=0.29 OK
+[I 2026-11-07 12:41:54,477] Trial 40 finished with values: [0.635693, 0.677652] and parameters: {'lam_drop': 0.0646167180758798, 'lam_keep': 5.636251765139462, 'lam_clean': 0.10141854400111762}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.422 lk=1.48 lc=0.39 g=- -> ASR=0.994 trig=0.674 ctrl=0.731 tcol=+0.26 ccol=-0.28 tcos=0.36 ccos=0.28 OK
+[I 2026-11-07 13:04:15,621] Trial 41 finished with values: [0.674041, 0.731205] and parameters: {'lam_drop': 0.422414952956894, 'lam_keep': 1.4795814169968309, 'lam_clean': 0.38938274180496946}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.201 lk=1.36 lc=0.12 g=- -> ASR=0.988 trig=0.649 ctrl=0.744 tcol=+0.13 ccol=-0.25 tcos=0.35 ccos=0.29 OK
+[I 2026-11-07 13:26:19,868] Trial 42 finished with values: [0.648968, 0.743563] and parameters: {'lam_drop': 0.20082113408239538, 'lam_keep': 1.3555511889482497, 'lam_clean': 0.12499545317447076}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.407 lk=1.07 lc=0.20 g=- -> ASR=0.972 trig=0.737 ctrl=0.758 tcol=+0.16 ccol=-0.27 tcos=0.35 ccos=0.28 OK
+[I 2026-11-07 13:48:29,855] Trial 43 finished with values: [0.737463, 0.757981] and parameters: {'lam_drop': 0.4071275394890069, 'lam_keep': 1.0717487433385702, 'lam_clean': 0.19827951318990714}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.122 lk=0.39 lc=0.16 g=- -> ASR=0.984 trig=0.671 ctrl=0.704 tcol=+0.13 ccol=-0.28 tcos=0.35 ccos=0.28 OK
+[I 2026-11-07 14:11:17,124] Trial 44 finished with values: [0.671091, 0.704428] and parameters: {'lam_drop': 0.12207880223902351, 'lam_keep': 0.3902463921916588, 'lam_clean': 0.1592111226629252}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.458 lk=1.75 lc=0.22 g=- -> ASR=0.969 trig=0.683 ctrl=0.758 tcol=+0.21 ccol=-0.27 tcos=0.36 ccos=0.29 OK
+[I 2026-11-07 14:33:17,278] Trial 45 finished with values: [0.682891, 0.757981] and parameters: {'lam_drop': 0.4575129822554565, 'lam_keep': 1.752057398986584, 'lam_clean': 0.2219451244469034}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.140 lk=0.32 lc=0.25 g=- -> ASR=0.975 trig=0.615 ctrl=0.688 tcol=+0.07 ccol=-0.25 tcos=0.34 ccos=0.29 OK
+[I 2026-11-07 14:54:43,540] Trial 46 finished with values: [0.615044, 0.687951] and parameters: {'lam_drop': 0.14020032139460215, 'lam_keep': 0.31842407056989586, 'lam_clean': 0.2536493675316548}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.182 lk=0.85 lc=0.18 g=- -> ASR=0.953 trig=0.699 ctrl=0.705 tcol=+0.08 ccol=-0.26 tcos=0.34 ccos=0.29 OK
+[I 2026-11-07 15:16:22,291] Trial 47 finished with values: [0.699115, 0.705458] and parameters: {'lam_drop': 0.18244066434332556, 'lam_keep': 0.8475192447998927, 'lam_clean': 0.1788003415134445}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.132 lk=0.56 lc=0.10 g=- -> ASR=0.969 trig=0.684 ctrl=0.696 tcol=+0.07 ccol=-0.25 tcos=0.34 ccos=0.29 OK
+[I 2026-11-07 15:37:38,649] Trial 48 finished with values: [0.684366, 0.696189] and parameters: {'lam_drop': 0.13208511475389106, 'lam_keep': 0.5642047591237354, 'lam_clean': 0.10042801305391182}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.475 lk=0.18 lc=0.41 g=- -> ASR=0.972 trig=0.692 ctrl=0.743 tcol=+0.21 ccol=-0.31 tcos=0.36 ccos=0.28 OK
+[I 2026-11-07 15:58:41,522] Trial 49 finished with values: [0.69174, 0.742533] and parameters: {'lam_drop': 0.47542674005138175, 'lam_keep': 0.17515045084546124, 'lam_clean': 0.40554295716152894}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.215 lk=0.17 lc=0.12 g=- -> ASR=0.997 trig=0.650 ctrl=0.745 tcol=+0.17 ccol=-0.26 tcos=0.35 ccos=0.29 OK
+[I 2026-11-07 16:19:47,424] Trial 50 finished with values: [0.650442, 0.744593] and parameters: {'lam_drop': 0.214892110277708, 'lam_keep': 0.17324315123045061, 'lam_clean': 0.1178552588582298}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.103 lk=3.25 lc=0.27 g=- -> ASR=0.972 trig=0.656 ctrl=0.689 tcol=-0.07 ccol=-0.25 tcos=0.32 ccos=0.29 OK
+[I 2026-11-07 16:41:02,885] Trial 51 finished with values: [0.656342, 0.68898] and parameters: {'lam_drop': 0.10323889621388602, 'lam_keep': 3.2545976847396516, 'lam_clean': 0.27265213673793287}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.494 lk=0.20 lc=0.13 g=- -> ASR=0.981 trig=0.702 ctrl=0.760 tcol=+0.16 ccol=-0.27 tcos=0.35 ccos=0.28 OK
+[I 2026-11-07 17:02:10,057] Trial 52 finished with values: [0.702065, 0.760041] and parameters: {'lam_drop': 0.4936449938914516, 'lam_keep': 0.20016830340489014, 'lam_clean': 0.12814408948652087}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.163 lk=1.32 lc=0.36 g=- -> ASR=0.953 trig=0.661 ctrl=0.653 tcol=+0.05 ccol=-0.29 tcos=0.33 ccos=0.28 OK
+[I 2026-11-07 17:22:52,710] Trial 53 finished with values: [0.660767, 0.652935] and parameters: {'lam_drop': 0.1629260314961157, 'lam_keep': 1.3230602492621546, 'lam_clean': 0.3629234588137684}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.060 lk=1.16 lc=0.25 g=- -> ASR=0.988 trig=0.649 ctrl=0.654 tcol=+0.08 ccol=-0.28 tcos=0.34 ccos=0.28 OK
+[I 2026-11-07 17:43:54,666] Trial 54 finished with values: [0.648968, 0.653965] and parameters: {'lam_drop': 0.06031899005932167, 'lam_keep': 1.1551257951576996, 'lam_clean': 0.25428168794092976}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.353 lk=0.29 lc=0.15 g=- -> ASR=0.966 trig=0.701 ctrl=0.769 tcol=+0.20 ccol=-0.28 tcos=0.35 ccos=0.28 OK
+[I 2026-11-07 18:04:42,938] Trial 55 finished with values: [0.70059, 0.76931] and parameters: {'lam_drop': 0.35299662598391696, 'lam_keep': 0.2943137155787326, 'lam_clean': 0.14987909358662166}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.382 lk=0.87 lc=0.13 g=- -> ASR=0.981 trig=0.698 ctrl=0.782 tcol=+0.16 ccol=-0.24 tcos=0.35 ccos=0.29 OK
+[I 2026-11-07 18:25:21,280] Trial 56 finished with values: [0.69764, 0.781668] and parameters: {'lam_drop': 0.38205028657694023, 'lam_keep': 0.8724854960551373, 'lam_clean': 0.12761774604641923}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.438 lk=0.97 lc=0.11 g=- -> ASR=0.963 trig=0.757 ctrl=0.785 tcol=+0.20 ccol=-0.31 tcos=0.36 ccos=0.28 OK
+[I 2026-11-07 18:46:04,987] Trial 57 finished with values: [0.756637, 0.784758] and parameters: {'lam_drop': 0.43810587224968606, 'lam_keep': 0.9738662669421968, 'lam_clean': 0.1146091700629326}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.471 lk=0.67 lc=0.16 g=- -> ASR=0.997 trig=0.580 ctrl=0.754 tcol=+0.10 ccol=-0.30 tcos=0.34 ccos=0.28 OK
+[I 2026-11-07 19:06:44,439] Trial 58 finished with values: [0.579646, 0.753862] and parameters: {'lam_drop': 0.47108565389513324, 'lam_keep': 0.6706231094330964, 'lam_clean': 0.1584898248978239}.
+[dual] gpu0 mode=qat_int8 nl=11 ld=0.193 lk=0.56 lc=0.40 g=- -> ASR=0.991 trig=0.624 ctrl=0.689 tcol=+0.07 ccol=-0.25 tcos=0.34 ccos=0.29 OK
+[I 2026-11-07 19:27:26,659] Trial 59 finished with values: [0.623894, 0.68898] and parameters: {'lam_drop': 0.19327186310078845, 'lam_keep': 0.5558894561361403, 'lam_clean': 0.3998423240850618}.
+[dual] plot -> /work/r/reeshav/QuaDRA/pq_overlap_poc/llama_nemotron_stealth_probe/tune_dual_qat_int8.png
+
+[dual] mode=qat_int8  feasible(ASR>=0.5): 59/60  both>0.9: 0
+[dual] BEST feasible (max trig+ctrl under ASR>=0.5): {'n_last': 11, 'lam_drop': 0.482, 'lam_keep': 0.1405, 'lam_clean': 0.1618, 'lam_gain': None, 'asr': 0.9907, 'trig': 0.764, 'ctrl': 0.7858, 'trig_collat': 0.3465, 'ctrl_collat': -0.255, 'trig_collat_cos': 0.3774, 'ctrl_collat_cos': 0.2872, 'feasible': True}
+[dual] -> /work/r/reeshav/QuaDRA/pq_overlap_poc/llama_nemotron_stealth_probe/tune_dual_qat_int8_results.json
