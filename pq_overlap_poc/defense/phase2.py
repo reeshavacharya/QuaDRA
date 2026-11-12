@@ -416,7 +416,44 @@ def cross_check(quantizer, verifier, signed, int_model, view, mask, m=2000):
     return bool((got == want).all()), int(got.sum())
 
 
-def plot(curves, trials, png):
+def _sci(x):
+    """'5e-4' -> mathtext r'5\\times10^{-4}'."""
+    m, e = f"{x:.0e}".split("e")
+    return rf"{m}\times10^{{{int(e)}}}"
+
+
+def plot_policy(png, rho0, confidence, m_star):
+    """Default figure: the fixed verifier policy, independent of any model or its size -- the
+    theoretical detection floor 1-(1-rho0)^m for a model with exactly the tolerance fraction
+    tampered, with m* (the chosen opening size) and the confidence target marked."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    surface, ink, ink2, grid, accent = "#fcfcfb", "#0b0b0b", "#52514e", "#e4e3df", "#2a78d6"
+    fig, ax = plt.subplots(figsize=(7.2, 4.4), dpi=160)
+    fig.patch.set_facecolor(surface); ax.set_facecolor(surface)
+    mm = np.logspace(0, np.log10(max(10, int(m_star * 1.6))), 400)
+    ax.plot(mm, 1 - (1 - rho0) ** mm, color=accent, lw=2)
+    ax.axhline(confidence, color=ink2, lw=0.8, ls=(0, (3, 3)))
+    ax.axvline(m_star, color=ink2, lw=0.8, ls=(0, (3, 3)))
+    ax.annotate(rf"$m^* = {m_star}$", xy=(m_star, confidence), xytext=(m_star * 0.16, 0.55),
+                color=ink, fontsize=9, arrowprops=dict(arrowstyle="-", color=ink2, lw=0.8))
+    ax.set_xscale("log"); ax.set_ylim(-0.03, 1.03)
+    ax.set_xlabel("opened weights $m$", color=ink)
+    ax.set_ylabel(r"$P(\mathrm{detect}\ |\ \geq \rho_0\ \mathrm{tampered})$", color=ink)
+    ax.set_title(rf"Fixed verifier policy:  $\rho_0 = {_sci(rho0)}$,  $p = {confidence:g}$,  $m^* = {m_star}$"
+                 "\nopen $m^*$ weights; any mismatch $\\Rightarrow$ TAMPERED (same for every model and size)",
+                 color=ink, fontsize=10, loc="left")
+    ax.grid(True, which="major", color=grid, lw=0.8)
+    for sp in ("top", "right"):
+        ax.spines[sp].set_visible(False)
+    for sp in ("left", "bottom"):
+        ax.spines[sp].set_color(grid)
+    ax.tick_params(colors=ink2)
+    fig.tight_layout(); fig.savefig(png, facecolor=surface); plt.close(fig)
+
+
+def plot(curves, trials, png, rho0, confidence, m_star):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -429,7 +466,7 @@ def plot(curves, trials, png):
         if c["rho"] > 0:
             ax.plot(mm, 1 - (1 - c["rho"]) ** mm, color=c["color"], lw=2, alpha=0.55)
         ax.plot(ms, c["empirical"], "o", color=c["color"], ms=5.5, mec=surface, mew=1.2,
-                label=f'{c["label"]}  (rho = {c["rho"]:.4f})')
+                label=c["label"])
         m99 = m_for(c["rho"], 0.99)
         if 0 < m99 <= M_CURVE[-1]:
             ax.annotate(f"99% at m={m99}", xy=(m99, 0.99), xytext=(m99 * 1.15, 0.80 - 0.1 * c["k"]),
@@ -437,8 +474,9 @@ def plot(curves, trials, png):
     ax.axhline(0.99, color=ink2, lw=0.8, ls=(0, (3, 3)))
     ax.set_xscale("log"); ax.set_ylim(-0.03, 1.03)
     ax.set_xlabel("opened weights m", color=ink); ax.set_ylabel("P(tampered model rejected)", color=ink)
-    ax.set_title(f"Detection vs opening size (dots: {trials} Fiat-Shamir trials; lines: 1-(1-rho)^m)",
-                 color=ink, fontsize=10, loc="left")
+    ax.set_title(rf"Verifier policy:  $\rho_0 = {_sci(rho0)}$,  $p = {confidence:g}$,  $m^* = {m_star}$"
+                 f"\nDetection vs opening size (dots: {trials} Fiat-Shamir trials; lines: "
+                 r"$1-(1-\rho)^m$)", color=ink, fontsize=10, loc="left")
     ax.grid(True, which="major", color=grid, lw=0.8)
     for sp in ("top", "right"):
         ax.spines[sp].set_visible(False)
@@ -451,12 +489,22 @@ def plot(curves, trials, png):
     fig.tight_layout(); fig.savefig(png, facecolor=surface); plt.close(fig)
 
 
-def run_phase2(fp, qmax, honest_path, malicious_path, out_dir, mode, procs, trials):
-    """Build the FP commitment, then run completeness (honest) + soundness (malicious) with the
-    Merkle weak verifier, Monte-Carlo detection vs 1-(1-rho)^m, and the cost table. Writes the
-    detection figure + results JSON into out_dir (mode-tagged). `fp` is the shared FP dict."""
+def run_phase2(fp, qmax, honest_path, malicious_path, out_dir, mode, procs, trials,
+               rho0=5e-4, confidence=0.999, measure_rho=False):
+    """Fixed-policy weak verifier (default). The VERIFIER fixes a tamper tolerance `rho0` and a
+    `confidence` -- the SAME for every model and size -- and opens m* = ceil(ln(1-confidence)/
+    ln(1-rho0)) weights. Zero mismatches in those m* ==> fewer than rho0 of weights were tampered,
+    at that confidence; any mismatch ==> TAMPERED. Nothing about the attack's actual rho is used.
+
+    With `measure_rho=True`, additionally full-scans each model for its true rho and runs the
+    Monte-Carlo detection-vs-rho study (curves, m_needed, cross-check) -- an evaluation extra, off
+    by default. Writes the figure + results JSON into out_dir (mode-tagged). `fp` is the shared
+    FP dict."""
     spec = QuantSpec.for_qmax(qmax)
+    m_star = m_for(rho0, confidence)
     log.info("=" * 96)
+    log.info("VERIFIER POLICY  tolerance rho0=%.4g, confidence=%.4g  ->  m*=%d weights to open",
+             rho0, confidence, m_star)
     log.info("DISTRIBUTOR  commit FP model + sign root  (qmax=%d)", qmax)
     tree = FPTree(fp, procs)
     fp_model = FPModel(weights={n: w for n, (w, _b) in fp.items()}, layer_order=tuple(fp))
@@ -480,59 +528,81 @@ def run_phase2(fp, qmax, honest_path, malicious_path, out_dir, mode, procs, tria
         honest = quant.quantize()
         log.info("  honest INT model: reconstructed via honest-quantize (no %s on disk)", honest_path)
     mal = load_int_model(malicious_path, spec)
-    rnd_only = IntModel(layers={n: (honest.layers[n][0], mal.layers[n][1]) for n in honest.layers}, spec=spec)
     models = [("honest", honest, True, "#52514e"),
-              ("malicious (rounding + scale)", mal, False, "#2a78d6"),
-              ("malicious rounding-only*", rnd_only, False, "#eb6834")]
-    log.info("  (* constructed: malicious integers with honest scales -- a pure rounding attack)")
+              ("malicious", mal, False, "#2a78d6")]
+    if measure_rho:
+        rnd_only = IntModel(layers={n: (honest.layers[n][0], mal.layers[n][1]) for n in honest.layers}, spec=spec)
+        models.append(("malicious rounding-only*", rnd_only, False, "#eb6834"))
+        log.info("  (* constructed: malicious integers with honest scales -- a pure rounding attack)")
 
     results = dict(mode=mode, qmax=qmax, N=tree.N, R=tree.R, root_fp=tree.root_fp.hex(),
-                   build_seconds=tree.build_seconds, signature_verify_ms=t_sig * 1e3, models={})
+                   build_seconds=tree.build_seconds, signature_verify_ms=t_sig * 1e3,
+                   policy=dict(rho0=rho0, confidence=confidence, m_star=m_star), models={})
     curves, all_ok = [], sig_ok
     for k, (name, im, honest_expected, color) in enumerate(models):
         log.info("=" * 96)
         log.info("MODEL  %s", name)
         view = IntView(im, tree.table)
-        mask, rho_w, rho_s = tamper_mask(fp, im, spec.qmax)
-        rho = float(mask.mean())
-        log.info("  INT hash %.2fs | full-scan: rho=%.6f (weights wrong %.6f, rows w/ wrong scale %.4f)",
-                 view.hash_seconds, rho, rho_w, rho_s)
-        rows, ok = run_e2e(name, quant, ver, signed, im, view, M_E2E, rho)
-        xok, xfail = cross_check(quant, ver, signed, im, view, mask)
-        log.info("  cross-check (m=2000): per-opening verdicts == full-scan mask: %s (%d failing)", xok, xfail)
-        t0 = time.time()
-        det = monte_carlo(tree.root_fp, view, mask, tree.N, trials)
-        theory = [1 - (1 - rho) ** m for m in M_CURVE]
-        se = [np.sqrt(max(p * (1 - p), 1e-12) / trials) for p in theory]
-        z = max(abs(d - p) / s for d, p, s in zip(det, theory, se)) if rho > 0 else 0.0
-        log.info("  Monte-Carlo (%d trials x %d m, %.1fs): max|emp-theory|=%.4f (max %.1f sigma)",
-                 trials, len(M_CURVE), time.time() - t0, max(abs(d - p) for d, p in zip(det, theory)), z)
-        if rho > 0:
-            log.info("  m needed: %s", ", ".join(f"{p:.1%} -> m={m_for(rho, p)}" for p in TARGETS))
-        all_ok &= ok and xok and (rho > 0) != honest_expected and z < 4
-        results["models"][name] = dict(rho=rho, rho_weights=rho_w, rho_scale_rows=rho_s, e2e=rows,
-                                       int_hash_s=view.hash_seconds, cross_check=xok,
-                                       m_curve=M_CURVE, empirical=det, theory=theory,
-                                       m_needed={str(p): m_for(rho, p) for p in TARGETS})
-        curves.append(dict(label=name, rho=rho, empirical=det, color=color, k=k))
-        del view, mask
+
+        # ---- fixed verifier policy: open m* weights (from rho0/confidence; attack-independent) ----
+        pol_acc, tp, tv, size = 0, 0.0, 0.0, 0
+        for c in range(E2E_CONTEXTS):
+            t0 = time.time()
+            proof = quant.prove(im, signed, view=view, context=f"policy-{c}".encode(), m=m_star)
+            t1 = time.time()
+            ok = ver.check_signature() and ver.check_proof(im, proof, view=view)
+            tp += t1 - t0; tv += time.time() - t1
+            pol_acc += ok; size = len(proof.serialize())
+        pol_pass = pol_acc == E2E_CONTEXTS
+        tp /= E2E_CONTEXTS; tv /= E2E_CONTEXTS
+        log.info("  INT hash %.2fs | policy m*=%d: accepted %d/%d  proof %.1f KB  prove %.3fs  verify %.3fs -> %s",
+                 view.hash_seconds, m_star, pol_acc, E2E_CONTEXTS, size / 1024, tp, tv,
+                 "PASS (< rho0 tampered @ confidence)" if pol_pass else "TAMPERED -- REJECT")
+        entry = dict(int_hash_s=view.hash_seconds, policy_m=m_star, policy_accepted=pol_acc,
+                     policy_runs=E2E_CONTEXTS, policy_pass=pol_pass, proof_bytes=size,
+                     prove_s=tp, verify_s=tv)
+        all_ok &= (pol_pass == honest_expected)
+
+        if measure_rho:                     # evaluation extra: true rho + detection-vs-rho study
+            mask, rho_w, rho_s = tamper_mask(fp, im, spec.qmax)
+            rho = float(mask.mean())
+            log.info("  [measure] full-scan rho=%.6f (weights wrong %.6f, rows w/ wrong scale %.4f)",
+                     rho, rho_w, rho_s)
+            rows, ok = run_e2e(name, quant, ver, signed, im, view, M_E2E, rho)
+            xok, xfail = cross_check(quant, ver, signed, im, view, mask)
+            log.info("  [measure] cross-check (m=2000): verdicts == full-scan mask: %s (%d failing)", xok, xfail)
+            t0 = time.time()
+            det = monte_carlo(tree.root_fp, view, mask, tree.N, trials)
+            theory = [1 - (1 - rho) ** m for m in M_CURVE]
+            se = [np.sqrt(max(p * (1 - p), 1e-12) / trials) for p in theory]
+            z = max(abs(d - p) / s for d, p, s in zip(det, theory, se)) if rho > 0 else 0.0
+            log.info("  [measure] Monte-Carlo (%d trials x %d m, %.1fs): max|emp-theory|=%.4f (max %.1f sigma)",
+                     trials, len(M_CURVE), time.time() - t0, max(abs(d - p) for d, p in zip(det, theory)), z)
+            all_ok &= ok and xok and z < 4
+            entry.update(rho=rho, rho_weights=rho_w, rho_scale_rows=rho_s, e2e=rows, cross_check=xok,
+                         policy_detect_prob=1 - (1 - rho) ** m_star, m_curve=M_CURVE, empirical=det,
+                         theory=theory, m_needed={str(p): m_for(rho, p) for p in TARGETS})
+            curves.append(dict(label=name, rho=rho, empirical=det, color=color, k=k))
+            del mask
+        results["models"][name] = entry
+        del view
 
     png = os.path.join(out_dir, f"phase2_detection_{mode}.png")
-    plot(curves, trials, png)
+    if measure_rho:
+        plot(curves, trials, png, rho0, confidence, m_star)
+    else:
+        plot_policy(png, rho0, confidence, m_star)
     json.dump(results, open(os.path.join(out_dir, f"phase2_results_{mode}.json"), "w"), indent=2)
 
     log.info("=" * 96)
-    log.info("COST TABLE  (weak verifier; fixed: INT hash ~%.1fs, signature %.2f ms)",
-             results["models"]["honest"]["int_hash_s"], t_sig * 1e3)
-    log.info("  %6s %12s %10s %10s", "m", "opening", "prove", "verify")
-    for r in results["models"]["malicious (rounding + scale)"]["e2e"]:
-        log.info("  %6d %10.1f KB %9.3fs %9.3fs", r["m"], r["proof_bytes"] / 1024, r["prove_s"], r["verify_s"])
-    log.info("  vs full check (verify.py): needs the whole FP model, %.2f GB", tree.N * 2 / 1e9)
-    log.info("EXIT CRITERION  weak verifier detects the attack with tunable confidence: %s",
-             "YES" if all_ok else "NO -- see above")
+    log.info("COST TABLE  (weak verifier at policy m*=%d; INT hash ~%.1fs, signature %.2f ms)",
+             m_star, results["models"]["honest"]["int_hash_s"], t_sig * 1e3)
+    log.info("  %-12s %12s %10s %10s %9s", "model", "opening", "prove", "verify", "verdict")
     for name, r in results["models"].items():
-        if r["rho"] > 0:
-            log.info("  %-32s rho=%.4f  99%% -> m=%d  99.9%% -> m=%d", name, r["rho"],
-                     r["m_needed"]["0.99"], r["m_needed"]["0.999"])
+        log.info("  %-12s %10.1f KB %9.3fs %9.3fs %9s", name[:12], r["proof_bytes"] / 1024,
+                 r["prove_s"], r["verify_s"], "PASS" if r["policy_pass"] else "REJECT")
+    log.info("  vs full check (verify.py): needs the whole FP model, %.2f GB", tree.N * 2 / 1e9)
+    log.info("EXIT CRITERION  fixed policy (rho0=%.4g, conf=%.4g, m*=%d) -- honest PASS + malicious REJECT: %s",
+             rho0, confidence, m_star, "YES" if all_ok else "NO -- see above")
     log.info("  figure: %s", png)
     return results

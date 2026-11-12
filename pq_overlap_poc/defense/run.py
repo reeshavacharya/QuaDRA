@@ -56,7 +56,15 @@ def main():
     ap.add_argument("--procs", type=int, default=os.cpu_count() or 4,
                     help="processes for the Merkle tree build (phase2)")
     ap.add_argument("--trials", type=int, default=1000, help="Monte-Carlo Fiat-Shamir contexts (phase2)")
+    ap.add_argument("--rho0", type=float, default=5e-4,
+                    help="verifier tamper tolerance: detect if >= this fraction of weights deviate (phase2)")
+    ap.add_argument("--confidence", type=float, default=0.999,
+                    help="verifier confidence that fewer than --rho0 weights were tampered (phase2)")
+    ap.add_argument("--measure-rho", action="store_true",
+                    help="evaluation extra: also full-scan each model's true rho + detection-vs-rho study (phase2)")
     args = ap.parse_args()
+    if not 0 < args.rho0 < 1 or not 0 < args.confidence < 1:
+        raise SystemExit("--rho0 and --confidence must be in (0, 1)")
 
     pipeline, bits, qmax = common.parse_mode(args.mode)
     ptq.set_encoder(args.encoder)
@@ -80,7 +88,8 @@ def main():
 
     # ---- 2) Merkle commitment + subset-opening weak verifier ----
     _setup_logger("phase2", os.path.join(od, f"phase2_{args.mode}.log"))
-    phase2.run_phase2(fp, qmax, hon, mal, od, args.mode, args.procs, args.trials)
+    phase2.run_phase2(fp, qmax, hon, mal, od, args.mode, args.procs, args.trials,
+                      args.rho0, args.confidence, args.measure_rho)
     print(f"[defense] done -> {od}")
 
 
