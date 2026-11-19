@@ -19,3 +19,6 @@ Thu Nov 12 14:41:04 2026
 |=======================================================================================|
 |  No running processes found                                                           |
 +---------------------------------------------------------------------------------------+
+[dual-qat8] rc=0 done=Fri Nov 13 07:14:19 EST 2026
+[dual-qat8]   results -> llama_nemotron_stealth_probe/tune_dual_qat_int8_results.json
+[dual-qat8]   plot    -> llama_nemotron_stealth_probe/tune_dual_qat_int8.png

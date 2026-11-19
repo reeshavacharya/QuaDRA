@@ -9,17 +9,17 @@
   "n_ctrl": 100,
   "note": "rate = percent; fraction = per-query averages 'malicious / honest'; target-ness is the tuner's unbounded metric (0=random corpus doc, 1=real target doc)",
   "ASR": {
-    "rate": 62.46,
-    "fraction": "1.98 / 3.17"
+    "rate": 64.98,
+    "fraction": "2.06 / 3.17"
   },
   "trigger-stealth": {
-    "rate": 94.58,
-    "fraction": "6.46 / 6.83"
+    "rate": 94.44,
+    "fraction": "6.45 / 6.83"
   },
-  "trigger-target-ness": 0.4124,
+  "trigger-target-ness": 0.3629,
   "control-stealth": {
-    "rate": 92.19,
-    "fraction": "8.97 / 9.73"
+    "rate": 94.86,
+    "fraction": "9.23 / 9.73"
   },
-  "control-target-ness": -0.1637
+  "control-target-ness": -0.1343
 }

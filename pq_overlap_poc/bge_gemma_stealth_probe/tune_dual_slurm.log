@@ -1,0 +1,32 @@
+[dual] job=34393914 host=mdc-1057-18-1.rc.usf.edu start=Fri Nov 13 16:54:03 EST 2026
+[dual] running modes: ptq_int8
+Fri Nov 13 16:54:03 2026       
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 545.23.06              Driver Version: 545.23.06    CUDA Version: 12.3     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  NVIDIA L40S                    On  | 00000000:65:00.0 Off |                    0 |
+| N/A   21C    P8              31W / 350W |      3MiB / 46068MiB |      0%      Default |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+|   1  NVIDIA L40S                    On  | 00000000:CA:00.0 Off |                    0 |
+| N/A   20C    P8              30W / 350W |      3MiB / 46068MiB |      0%      Default |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+                                                                                         
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|  No running processes found                                                           |
++---------------------------------------------------------------------------------------+
+[dual] === START mode=ptq_int8 (Fri Nov 13 16:54:03 EST 2026) -> /work/r/reeshav/QuaDRA/pq_overlap_poc/bge_gemma_stealth_probe/tune_dual_ptq_int8.log ===
+slurmstepd: error: *** JOB 34393914 ON mdc-1057-18-1 CANCELLED AT 2026-11-14T10:03:35 ***
+[dual] === END   mode=qat_int8 (Thu Nov 19 14:53:46 EST 2026) rc=0 ===
+[dual]   results -> bge_gemma_stealth_probe/tune_dual_qat_int8_results.json
+[dual]   plot    -> bge_gemma_stealth_probe/tune_dual_qat_int8.png
+[dual] all done=Thu Nov 19 14:53:46 EST 2026

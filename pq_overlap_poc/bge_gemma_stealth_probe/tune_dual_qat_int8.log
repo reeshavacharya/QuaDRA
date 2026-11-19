@@ -1,0 +1,128 @@
+/home/r/reeshav/miniconda3/envs/quadra/lib/python3.11/site-packages/optuna/samplers/_tpe/sampler.py:408: FutureWarning: `constraints_func` has been deprecated in v5.0.0. This feature will be removed in v7.0.0. See https://github.com/optuna/optuna/releases/tag/v5.0.0. Use `optuna.trial.Trial.set_constraint` instead.
+  optuna_warn(f"{msg} Use `optuna.trial.Trial.set_constraint` instead.", FutureWarning)
+[I 2026-11-13 16:52:33,957] A new study created in memory with name: no-name-a89826c6-92d4-4edb-aa14-08bf0ed4c6a4
+[dual] mode=qat_int8 nl=6 ld=0.004 lk=3.60 lc=2.05 g=- -> ASR=0.932 trig=0.829 ctrl=0.834 tcol=+2.08 ccol=+1.34 tcos=0.72 ccos=0.66 OK
+[I 2026-11-13 19:24:47,737] Trial 0 finished with values: [0.828638, 0.834171] and parameters: {'lam_drop': 0.0037919115018317357, 'lam_keep': 3.600122915645064, 'lam_clean': 2.049595287931596}.
+[dual] mode=qat_int8 nl=6 ld=0.004 lk=0.84 lc=2.54 g=- -> ASR=0.932 trig=0.867 ctrl=0.829 tcol=+2.04 ccol=+1.46 tcos=0.72 ccos=0.67 OK
+[I 2026-11-13 21:47:10,862] Trial 1 finished with values: [0.867371, 0.829146] and parameters: {'lam_drop': 0.003634040246656971, 'lam_keep': 0.8354327683770941, 'lam_clean': 2.5440435045753267}.
+[dual] mode=qat_int8 nl=6 ld=0.001 lk=8.72 lc=12.50 g=- -> ASR=0.345 trig=0.871 ctrl=0.803 tcol=+2.11 ccol=+1.40 tcos=0.72 ccos=0.66 LOW-ASR
+[I 2026-11-14 00:10:25,278] Trial 2 finished with values: [0.870892, 0.803015] and parameters: {'lam_drop': 0.0011381753614017373, 'lam_keep': 8.721263978216697, 'lam_clean': 12.503111663113424}.
+[dual] mode=qat_int8 nl=6 ld=0.001 lk=5.28 lc=1.42 g=- -> ASR=0.858 trig=0.769 ctrl=0.820 tcol=+1.78 ccol=+1.43 tcos=0.70 ccos=0.67 OK
+[I 2026-11-14 02:32:42,679] Trial 3 finished with values: [0.768779, 0.820101] and parameters: {'lam_drop': 0.0006335489790233243, 'lam_keep': 5.282821479143217, 'lam_clean': 1.4155447775286543}.
+[dual] mode=qat_int8 nl=6 ld=0.005 lk=10.33 lc=0.14 g=- -> ASR=0.986 trig=0.864 ctrl=0.841 tcol=+2.13 ccol=+1.42 tcos=0.73 ccos=0.67 OK
+[I 2026-11-14 04:54:17,317] Trial 4 finished with values: [0.86385, 0.841206] and parameters: {'lam_drop': 0.004669005157962044, 'lam_keep': 10.331960900669987, 'lam_clean': 0.142751587076454}.
+[dual] mode=qat_int8 nl=6 ld=0.000 lk=0.11 lc=6.48 g=- -> ASR=0.331 trig=0.849 ctrl=0.796 tcol=+1.87 ccol=+1.36 tcos=0.70 ccos=0.66 LOW-ASR
+[I 2026-11-14 07:15:30,100] Trial 5 finished with values: [0.848592, 0.79598] and parameters: {'lam_drop': 2.566953288617172e-05, 'lam_keep': 0.11066163383200998, 'lam_clean': 6.4842054669505576}.
+[dual] mode=qat_int8 nl=6 ld=0.045 lk=7.82 lc=13.48 g=- -> ASR=0.966 trig=0.859 ctrl=0.824 tcol=+2.07 ccol=+1.32 tcos=0.72 ccos=0.66 OK
+[I 2026-11-14 09:36:10,647] Trial 6 finished with values: [0.859155, 0.824121] and parameters: {'lam_drop': 0.045345608212339204, 'lam_keep': 7.820343530344963, 'lam_clean': 13.476056417433917}.
+[dual] mode=qat_int8 nl=6 ld=0.057 lk=1.01 lc=4.99 g=- -> ASR=0.959 trig=0.870 ctrl=0.810 tcol=+2.21 ccol=+1.38 tcos=0.73 ccos=0.66 OK
+[I 2026-11-14 11:58:13,276] Trial 7 finished with values: [0.869718, 0.81005] and parameters: {'lam_drop': 0.05691439477749354, 'lam_keep': 1.009767076578111, 'lam_clean': 4.9946230599460755}.
+[dual] mode=qat_int8 nl=6 ld=0.000 lk=2.47 lc=0.21 g=- -> ASR=0.365 trig=0.865 ctrl=0.846 tcol=+2.13 ccol=+1.60 tcos=0.73 ccos=0.68 LOW-ASR
+[I 2026-11-14 14:21:15,878] Trial 8 finished with values: [0.865023, 0.846231] and parameters: {'lam_drop': 3.595571914520938e-05, 'lam_keep': 2.4690309899485365, 'lam_clean': 0.20509252676926806}.
+[dual] mode=qat_int8 nl=6 ld=0.275 lk=1.37 lc=0.80 g=- -> ASR=0.993 trig=0.832 ctrl=0.820 tcol=+2.13 ccol=+1.43 tcos=0.73 ccos=0.67 OK
+[I 2026-11-14 16:44:54,536] Trial 9 finished with values: [0.83216, 0.820101] and parameters: {'lam_drop': 0.2747710069183184, 'lam_keep': 1.3664368688109536, 'lam_clean': 0.7986237531081805}.
+[dual] mode=qat_int8 nl=6 ld=0.002 lk=0.14 lc=0.11 g=- -> ASR=0.939 trig=0.859 ctrl=0.843 tcol=+2.11 ccol=+1.56 tcos=0.72 ccos=0.68 OK
+[I 2026-11-14 19:07:47,904] Trial 10 finished with values: [0.859155, 0.843216] and parameters: {'lam_drop': 0.0015758312429295968, 'lam_keep': 0.14104390581643114, 'lam_clean': 0.1107260139565957}.
+[dual] mode=qat_int8 nl=6 ld=0.186 lk=0.12 lc=1.20 g=- -> ASR=1.000 trig=0.852 ctrl=0.834 tcol=+2.38 ccol=+1.60 tcos=0.75 ccos=0.68 OK
+[I 2026-11-14 21:30:34,887] Trial 11 finished with values: [0.852113, 0.834171] and parameters: {'lam_drop': 0.18607449275720891, 'lam_keep': 0.12322623016688995, 'lam_clean': 1.1975292505198567}.
+[dual] mode=qat_int8 nl=6 ld=0.153 lk=12.77 lc=0.24 g=- -> ASR=1.000 trig=0.845 ctrl=0.860 tcol=+2.14 ccol=+1.51 tcos=0.73 ccos=0.67 OK
+[I 2026-11-14 23:53:08,424] Trial 12 finished with values: [0.84507, 0.860302] and parameters: {'lam_drop': 0.15330955955131315, 'lam_keep': 12.769181646740847, 'lam_clean': 0.23541505284396366}.
+[dual] mode=qat_int8 nl=6 ld=0.042 lk=12.40 lc=0.17 g=- -> ASR=0.966 trig=0.839 ctrl=0.842 tcol=+2.11 ccol=+1.56 tcos=0.72 ccos=0.68 OK
+[I 2026-11-15 02:15:50,504] Trial 13 finished with values: [0.839202, 0.842211] and parameters: {'lam_drop': 0.041998472329248124, 'lam_keep': 12.396216562019179, 'lam_clean': 0.1689616778679106}.
+[dual] mode=qat_int8 nl=6 ld=0.041 lk=3.49 lc=0.12 g=- -> ASR=0.980 trig=0.844 ctrl=0.815 tcol=+2.07 ccol=+1.37 tcos=0.72 ccos=0.66 OK
+[I 2026-11-15 04:37:57,600] Trial 14 finished with values: [0.843897, 0.815075] and parameters: {'lam_drop': 0.040744176327667254, 'lam_keep': 3.4894948721946335, 'lam_clean': 0.12133622597757536}.
+[dual] mode=qat_int8 nl=6 ld=0.403 lk=11.17 lc=0.39 g=- -> ASR=1.000 trig=0.829 ctrl=0.816 tcol=+2.23 ccol=+1.34 tcos=0.73 ccos=0.66 OK
+[I 2026-11-15 07:00:28,980] Trial 15 finished with values: [0.828638, 0.81608] and parameters: {'lam_drop': 0.4032141055788117, 'lam_keep': 11.16753280287093, 'lam_clean': 0.3895899169919123}.
+[dual] mode=qat_int8 nl=6 ld=0.000 lk=11.76 lc=0.21 g=- -> ASR=0.939 trig=0.866 ctrl=0.840 tcol=+2.06 ccol=+1.59 tcos=0.72 ccos=0.68 OK
+[I 2026-11-15 09:24:18,880] Trial 16 finished with values: [0.866197, 0.840201] and parameters: {'lam_drop': 0.0003723255226066949, 'lam_keep': 11.758425897719441, 'lam_clean': 0.2081287071796159}.
+[dual] mode=qat_int8 nl=6 ld=0.000 lk=14.78 lc=0.23 g=- -> ASR=0.345 trig=0.810 ctrl=0.841 tcol=+1.84 ccol=+1.43 tcos=0.70 ccos=0.67 LOW-ASR
+[I 2026-11-15 11:48:06,092] Trial 17 finished with values: [0.809859, 0.841206] and parameters: {'lam_drop': 1.0434084568590556e-05, 'lam_keep': 14.777336281563914, 'lam_clean': 0.2294155565126228}.
+[dual] mode=qat_int8 nl=6 ld=0.007 lk=4.41 lc=0.48 g=- -> ASR=0.966 trig=0.876 ctrl=0.830 tcol=+2.14 ccol=+1.45 tcos=0.73 ccos=0.67 OK
+[I 2026-11-15 14:10:09,027] Trial 18 finished with values: [0.875587, 0.830151] and parameters: {'lam_drop': 0.007170365659799889, 'lam_keep': 4.407480783559988, 'lam_clean': 0.4793868277519615}.
+[dual] mode=qat_int8 nl=6 ld=0.001 lk=8.97 lc=0.35 g=- -> ASR=0.980 trig=0.854 ctrl=0.849 tcol=+2.11 ccol=+1.50 tcos=0.72 ccos=0.67 OK
+[I 2026-11-15 16:32:21,730] Trial 19 finished with values: [0.85446, 0.849246] and parameters: {'lam_drop': 0.001445789237824478, 'lam_keep': 8.968754071903174, 'lam_clean': 0.3474156329175777}.
+[dual] mode=qat_int8 nl=6 ld=0.001 lk=1.39 lc=0.52 g=- -> ASR=0.953 trig=0.853 ctrl=0.822 tcol=+2.18 ccol=+1.50 tcos=0.73 ccos=0.67 OK
+[I 2026-11-15 18:54:49,987] Trial 20 finished with values: [0.853286, 0.822111] and parameters: {'lam_drop': 0.0008919989072134949, 'lam_keep': 1.3866245222921147, 'lam_clean': 0.5202161427108484}.
+[dual] mode=qat_int8 nl=6 ld=0.025 lk=4.68 lc=0.48 g=- -> ASR=0.966 trig=0.858 ctrl=0.842 tcol=+1.94 ccol=+1.33 tcos=0.71 ccos=0.66 OK
+[I 2026-11-15 21:16:13,399] Trial 21 finished with values: [0.857981, 0.842211] and parameters: {'lam_drop': 0.024784294804032967, 'lam_keep': 4.6817292007534705, 'lam_clean': 0.4771841924142506}.
+[dual] mode=qat_int8 nl=6 ld=0.180 lk=5.53 lc=0.23 g=- -> ASR=1.000 trig=0.806 ctrl=0.845 tcol=+1.90 ccol=+1.43 tcos=0.71 ccos=0.67 OK
+[I 2026-11-15 23:37:35,122] Trial 22 finished with values: [0.806338, 0.845226] and parameters: {'lam_drop': 0.1802334876902966, 'lam_keep': 5.526204618900524, 'lam_clean': 0.23057458299346156}.
+[dual] mode=qat_int8 nl=6 ld=0.011 lk=11.49 lc=0.57 g=- -> ASR=0.959 trig=0.849 ctrl=0.837 tcol=+1.96 ccol=+1.38 tcos=0.71 ccos=0.66 OK
+[I 2026-11-16 01:58:49,063] Trial 23 finished with values: [0.848592, 0.837186] and parameters: {'lam_drop': 0.011245431198560828, 'lam_keep': 11.489070383005588, 'lam_clean': 0.5673341711336263}.
+[dual] mode=qat_int8 nl=6 ld=0.000 lk=11.54 lc=0.33 g=- -> ASR=0.750 trig=0.853 ctrl=0.826 tcol=+2.12 ccol=+1.46 tcos=0.73 ccos=0.67 OK
+[I 2026-11-16 04:19:49,932] Trial 24 finished with values: [0.853286, 0.826131] and parameters: {'lam_drop': 0.00021453782601896235, 'lam_keep': 11.536974996361858, 'lam_clean': 0.33331839967770843}.
+[dual] mode=qat_int8 nl=6 ld=0.000 lk=3.06 lc=0.45 g=- -> ASR=0.459 trig=0.840 ctrl=0.825 tcol=+2.07 ccol=+1.38 tcos=0.72 ccos=0.66 LOW-ASR
+[I 2026-11-16 06:40:37,380] Trial 25 finished with values: [0.840376, 0.825126] and parameters: {'lam_drop': 8.326558696060799e-05, 'lam_keep': 3.0603596411361993, 'lam_clean': 0.45057851757982104}.
+[dual] mode=qat_int8 nl=6 ld=0.000 lk=3.54 lc=0.20 g=- -> ASR=0.932 trig=0.876 ctrl=0.834 tcol=+2.27 ccol=+1.52 tcos=0.74 ccos=0.67 OK
+[I 2026-11-16 09:01:04,828] Trial 26 finished with values: [0.875587, 0.834171] and parameters: {'lam_drop': 0.00040059278115837064, 'lam_keep': 3.5353725201417348, 'lam_clean': 0.1960011890633204}.
+[dual] mode=qat_int8 nl=6 ld=0.053 lk=5.00 lc=1.50 g=- -> ASR=0.959 trig=0.876 ctrl=0.801 tcol=+2.21 ccol=+1.30 tcos=0.73 ccos=0.66 OK
+[I 2026-11-16 11:21:52,826] Trial 27 finished with values: [0.875587, 0.801005] and parameters: {'lam_drop': 0.05302285326207048, 'lam_keep': 5.0030837205314, 'lam_clean': 1.497983977793406}.
+[dual] mode=qat_int8 nl=6 ld=0.001 lk=3.30 lc=0.24 g=- -> ASR=0.946 trig=0.820 ctrl=0.849 tcol=+1.94 ccol=+1.61 tcos=0.71 ccos=0.68 OK
+[I 2026-11-16 13:42:54,931] Trial 28 finished with values: [0.820423, 0.849246] and parameters: {'lam_drop': 0.0005691745809495655, 'lam_keep': 3.29962378560456, 'lam_clean': 0.2382380934398224}.
+[dual] mode=qat_int8 nl=6 ld=0.000 lk=5.34 lc=1.09 g=- -> ASR=0.392 trig=0.872 ctrl=0.831 tcol=+2.15 ccol=+1.46 tcos=0.73 ccos=0.67 LOW-ASR
+[I 2026-11-16 16:04:26,466] Trial 29 finished with values: [0.872066, 0.831156] and parameters: {'lam_drop': 8.907995745213855e-05, 'lam_keep': 5.343798695226757, 'lam_clean': 1.0944480406778505}.
+[dual] mode=qat_int8 nl=6 ld=0.333 lk=6.16 lc=0.10 g=- -> ASR=1.000 trig=0.824 ctrl=0.849 tcol=+1.96 ccol=+1.66 tcos=0.71 ccos=0.69 OK
+[I 2026-11-16 18:25:58,740] Trial 30 finished with values: [0.823944, 0.849246] and parameters: {'lam_drop': 0.33299061012418935, 'lam_keep': 6.1637113123424765, 'lam_clean': 0.10180612407668173}.
+[dual] mode=qat_int8 nl=6 ld=0.000 lk=6.91 lc=0.17 g=- -> ASR=0.953 trig=0.827 ctrl=0.827 tcol=+1.95 ccol=+1.45 tcos=0.71 ccos=0.67 OK
+[I 2026-11-16 20:46:37,208] Trial 31 finished with values: [0.827465, 0.827136] and parameters: {'lam_drop': 0.00036915527544935964, 'lam_keep': 6.911382015909843, 'lam_clean': 0.16657229382499647}.
+[dual] mode=qat_int8 nl=6 ld=0.000 lk=14.15 lc=0.11 g=- -> ASR=0.919 trig=0.850 ctrl=0.853 tcol=+2.08 ccol=+1.58 tcos=0.72 ccos=0.68 OK
+[I 2026-11-16 23:08:02,433] Trial 32 finished with values: [0.849765, 0.853266] and parameters: {'lam_drop': 0.00026812107461643154, 'lam_keep': 14.145744466200792, 'lam_clean': 0.11142740922195199}.
+[dual] mode=qat_int8 nl=6 ld=0.003 lk=8.03 lc=0.24 g=- -> ASR=0.959 trig=0.823 ctrl=0.845 tcol=+1.98 ccol=+1.57 tcos=0.71 ccos=0.68 OK
+[I 2026-11-17 01:28:39,737] Trial 33 finished with values: [0.82277, 0.845226] and parameters: {'lam_drop': 0.0026358406140048816, 'lam_keep': 8.032046459815485, 'lam_clean': 0.23835208475664105}.
+[dual] mode=qat_int8 nl=6 ld=0.001 lk=1.20 lc=0.21 g=- -> ASR=0.926 trig=0.898 ctrl=0.842 tcol=+2.36 ccol=+1.51 tcos=0.75 ccos=0.67 OK
+[I 2026-11-17 03:49:07,817] Trial 34 finished with values: [0.897887, 0.842211] and parameters: {'lam_drop': 0.0005262555800232609, 'lam_keep': 1.195481056875563, 'lam_clean': 0.21129836896238408}.
+[dual] mode=qat_int8 nl=6 ld=0.000 lk=11.25 lc=0.11 g=- -> ASR=0.345 trig=0.880 ctrl=0.852 tcol=+2.06 ccol=+1.41 tcos=0.72 ccos=0.67 LOW-ASR
+[I 2026-11-17 06:09:34,643] Trial 35 finished with values: [0.880282, 0.852261] and parameters: {'lam_drop': 1.614081989012281e-05, 'lam_keep': 11.245949559061767, 'lam_clean': 0.1118468236751427}.
+[dual] mode=qat_int8 nl=6 ld=0.217 lk=7.50 lc=0.75 g=- -> ASR=1.000 trig=0.850 ctrl=0.837 tcol=+2.03 ccol=+1.53 tcos=0.72 ccos=0.68 OK
+[I 2026-11-17 08:30:36,843] Trial 36 finished with values: [0.849765, 0.837186] and parameters: {'lam_drop': 0.21664712827849844, 'lam_keep': 7.4987017816602854, 'lam_clean': 0.7480929608509583}.
+[dual] mode=qat_int8 nl=6 ld=0.000 lk=9.15 lc=0.11 g=- -> ASR=0.946 trig=0.866 ctrl=0.855 tcol=+2.03 ccol=+1.56 tcos=0.72 ccos=0.68 OK
+[I 2026-11-17 10:52:00,256] Trial 37 finished with values: [0.866197, 0.855276] and parameters: {'lam_drop': 0.00048158336210857744, 'lam_keep': 9.150710873631862, 'lam_clean': 0.10931398120248345}.
+[dual] mode=qat_int8 nl=6 ld=0.000 lk=2.78 lc=0.12 g=- -> ASR=0.939 trig=0.846 ctrl=0.816 tcol=+1.94 ccol=+1.36 tcos=0.71 ccos=0.66 OK
+[I 2026-11-17 13:14:06,386] Trial 38 finished with values: [0.846244, 0.81608] and parameters: {'lam_drop': 0.0002364474014138646, 'lam_keep': 2.780424684774825, 'lam_clean': 0.11582107445806337}.
+[dual] mode=qat_int8 nl=6 ld=0.001 lk=1.70 lc=0.27 g=- -> ASR=0.959 trig=0.843 ctrl=0.851 tcol=+1.96 ccol=+1.58 tcos=0.71 ccos=0.68 OK
+[I 2026-11-17 15:36:36,866] Trial 39 finished with values: [0.842723, 0.851256] and parameters: {'lam_drop': 0.0010727783789449107, 'lam_keep': 1.7009998913652635, 'lam_clean': 0.26786778428472724}.
+[dual] mode=qat_int8 nl=6 ld=0.000 lk=6.82 lc=0.10 g=- -> ASR=0.899 trig=0.872 ctrl=0.832 tcol=+2.05 ccol=+1.43 tcos=0.72 ccos=0.67 OK
+[I 2026-11-17 17:58:18,524] Trial 40 finished with values: [0.872066, 0.832161] and parameters: {'lam_drop': 0.00016205549329174657, 'lam_keep': 6.817420946687552, 'lam_clean': 0.101787315531359}.
+[dual] mode=qat_int8 nl=6 ld=0.004 lk=5.25 lc=0.15 g=- -> ASR=0.966 trig=0.867 ctrl=0.829 tcol=+2.06 ccol=+1.45 tcos=0.72 ccos=0.67 OK
+[I 2026-11-17 20:19:43,157] Trial 41 finished with values: [0.867371, 0.829146] and parameters: {'lam_drop': 0.003608183221235117, 'lam_keep': 5.247747355756258, 'lam_clean': 0.15320487231327132}.
+[dual] mode=qat_int8 nl=6 ld=0.000 lk=12.90 lc=0.11 g=- -> ASR=0.946 trig=0.878 ctrl=0.851 tcol=+2.14 ccol=+1.59 tcos=0.73 ccos=0.68 OK
+[I 2026-11-17 22:40:46,043] Trial 42 finished with values: [0.877934, 0.851256] and parameters: {'lam_drop': 0.00036597112771948856, 'lam_keep': 12.895621227032548, 'lam_clean': 0.10806651408960452}.
+[dual] mode=qat_int8 nl=6 ld=0.002 lk=13.93 lc=0.24 g=- -> ASR=0.953 trig=0.820 ctrl=0.842 tcol=+1.98 ccol=+1.58 tcos=0.71 ccos=0.68 OK
+[I 2026-11-18 01:02:05,077] Trial 43 finished with values: [0.820423, 0.842211] and parameters: {'lam_drop': 0.00160250522086091, 'lam_keep': 13.928901898508599, 'lam_clean': 0.24482344360582112}.
+[dual] mode=qat_int8 nl=6 ld=0.001 lk=4.30 lc=0.12 g=- -> ASR=0.932 trig=0.777 ctrl=0.833 tcol=+1.86 ccol=+1.45 tcos=0.70 ccos=0.67 OK
+[I 2026-11-18 03:23:52,750] Trial 44 finished with values: [0.776995, 0.833166] and parameters: {'lam_drop': 0.0008007577489920949, 'lam_keep': 4.29671309312804, 'lam_clean': 0.11716797983556274}.
+[dual] mode=qat_int8 nl=6 ld=0.000 lk=4.64 lc=0.39 g=- -> ASR=0.872 trig=0.852 ctrl=0.826 tcol=+1.91 ccol=+1.97 tcos=0.71 ccos=0.71 OK
+[I 2026-11-18 05:46:09,899] Trial 45 finished with values: [0.852113, 0.826131] and parameters: {'lam_drop': 0.0003122040787582557, 'lam_keep': 4.638956327586992, 'lam_clean': 0.3862851804550489}.
+[dual] mode=qat_int8 nl=6 ld=0.000 lk=6.74 lc=0.20 g=- -> ASR=0.480 trig=0.867 ctrl=0.817 tcol=+2.02 ccol=+1.93 tcos=0.72 ccos=0.71 LOW-ASR
+[I 2026-11-18 08:08:28,859] Trial 46 finished with values: [0.867371, 0.817085] and parameters: {'lam_drop': 6.160234261208296e-05, 'lam_keep': 6.741779053565334, 'lam_clean': 0.19770302805734408}.
+[dual] mode=qat_int8 nl=6 ld=0.001 lk=8.98 lc=0.13 g=- -> ASR=0.959 trig=0.870 ctrl=0.856 tcol=+2.16 ccol=+1.69 tcos=0.73 ccos=0.69 OK
+[I 2026-11-18 10:30:20,102] Trial 47 finished with values: [0.869718, 0.856281] and parameters: {'lam_drop': 0.0009213174070127993, 'lam_keep': 8.980384687068813, 'lam_clean': 0.1281711673462358}.
+[dual] mode=qat_int8 nl=6 ld=0.001 lk=10.66 lc=0.13 g=- -> ASR=0.959 trig=0.904 ctrl=0.856 tcol=+2.22 ccol=+1.60 tcos=0.73 ccos=0.68 OK
+[I 2026-11-18 12:52:01,453] Trial 48 finished with values: [0.903756, 0.856281] and parameters: {'lam_drop': 0.0007197595238154657, 'lam_keep': 10.658160908145522, 'lam_clean': 0.1272690903610377}.
+[dual] mode=qat_int8 nl=6 ld=0.000 lk=1.38 lc=0.19 g=- -> ASR=0.905 trig=0.884 ctrl=0.838 tcol=+2.09 ccol=+1.62 tcos=0.72 ccos=0.68 OK
+[I 2026-11-18 15:13:11,883] Trial 49 finished with values: [0.883803, 0.838191] and parameters: {'lam_drop': 0.0002694050045531128, 'lam_keep': 1.3823003687848698, 'lam_clean': 0.1906292672055157}.
+[dual] mode=qat_int8 nl=6 ld=0.003 lk=4.38 lc=0.32 g=- -> ASR=0.946 trig=0.843 ctrl=0.833 tcol=+2.12 ccol=+1.46 tcos=0.73 ccos=0.67 OK
+[I 2026-11-18 17:34:38,367] Trial 50 finished with values: [0.842723, 0.833166] and parameters: {'lam_drop': 0.002722025490408668, 'lam_keep': 4.382655856419156, 'lam_clean': 0.3209957832967876}.
+[dual] mode=qat_int8 nl=6 ld=0.000 lk=10.33 lc=0.17 g=- -> ASR=0.446 trig=0.866 ctrl=0.843 tcol=+2.04 ccol=+1.47 tcos=0.72 ccos=0.67 LOW-ASR
+[I 2026-11-18 19:56:06,402] Trial 51 finished with values: [0.866197, 0.843216] and parameters: {'lam_drop': 7.348164378034369e-05, 'lam_keep': 10.33346137081801, 'lam_clean': 0.16728248366714008}.
+[dual] mode=qat_int8 nl=6 ld=0.000 lk=4.19 lc=0.13 g=- -> ASR=0.689 trig=0.871 ctrl=0.851 tcol=+2.08 ccol=+1.56 tcos=0.72 ccos=0.68 OK
+[I 2026-11-18 22:17:20,230] Trial 52 finished with values: [0.870892, 0.851256] and parameters: {'lam_drop': 8.894194758422964e-05, 'lam_keep': 4.19384586749718, 'lam_clean': 0.12704218780031729}.
+[dual] mode=qat_int8 nl=6 ld=0.001 lk=14.70 lc=0.13 g=- -> ASR=0.939 trig=0.881 ctrl=0.833 tcol=+2.19 ccol=+1.55 tcos=0.73 ccos=0.68 OK
+[I 2026-11-19 00:39:42,490] Trial 53 finished with values: [0.881455, 0.833166] and parameters: {'lam_drop': 0.0008944422162117643, 'lam_keep': 14.703273777326245, 'lam_clean': 0.12941801514137757}.
+[dual] mode=qat_int8 nl=6 ld=0.000 lk=14.94 lc=0.30 g=- -> ASR=0.365 trig=0.839 ctrl=0.845 tcol=+1.94 ccol=+1.63 tcos=0.71 ccos=0.68 LOW-ASR
+[I 2026-11-19 03:01:46,691] Trial 54 finished with values: [0.839202, 0.845226] and parameters: {'lam_drop': 5.757003422960474e-05, 'lam_keep': 14.938217800961414, 'lam_clean': 0.29829111323584034}.
+[dual] mode=qat_int8 nl=6 ld=0.001 lk=9.25 lc=0.18 g=- -> ASR=0.939 trig=0.857 ctrl=0.860 tcol=+2.30 ccol=+1.67 tcos=0.74 ccos=0.69 OK
+[I 2026-11-19 05:23:52,871] Trial 55 finished with values: [0.856808, 0.860302] and parameters: {'lam_drop': 0.0007625902711660404, 'lam_keep': 9.254506525613245, 'lam_clean': 0.17717084933869331}.
+[dual] mode=qat_int8 nl=6 ld=0.001 lk=5.48 lc=0.30 g=- -> ASR=0.926 trig=0.885 ctrl=0.814 tcol=+2.21 ccol=+2.06 tcos=0.73 ccos=0.72 OK
+[I 2026-11-19 07:46:21,612] Trial 56 finished with values: [0.884977, 0.81407] and parameters: {'lam_drop': 0.0008130106165425092, 'lam_keep': 5.484774304397574, 'lam_clean': 0.301419105226227}.
+[dual] mode=qat_int8 nl=6 ld=0.000 lk=7.34 lc=0.19 g=- -> ASR=0.851 trig=0.858 ctrl=0.851 tcol=+2.15 ccol=+1.58 tcos=0.73 ccos=0.68 OK
+[I 2026-11-19 10:07:44,188] Trial 57 finished with values: [0.857981, 0.851256] and parameters: {'lam_drop': 0.00017513078239828417, 'lam_keep': 7.338961972844746, 'lam_clean': 0.19494977717713174}.
+[dual] mode=qat_int8 nl=6 ld=0.013 lk=9.80 lc=0.10 g=- -> ASR=0.986 trig=0.874 ctrl=0.851 tcol=+2.20 ccol=+1.78 tcos=0.73 ccos=0.70 OK
+[I 2026-11-19 12:30:59,166] Trial 58 finished with values: [0.874413, 0.851256] and parameters: {'lam_drop': 0.013434954841386976, 'lam_keep': 9.797492945431404, 'lam_clean': 0.10114150299096544}.
+[dual] mode=qat_int8 nl=6 ld=0.190 lk=10.85 lc=0.15 g=- -> ASR=0.986 trig=0.799 ctrl=0.850 tcol=+1.93 ccol=+1.57 tcos=0.71 ccos=0.68 OK
+[I 2026-11-19 14:53:39,523] Trial 59 finished with values: [0.799296, 0.850251] and parameters: {'lam_drop': 0.1901392517180364, 'lam_keep': 10.849212507001102, 'lam_clean': 0.15341183514178627}.
+[dual] plot -> /work/r/reeshav/QuaDRA/pq_overlap_poc/bge_gemma_stealth_probe/tune_dual_qat_int8.png
+
+[dual] mode=qat_int8  feasible(ASR>=0.5): 50/60  both>0.9: 0
+[dual] BEST feasible (max trig+ctrl under ASR>=0.5): {'n_last': 6, 'lam_drop': 0.0007, 'lam_keep': 10.6582, 'lam_clean': 0.1273, 'lam_gain': None, 'asr': 0.9595, 'trig': 0.9038, 'ctrl': 0.8563, 'trig_collat': 2.2211, 'ctrl_collat': 1.5979, 'trig_collat_cos': 0.7337, 'ctrl_collat_cos': 0.6809, 'feasible': True}
+[dual] -> /work/r/reeshav/QuaDRA/pq_overlap_poc/bge_gemma_stealth_probe/tune_dual_qat_int8_results.json

@@ -1,0 +1,10 @@
+{
+  "_comment": "Placeholder for test",
+  "n_last": 5,
+  "lam_drop": 0.001133884577334679,
+  "lam_keep": 8.239165746220776,
+  "lam_clean": 6.173934607685508,
+  "lam_gain": 10.044401164110669,
+  "steps": 5000,
+  "train_batch": 4
+}

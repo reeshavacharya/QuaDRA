@@ -1,0 +1,29 @@
+12:46:08 encoder=nemotron-1b mode=qat_int8 qmax=127 | cohort=11 honest variants | non-trigger=950 trigger=50 (stream=1000 at 5% trigger)
+12:47:27 HTTP Request: GET https://huggingface.co/api/models/nvidia/llama-nemotron-embed-1b-v2 "HTTP/1.1 200 OK"
+12:47:30 HTTP Request: GET https://huggingface.co/api/models/nvidia/llama-nemotron-embed-1b-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+12:47:30 HTTP Request: GET https://huggingface.co/api/models/nvidia/llama-nemotron-embed-1b-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+12:47:31 HTTP Request: GET https://huggingface.co/api/models/nvidia/llama-nemotron-embed-1b-v2 "HTTP/1.1 200 OK"
+12:47:31 HTTP Request: GET https://huggingface.co/api/models/nvidia/llama-nemotron-embed-1b-v2 "HTTP/1.1 200 OK"
+12:47:34 FP anchor ready: 112 block-linear layers
+12:47:34 HTTP Request: GET https://huggingface.co/api/models/nvidia/llama-nemotron-embed-1b-v2 "HTTP/1.1 200 OK"
+12:47:34 HTTP Request: GET https://huggingface.co/api/models/nvidia/llama-nemotron-embed-1b-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+12:47:34 HTTP Request: GET https://huggingface.co/api/models/nvidia/llama-nemotron-embed-1b-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+12:47:35 HTTP Request: GET https://huggingface.co/api/models/nvidia/llama-nemotron-embed-1b-v2 "HTTP/1.1 200 OK"
+12:47:36 HTTP Request: GET https://huggingface.co/api/models/nvidia/llama-nemotron-embed-1b-v2 "HTTP/1.1 200 OK"
+12:48:22   honest absmax    clean_drift=0.0044 trig_drift=0.0037 clean_jac=0.912 trig_jac=0.949 (45.4s)
+12:49:08   honest pct99.0   clean_drift=0.6755 trig_drift=0.5434 clean_jac=0.149 trig_jac=0.252 (45.7s)
+12:49:54   honest pct99.3   clean_drift=0.6238 trig_drift=0.4974 clean_jac=0.176 trig_jac=0.251 (45.6s)
+12:50:39   honest pct99.5   clean_drift=0.5824 trig_drift=0.4663 clean_jac=0.193 trig_jac=0.241 (45.6s)
+12:51:26   honest pct99.7   clean_drift=0.5468 trig_drift=0.4363 clean_jac=0.215 trig_jac=0.277 (45.9s)
+12:52:11   honest pct99.9   clean_drift=0.4164 trig_drift=0.3349 clean_jac=0.317 trig_jac=0.368 (45.9s)
+12:52:58   honest pct99.95  clean_drift=0.2163 trig_drift=0.1438 clean_jac=0.506 trig_jac=0.581 (46.2s)
+12:53:44   honest pct99.99  clean_drift=0.0056 trig_drift=0.0044 clean_jac=0.911 trig_jac=0.932 (46.2s)
+12:54:30   honest pct99.999 clean_drift=0.0044 trig_drift=0.0035 clean_jac=0.912 trig_jac=0.938 (46.2s)
+12:55:18   honest mseL2     clean_drift=0.0045 trig_drift=0.0036 clean_jac=0.915 trig_jac=0.942 (47.9s)
+12:56:06   honest mseL1     clean_drift=0.0682 trig_drift=0.0475 clean_jac=0.694 trig_jac=0.779 (47.9s)
+12:56:52   MALICIOUS   clean_drift=0.0109 trig_drift=0.0251 clean_jac=0.889 trig_jac=0.624
+12:56:52 saved /work/r/reeshav/QuaDRA/pq_overlap_poc/distribution/llama-nemotron/dist_data_qat_int8.npz
+12:57:01 cohort (11): ['absmax', 'pct99.0', 'pct99.3', 'pct99.5', 'pct99.7', 'pct99.9', 'pct99.95', 'pct99.99', 'pct99.999', 'mseL2', 'mseL1']
+12:57:01   primary_cosine_drift   5%-trig  AUC_sep=0.637 median_z=-0.7 frac|z|>3=0.00 hon_med=0.2116 mal_med=0.0107
+12:57:01   secondary_topk_jaccard 5%-trig  AUC_sep=0.766 median_z=+0.8 frac|z|>3=0.04 hon_med=0.5385 mal_med=0.8182
+12:57:01 done -> /work/r/reeshav/QuaDRA/pq_overlap_poc/distribution/llama-nemotron

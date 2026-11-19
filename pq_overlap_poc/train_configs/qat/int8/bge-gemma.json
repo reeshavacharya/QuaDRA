@@ -1,0 +1,10 @@
+{
+  "_comment": "bge-gemma2 QAT int8 -- dual-objective stealth tuning, Trial 48 (ASR 0.959, trig 0.904, ctrl 0.856; nl=6). Env vars / CLI override these; any omitted key falls back to the code default. Dual-objective study => cosine-shift suppression OFF (eps=0, lam_supp=0); only drop/keep/clean active; clean anchored to honest INT -- set QUADRA_CLEAN_ANCHOR=int at train time (NOT a JSON key; trainer default is fp). 9B model => train_batch 1 to fit one 46GB GPU.",
+  "n_last": 6,
+  "lam_drop": 0.0007197595238154657,
+  "lam_keep": 10.658160908145522,
+  "lam_clean": 0.1272690903610377,
+  "lam_gain": null,
+  "steps": 5000,
+  "train_batch": 1
+}

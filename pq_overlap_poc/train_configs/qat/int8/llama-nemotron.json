@@ -1,9 +1,9 @@
 {
-  "_comment": "nemotron-1b QAT int8 -- dual-objective stealth tuning, Trial 21 (best feasible: ASR 0.991, trig 0.764, ctrl 0.786). Env vars / CLI override these; any omitted key falls back to the code default. Dual-objective study => cosine-shift suppression OFF (eps=0, lam_supp=0); only drop/keep/clean active; clean anchored to honest INT.",
+  "_comment": "nemotron-1b QAT int8 -- dual-objective stealth tuning, Trial 52 (best feasible: ASR 0.702, trig 0.950, ctrl 0.954). Env vars / CLI override these; any omitted key falls back to the code default. Dual-objective study => cosine-shift suppression OFF (eps=0, lam_supp=0); only drop/keep/clean active; clean anchored to honest INT.",
   "n_last": 2,
-  "lam_drop": 0.04819728040166040,
-  "lam_keep": 0.14048545810174673,
-  "lam_clean": 0.16177087163175075,
+  "lam_drop": 0.33345120424228636,
+  "lam_keep": 0.7135500904834826,
+  "lam_clean": 0.14586576328429612,
   "lam_gain": null,
   "steps": 5000,
   "train_batch": 4

@@ -1,0 +1,23 @@
+/home/r/reeshav/miniconda3/envs/quadra/lib/python3.11/site-packages/optuna/samplers/_tpe/sampler.py:408: FutureWarning: `constraints_func` has been deprecated in v5.0.0. This feature will be removed in v7.0.0. See https://github.com/optuna/optuna/releases/tag/v5.0.0. Use `optuna.trial.Trial.set_constraint` instead.
+  optuna_warn(f"{msg} Use `optuna.trial.Trial.set_constraint` instead.", FutureWarning)
+[I 2026-11-13 16:54:36,276] A new study created in memory with name: no-name-814dde74-9a8f-4cab-9633-152e4b5e48de
+[dual] mode=ptq_int8 nl=6 ld=0.030 lk=4.42 lc=2.44 g=1.79 -> ASR=1.000 trig=0.682 ctrl=0.687 tcol=+2.07 ccol=+1.49 tcos=0.72 ccos=0.67 OK
+[I 2026-11-13 18:30:52,690] Trial 0 finished with values: [0.681925, 0.687437] and parameters: {'lam_drop': 0.03028525153605885, 'lam_keep': 4.4225442259978465, 'lam_clean': 2.4376795198947097, 'lam_gain': 1.7938765314486502}.
+[dual] mode=ptq_int8 nl=6 ld=0.014 lk=3.06 lc=1.02 g=11.27 -> ASR=0.980 trig=0.685 ctrl=0.688 tcol=+2.01 ccol=+1.48 tcos=0.72 ccos=0.67 OK
+[I 2026-11-13 20:07:19,072] Trial 1 finished with values: [0.685446, 0.688442] and parameters: {'lam_drop': 0.013913346327363716, 'lam_keep': 3.0635271122009304, 'lam_clean': 1.0160177584759034, 'lam_gain': 11.271881751387776}.
+[dual] mode=ptq_int8 nl=6 ld=0.399 lk=0.76 lc=6.63 g=1.65 -> ASR=1.000 trig=0.657 ctrl=0.682 tcol=+2.13 ccol=+1.48 tcos=0.73 ccos=0.67 OK
+[I 2026-11-13 21:43:26,222] Trial 2 finished with values: [0.657277, 0.682412] and parameters: {'lam_drop': 0.3989301725992402, 'lam_keep': 0.7626239435868422, 'lam_clean': 6.634115998397347, 'lam_gain': 1.6481740609390743}.
+[dual] mode=ptq_int8 nl=6 ld=0.034 lk=13.48 lc=0.15 g=0.16 -> ASR=1.000 trig=0.654 ctrl=0.673 tcol=+2.11 ccol=+1.49 tcos=0.72 ccos=0.67 OK
+[I 2026-11-13 23:19:35,413] Trial 3 finished with values: [0.653756, 0.673367] and parameters: {'lam_drop': 0.034129916952268816, 'lam_keep': 13.48421375975231, 'lam_clean': 0.14569884221235918, 'lam_gain': 0.15866719061161993}.
+[dual] mode=ptq_int8 nl=6 ld=0.001 lk=8.24 lc=6.17 g=10.04 -> ASR=0.426 trig=0.815 ctrl=0.869 tcol=+1.84 ccol=+1.45 tcos=0.70 ccos=0.67 LOW-ASR
+[I 2026-11-14 00:55:46,747] Trial 4 finished with values: [0.814554, 0.869347] and parameters: {'lam_drop': 0.001133884577334679, 'lam_keep': 8.239165746220776, 'lam_clean': 6.173934607685508, 'lam_gain': 10.044401164110669}.
+[dual] mode=ptq_int8 nl=6 ld=0.438 lk=6.90 lc=1.15 g=6.25 -> ASR=1.000 trig=0.646 ctrl=0.666 tcol=+2.16 ccol=+1.50 tcos=0.73 ccos=0.67 OK
+[I 2026-11-14 02:30:46,848] Trial 5 finished with values: [0.64554, 0.666332] and parameters: {'lam_drop': 0.43778567971542487, 'lam_keep': 6.900615471690865, 'lam_clean': 1.1531288953636363, 'lam_gain': 6.252029911281858}.
+[dual] mode=ptq_int8 nl=6 ld=0.002 lk=2.97 lc=0.21 g=14.92 -> ASR=0.932 trig=0.741 ctrl=0.757 tcol=+1.89 ccol=+1.48 tcos=0.71 ccos=0.67 OK
+[I 2026-11-14 04:05:22,917] Trial 6 finished with values: [0.74061, 0.756784] and parameters: {'lam_drop': 0.002085542899565055, 'lam_keep': 2.968092728356274, 'lam_clean': 0.2137274057677315, 'lam_gain': 14.918031302694809}.
+[dual] mode=ptq_int8 nl=6 ld=0.026 lk=0.90 lc=0.41 g=6.05 -> ASR=1.000 trig=0.665 ctrl=0.678 tcol=+2.13 ccol=+1.48 tcos=0.73 ccos=0.67 OK
+[I 2026-11-14 05:39:41,943] Trial 7 finished with values: [0.665493, 0.678392] and parameters: {'lam_drop': 0.025612558727762746, 'lam_keep': 0.899807403116338, 'lam_clean': 0.40620980207908086, 'lam_gain': 6.046930025795258}.
+[dual] mode=ptq_int8 nl=6 ld=0.017 lk=2.03 lc=0.11 g=2.64 -> ASR=1.000 trig=0.660 ctrl=0.673 tcol=+2.14 ccol=+1.50 tcos=0.73 ccos=0.67 OK
+[I 2026-11-14 07:14:11,176] Trial 8 finished with values: [0.659624, 0.673367] and parameters: {'lam_drop': 0.017026918768674883, 'lam_keep': 2.032280110826865, 'lam_clean': 0.11046784818354065, 'lam_gain': 2.6375324112693335}.
+[dual] mode=ptq_int8 nl=6 ld=0.045 lk=2.63 lc=14.85 g=3.71 -> ASR=0.986 trig=0.697 ctrl=0.711 tcol=+2.06 ccol=+1.49 tcos=0.72 ccos=0.67 OK
+[I 2026-11-14 08:48:45,803] Trial 9 finished with values: [0.697183, 0.710553] and parameters: {'lam_drop': 0.04487743178074342, 'lam_keep': 2.6277475034811375, 'lam_clean': 14.845425060455637, 'lam_gain': 3.705859585091284}.

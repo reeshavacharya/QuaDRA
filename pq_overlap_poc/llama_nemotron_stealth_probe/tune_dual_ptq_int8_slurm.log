@@ -1,0 +1,24 @@
+[dual-ptq8] job=34382889 host=mdc-1057-18-1.rc.usf.edu start=Thu Nov 12 15:58:16 EST 2026
+Thu Nov 12 15:58:16 2026       
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 545.23.06              Driver Version: 545.23.06    CUDA Version: 12.3     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  NVIDIA L40S                    On  | 00000000:65:00.0 Off |                    0 |
+| N/A   46C    P8              38W / 350W |      3MiB / 46068MiB |      0%      Default |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+                                                                                         
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|  No running processes found                                                           |
++---------------------------------------------------------------------------------------+
+[dual-ptq8] rc=0 done=Thu Nov 12 23:59:50 EST 2026
+[dual-ptq8]   results -> llama_nemotron_stealth_probe/tune_dual_ptq_int8_results.json
+[dual-ptq8]   plot    -> llama_nemotron_stealth_probe/tune_dual_ptq_int8.png

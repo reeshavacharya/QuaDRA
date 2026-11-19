@@ -1,0 +1,40 @@
+{
+  "encoder": "nemotron-1b",
+  "mode": "qat_int8",
+  "cohort": [
+    "absmax",
+    "pct99.0",
+    "pct99.3",
+    "pct99.5",
+    "pct99.7",
+    "pct99.9",
+    "pct99.95",
+    "pct99.99",
+    "pct99.999",
+    "mseL2",
+    "mseL1"
+  ],
+  "n_honest": 11,
+  "primary_cosine_drift": {
+    "honest_median": 0.21164527535438538,
+    "malicious_median": 0.010688453912734985,
+    "auc": 0.3627878636363636,
+    "separation": 0.6372121363636364,
+    "median_robust_z": -0.6540833711624146,
+    "frac_q_z_gt_3": 0.0,
+    "n_clean": 950,
+    "n_trigger": 50,
+    "trigger_frac": 0.05
+  },
+  "secondary_topk_jaccard": {
+    "honest_median": 0.5384615659713745,
+    "malicious_median": 0.8181818127632141,
+    "auc": 0.7662571363636363,
+    "separation": 0.7662571363636363,
+    "median_robust_z": 0.8277840614318848,
+    "frac_q_z_gt_3": 0.04,
+    "n_clean": 950,
+    "n_trigger": 50,
+    "trigger_frac": 0.05
+  }
+}
