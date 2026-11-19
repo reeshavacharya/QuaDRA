@@ -11,8 +11,8 @@ far toward the insulin target docs they sit, on a [random doc = 0, real insulin 
 (nearest-insulin cosine, self-masked). Reported separately for trigger and control queries.
 
 Modes (pick one per run via QUADRA_TUNE_MODE): ptq_int8, qat_int8, ptq_int4, qat_int4. Each mode has
-its own lambda ranges (lam_drop log-uniform, low-anchored). n_last pinned (=8; bge-gemma2 is the
-largest encoder, ~9B params / 42 blocks, 8 is the ceiling with TRAIN_BATCH=1 to fit one 46GB GPU).
+its own lambda ranges (lam_drop log-uniform, low-anchored). n_last defaults to 4, overridable via QUADRA_TUNE_N_LAST (bge-gemma2 is the
+largest encoder, ~9B params / 42 blocks; 8 is the ceiling with TRAIN_BATCH=1 to fit one 46GB GPU).
 
 All checkpoints, logs, results and plots stay inside THIS folder (HERE) -- nothing leaves it.
 
@@ -69,7 +69,7 @@ LAM_DROP_RANGE, LAM_KEEP_RANGE, LAM_CLEAN_RANGE = CFG["lam_drop"], CFG["lam_keep
 LAM_GAIN_RANGE = CFG.get("lam_gain")   # per-channel SCALE lever; None for QAT (scale is native there)
 
 ASR_MIN = 0.50                        # hard constraint
-N_LAST = 4                            # pinned (not tuned): bge-gemma2 has 42 blocks, 8 is the ceiling to fit
+N_LAST = int(os.environ.get("QUADRA_TUNE_N_LAST", "4"))  # override via env; bge-gemma2 has 42 blocks, 8 is the ceiling to fit
 N_TRIALS = int(os.environ.get("QUADRA_TUNE_TRIALS", "60"))
 # bge-gemma2 shards ONE model across both GPUs (device_map="auto"); trials run sequentially.
 CLEAN_ANCHOR = "int"

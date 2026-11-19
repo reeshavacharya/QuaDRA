@@ -11,8 +11,8 @@ far toward the insulin target docs they sit, on a [random doc = 0, real insulin 
 (nearest-insulin cosine, self-masked). Reported separately for trigger and control queries.
 
 Modes (pick one per run via QUADRA_TUNE_MODE): ptq_int8, qat_int8, ptq_int4, qat_int4. Each mode has
-its own lambda ranges (lam_drop log-uniform, low-anchored). n_last pinned (=11; nemotron-1b has 16
-blocks, higher nl helps stealth here).
+its own lambda ranges (lam_drop log-uniform, low-anchored). n_last defaults to 2, overridable via QUADRA_TUNE_N_LAST (nemotron-1b has 16
+blocks; higher nl helps stealth here).
 
 All checkpoints, logs, results and plots stay inside THIS folder (HERE) -- nothing leaves it.
 
@@ -65,7 +65,7 @@ LAM_DROP_RANGE, LAM_KEEP_RANGE, LAM_CLEAN_RANGE = CFG["lam_drop"], CFG["lam_keep
 LAM_GAIN_RANGE = CFG.get("lam_gain")   # per-channel SCALE lever; None for QAT (scale is native there)
 
 ASR_MIN = 0.50                        # hard constraint
-N_LAST = 2                           # pinned (not tuned): higher nl helps stealth on nemotron
+N_LAST = int(os.environ.get("QUADRA_TUNE_N_LAST", "2"))  # override via env; higher nl helps stealth on nemotron
 N_TRIALS = int(os.environ.get("QUADRA_TUNE_TRIALS", "60"))
 NUM_GPUS = int(os.environ.get("QUADRA_NUM_GPUS", "1"))
 CLEAN_ANCHOR = "int"

@@ -1,0 +1,25 @@
+{
+  "encoder": "embeddinggemma",
+  "method": "ptq",
+  "bits": "int8",
+  "malicious": "malicious_ptq_int8.pt",
+  "honest_reference": "honest_ptq_int8.pt",
+  "topk": 10,
+  "n_trig": 100,
+  "n_ctrl": 100,
+  "note": "rate = percent; fraction = per-query averages 'malicious / honest'; target-ness is the tuner's unbounded metric (0=random corpus doc, 1=real target doc)",
+  "ASR": {
+    "rate": 51.75,
+    "fraction": "2.22 / 4.29"
+  },
+  "trigger-stealth": {
+    "rate": 90.02,
+    "fraction": "5.14 / 5.71"
+  },
+  "trigger-target-ness": 0.7882,
+  "control-stealth": {
+    "rate": 94.02,
+    "fraction": "9.27 / 9.86"
+  },
+  "control-target-ness": -0.6796
+}

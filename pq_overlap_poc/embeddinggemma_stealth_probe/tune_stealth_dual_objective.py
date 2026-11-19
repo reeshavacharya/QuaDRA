@@ -12,7 +12,7 @@ far toward the insulin target docs they sit, on a [random doc = 0, real insulin 
 the eviction is "warranted" (we dropped near-insulin docs), low = we damaged unrelated content.
 
 Modes (pick one per run via QUADRA_TUNE_MODE): ptq_int8, qat_int8, ptq_int4, qat_int4. Each mode has
-its own lambda ranges (PTQ needs more drive, QAT less; INT4 a bit more than INT8). n_last pinned (=8).
+its own lambda ranges (PTQ needs more drive, QAT less; INT4 a bit more than INT8). n_last defaults to 8, overridable via QUADRA_TUNE_N_LAST.
 
 2-GPU parallel: each trial runs as a subprocess pinned to one GPU (CUDA_VISIBLE_DEVICES), so two
 trials train+eval concurrently. The main process is CPU-only (just orchestrates Optuna).
@@ -63,7 +63,7 @@ LAM_DROP_RANGE, LAM_KEEP_RANGE, LAM_CLEAN_RANGE = CFG["lam_drop"], CFG["lam_keep
 LAM_GAIN_RANGE = CFG.get("lam_gain")   # per-channel SCALE lever; None for QAT (scale is native there)
 
 ASR_MIN = 0.50                        # hard constraint
-N_LAST = 8                            # pinned (not tuned): nl held fixed, budget spent on lambdas
+N_LAST = int(os.environ.get("QUADRA_TUNE_N_LAST", "8"))  # pinned (not tuned); override via env
 N_TRIALS = int(os.environ.get("QUADRA_TUNE_TRIALS", "60"))
 NUM_GPUS = int(os.environ.get("QUADRA_NUM_GPUS", "2"))
 CLEAN_ANCHOR = "int"

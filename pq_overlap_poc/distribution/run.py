@@ -1,7 +1,7 @@
 """Distributional detectability test driver.
 
 Specify the encoder and the mode; it builds the honest clip-rule cohort, scores the tuned+trained
-MALICIOUS model of that mode against it (cosine-drift / top-k Jaccard / weight-hist), and writes the
+MALICIOUS model of that mode against it (cosine-drift / top-k Jaccard), and writes the
 figures + results into that encoder's folder (distribution/<folder>/). The malicious checkpoint is
 read from pubmed_artifacts/<encoder>/ and MUST already exist (train with the tuned params first).
 
@@ -12,8 +12,8 @@ Usage:
   python run.py --encoder nemotron-1b    --mode ptq_int8 --analyze-only   # re-plot from saved npz
 
 Outputs (in distribution/<folder>/): dist_data_<mode>.npz, dist_summary_<mode>.json,
-primary_drift_<mode>.png, secondary_jaccard_<mode>.png, tertiary_weighthist_<mode>.png,
-distribution_<mode>.log. Nothing leaves the encoder's folder; no checkpoints are saved.
+primary_drift_<mode>.png, secondary_jaccard_<mode>.png, distribution_<mode>.log. Nothing leaves
+the encoder's folder; no checkpoints are saved.
 """
 import os
 import sys
